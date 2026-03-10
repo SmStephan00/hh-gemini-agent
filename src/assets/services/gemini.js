@@ -1,9 +1,20 @@
 import axios from 'axios';
 
-// Используем твой TryCloudflare URL
-const PROXY_URL = import.meta.env.VITE_PROXY_URL || 'http://localhost:3001';
+async function getProxyUrl() {
+    try {
+        // Пробуем получить URL с локального прокси
+        const response = await axios.get('http://localhost:3001/tunnel-url', { 
+            timeout: 2000 
+        });
+        return response.data.url;
+    } catch (error) {
+        console.warn('⚠️ Не удалось получить URL от прокси, используем localhost');
+        return 'http://localhost:3001';
+    }
+}
 
 export const analyzeVacancy = async (vacancy, resumeText) => {
+    const PROXY_URL = await getProxyUrl(); // Получаем актуальный URL
     console.log('🔵 Анализ вакансии через прокси:', vacancy.title);
     console.log('📡 Прокси URL:', PROXY_URL);
     

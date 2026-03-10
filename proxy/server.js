@@ -15,6 +15,17 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+let currentTunnelUrl = null;
+
+// Endpoint для получения текущего URL туннеля
+app.get('/tunnel-url', (req, res) => {
+    if (currentTunnelUrl) {
+        res.json({ url: currentTunnelUrl });
+    } else {
+        res.status(404).json({ error: 'Tunnel URL not set' });
+    }
+});
+
 // Health check - для проверки
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', message: 'Прокси работает!' });
@@ -22,6 +33,20 @@ app.get('/health', (req, res) => {
 
 app.get('/tunnel-url', (req, res) => {
   res.json({ url: process.env.TUNNEL_URL || null });
+});
+
+
+
+// Endpoint для установки URL (будет вызываться из workflow)
+app.post('/tunnel-url', express.json(), (req, res) => {
+    const { url } = req.body;
+    if (url) {
+        currentTunnelUrl = url;
+        console.log('✅ Tunnel URL updated:', url);
+        res.json({ success: true });
+    } else {
+        res.status(400).json({ error: 'URL required' });
+    }
 });
 
 // Основной обработчик для Gemini
