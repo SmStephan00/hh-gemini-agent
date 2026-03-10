@@ -25,39 +25,63 @@ jobs:
         id: proxy
         run: |
           cd proxy
+          # Запускаем прокси в фоне
           node server.js &
+          # Сохраняем PID процесса
           echo "PROXY_PID=$!" >> $GITHUB_ENV
+          # Даем время на запуск
+          sleep 5
+          echo "✅ Прокси-сервер запущен на порту 3001"
+          
+      - name: Create tunnel with bore.pub
+        id: tunnel
+        run: |
+          # Устанавливаем bore
+          cargo install bore-cli
+          
+          # Запускаем туннель в фоне и сохраняем URL
+          bore local 3001 --to bore.pub > bore.log 2>&1 &
           sleep 5
           
-      - name: Create tunnel with Expose Tunnel
-        id: tunnel
-        uses: codetalkio/expose-tunnel@v1.5.0
-        with:
-          service: bore.pub
-          port: 3001
+          # Извлекаем URL из логов
+          TUNNEL_URL=$(cat bore.log | grep -o 'https://[^ ]*\.trycloudflare\.com\|http://[^ ]*\.bore\.pub' | head -1)
+          
+          # Сохраняем URL в выходную переменную
+          echo "tunnel-url=$TUNNEL_URL" >> $GITHUB_OUTPUT
+          echo "✅ Туннель создан: $TUNNEL_URL"
           
       - name: Display tunnel URL
         run: |
           echo "==========================================="
-          echo "🌐 Туннель создан!"
+          echo "🌐 ТУННЕЛЬ СОЗДАН!"
           echo "📡 URL: ${{ steps.tunnel.outputs.tunnel-url }}"
           echo "🔗 Health check: ${{ steps.tunnel.outputs.tunnel-url }}/health"
           echo "🤖 Gemini endpoint: ${{ steps.tunnel.outputs.tunnel-url }}/api/gemini/generate"
           echo "==========================================="
           
-          # Сохраняем URL в файл для следующего шага
-          echo "${{ steps.tunnel.outputs.tunnel-url }}" > tunnel-url.txt
+      - name: Update client .env with tunnel URL
+        run: |
+          # Создаем папку client если её нет
+          mkdir -p client
+          
+          # Записываем URL в .env файл
+          echo "VITE_PROXY_URL=${{ steps.tunnel.outputs.tunnel-url }}" > client/.env
+          
+          # Показываем результат
+          echo "✅ .env файл обновлен:"
+          cat client/.env
           
       - name: Save URL as artifact
         uses: actions/upload-artifact@v4
         with:
           name: tunnel-url
-          path: tunnel-url.txt
-          retention-days: 1
+          path: client/.env
+          retention-days: 7
           
-      - name: Keep alive
+      - name: Keep tunnel alive
         run: |
           echo "🔄 Туннель активен. Нажмите Cancel чтобы остановить"
+          echo "📝 URL сохранен в client/.env и в артефактах"
           while true; do
             sleep 60
           done
