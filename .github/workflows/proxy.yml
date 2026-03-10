@@ -44,8 +44,14 @@ jobs:
           # Даём время на запуск
           sleep 5
           
+          # Проверяем, что прокси работает локально
+          echo "🔄 Проверка локального прокси..."
+          curl -f http://localhost:3001/health || (echo "❌ Прокси не запущен!" && exit 1)
+          echo "✅ Прокси работает локально"
+          
+          echo ""
           echo "🔄 Запуск TryCloudflare Tunnel..."
-          echo "Это создаст временный публичный URL вида https://random-name.trycloudflare.com"
+          echo "URL будет показан ниже:"
           echo ""
           
           # Запускаем Quick Tunnel (без токена, без аккаунта)
