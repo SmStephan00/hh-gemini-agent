@@ -1,10 +1,11 @@
 import axios from 'axios';
 
 // Используем твой TryCloudflare URL
-const PROXY_URL = 'https://corporate-optimum-proprietary-tech.trycloudflare.com';
+const PROXY_URL = import.meta.env.VITE_PROXY_URL || 'http://localhost:3001';
 
 export const analyzeVacancy = async (vacancy, resumeText) => {
     console.log('🔵 Анализ вакансии через прокси:', vacancy.title);
+    console.log('📡 Прокси URL:', PROXY_URL);
     
     const prompt = `
 Ты — HR-эксперт. Оцени соответствие кандидата вакансии.

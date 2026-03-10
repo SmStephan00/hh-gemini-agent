@@ -3,6 +3,10 @@ import axios from 'axios';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
+console.log('🚀 Сервер запускается с обработчиками:');
+console.log(' - GET /health');
+console.log(' - POST /api/gemini/generate');
+
 dotenv.config();
 
 const app = express();
