@@ -25,21 +25,22 @@ app.get('/health', (req, res) => {
 });
 
 // Получить текущий URL туннеля
+// Добавь эти строки в server.js если их нет
+
 app.get('/tunnel-url', (req, res) => {
     if (currentTunnelUrl) {
         res.json({ url: currentTunnelUrl });
     } else {
-        res.status(404).json({ error: 'Tunnel URL not set yet' });
+        res.status(404).json({ error: 'Tunnel URL not set' });
     }
 });
 
-// Установить URL туннеля (вызывается из workflow)
 app.post('/tunnel-url', express.json(), (req, res) => {
     const { url } = req.body;
     if (url) {
         currentTunnelUrl = url;
         console.log('✅ Tunnel URL updated:', url);
-        res.json({ success: true, url });
+        res.json({ success: true });
     } else {
         res.status(400).json({ error: 'URL required' });
     }

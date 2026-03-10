@@ -1,9 +1,26 @@
 import axios from 'axios';
 
-// Используем твой TryCloudflare URL
-const PROXY_URL = import.meta.env.VITE_PROXY_URL || 'http://localhost:3001';
+// Функция для получения актуального URL
+async function getProxyUrl() {
+    try {
+        // Сначала пробуем получить из .env (если уже есть)
+        if (import.meta.env.VITE_PROXY_URL) {
+            console.log('📡 Использую URL из .env:', import.meta.env.VITE_PROXY_URL);
+            return import.meta.env.VITE_PROXY_URL;
+        }
+        
+        // Если нет, пробуем получить от прокси
+        const response = await axios.get('http://localhost:3001/tunnel-url', { timeout: 2000 });
+        console.log('📡 Получен URL от прокси:', response.data.url);
+        return response.data.url;
+    } catch (error) {
+        console.warn('⚠️ Не удалось получить URL, использую localhost');
+        return 'http://localhost:3001';
+    }
+}
 
 export const analyzeVacancy = async (vacancy, resumeText) => {
+    const PROXY_URL = await getProxyUrl();
     console.log('🔵 Анализ вакансии через прокси:', vacancy.title);
     console.log('📡 Прокси URL:', PROXY_URL);
     
@@ -22,9 +39,8 @@ ${resumeText}
 `;
 
     try {
-        // Отправляем запрос НА ПРОКСИ, а не напрямую в Google
         const response = await axios.post(`${PROXY_URL}/api/gemini/generate`, {
-            model: 'gemini-3-flash-preview',  // используй стабильную модель
+            model: 'gemini-2.0-flash-exp',
             contents: prompt
         });
         
@@ -36,14 +52,13 @@ ${resumeText}
         
     } catch (error) {
         console.error('❌ Ошибка прокси:', error.message);
-        if (error.response) {
-            console.error('Детали:', error.response.data);
-        }
         return 0;
     }
 };
 
 export const generateCoverLetter = async (vacancy, resumeText, userPrompt) => {
+    const PROXY_URL = await getProxyUrl();
+    
     const prompt = `
 ${userPrompt || 'Напиши сопроводительное письмо от имени кандидата.'}
 
@@ -59,7 +74,7 @@ ${resumeText}
 
     try {
         const response = await axios.post(`${PROXY_URL}/api/gemini/generate`, {
-            model: 'gemini-1.5-flash',
+            model: 'gemini-2.0-flash-exp',
             contents: prompt
         });
         
