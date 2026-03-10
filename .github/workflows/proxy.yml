@@ -18,7 +18,7 @@ jobs:
           
       - name: Install dependencies
         run: |
-          cd proxy  # Переходим в папку с прокси
+          cd proxy
           npm install  
           
       - name: Start proxy server
@@ -27,4 +27,4 @@ jobs:
         run: |
           cd proxy
           echo
-          node server.js  
+          node server.js
