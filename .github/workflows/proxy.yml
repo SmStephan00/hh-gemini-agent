@@ -31,56 +31,44 @@ jobs:
       - name: Start proxy server
         run: |
           cd proxy
-          # Запускаем прокси в фоне
           node server.js &
-          # Сохраняем PID процесса
-          echo "PROXY_PID=$!" >> $GITHUB_ENV
-          # Даем время на запуск
           sleep 5
-          echo "✅ Прокси-сервер запущен на порту 3001"
+          echo "✅ Прокси-сервер запущен"
           
       - name: Create tunnel with Cloudflare
         id: tunnel
         run: |
-          # Запускаем cloudflared в фоне и сохраняем URL
           cloudflared tunnel --url http://localhost:3001 > cloudflared.log 2>&1 &
           sleep 15
-          
-          # Извлекаем URL из логов
           TUNNEL_URL=$(cat cloudflared.log | grep -o 'https://[^ ]*\.trycloudflare\.com' | head -1)
           
           if [ -z "$TUNNEL_URL" ]; then
-            echo "❌ Не удалось получить URL из логов:"
-            cat cloudflared.log
+            echo "❌ Не удалось получить URL"
             exit 1
           fi
           
           echo "tunnel-url=$TUNNEL_URL" >> $GITHUB_OUTPUT
           echo "✅ Туннель создан: $TUNNEL_URL"
           
-      - name: Display tunnel URL
+      - name: Send URL to proxy
         run: |
-          echo "==========================================="
-          echo "🌐 ТУННЕЛЬ СОЗДАН!"
-          echo "📡 URL: ${{ steps.tunnel.outputs.tunnel-url }}"
-          echo "🔗 Health check: ${{ steps.tunnel.outputs.tunnel-url }}/health"
-          echo "🤖 Gemini endpoint: ${{ steps.tunnel.outputs.tunnel-url }}/api/gemini/generate"
-          echo "==========================================="
-          
-      - name: Send tunnel URL to proxy
-        run: |
-          # Отправляем URL прокси-серверу
           curl -X POST http://localhost:3001/tunnel-url \
             -H "Content-Type: application/json" \
             -d '{"url": "${{ steps.tunnel.outputs.tunnel-url }}"}'
-          echo "✅ URL отправлен прокси"
           
-      - name: Update client .env with tunnel URL
+      - name: Update client .env
         run: |
           mkdir -p client
           echo "VITE_PROXY_URL=${{ steps.tunnel.outputs.tunnel-url }}" > client/.env
-          echo "✅ .env файл обновлен:"
-          cat client/.env
+          echo "✅ .env обновлен: ${{ steps.tunnel.outputs.tunnel-url }}"
+          
+      - name: Commit and push updated .env
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add client/.env
+          git commit -m "Auto-update tunnel URL: ${{ steps.tunnel.outputs.tunnel-url }}" || echo "No changes to commit"
+          git push
           
       - name: Save URL as artifact
         uses: actions/upload-artifact@v4
@@ -91,8 +79,7 @@ jobs:
           
       - name: Keep tunnel alive
         run: |
-          echo "🔄 Туннель активен. URL: ${{ steps.tunnel.outputs.tunnel-url }}"
-          echo "📝 Нажмите Cancel чтобы остановить"
+          echo "🔄 Туннель активен. URL автоматически сохранен в client/.env и закоммичен в репозиторий"
           while true; do
             sleep 60
           done
