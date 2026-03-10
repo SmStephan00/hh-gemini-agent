@@ -23,7 +23,7 @@ jobs:
           
       - name: Start proxy server
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}  # Секретный ключ
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           cd proxy
           echo
