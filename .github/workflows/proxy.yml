@@ -16,37 +16,41 @@ jobs:
         with:
           node-version: '18'
           
+      - name: Install cloudflared
+        run: |
+          curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
+          chmod +x cloudflared
+          sudo mv cloudflared /usr/local/bin/
+          cloudflared --version
+          
       - name: Install dependencies
         run: |
           cd proxy
           npm install
           
       - name: Start proxy server
-        id: proxy
         run: |
           cd proxy
-          # Запускаем прокси в фоне
           node server.js &
-          # Сохраняем PID процесса
-          echo "PROXY_PID=$!" >> $GITHUB_ENV
-          # Даем время на запуск
           sleep 5
           echo "✅ Прокси-сервер запущен на порту 3001"
           
-      - name: Create tunnel with bore.pub
+      - name: Create tunnel with Cloudflare
         id: tunnel
         run: |
-          # Устанавливаем bore
-          cargo install bore-cli
-          
-          # Запускаем туннель в фоне и сохраняем URL
-          bore local 3001 --to bore.pub > bore.log 2>&1 &
-          sleep 5
+          # Запускаем cloudflared в фоне и сохраняем URL
+          cloudflared tunnel --url http://localhost:3001 > cloudflared.log 2>&1 &
+          sleep 15
           
           # Извлекаем URL из логов
-          TUNNEL_URL=$(cat bore.log | grep -o 'https://[^ ]*\.trycloudflare\.com\|http://[^ ]*\.bore\.pub' | head -1)
+          TUNNEL_URL=$(cat cloudflared.log | grep -o 'https://[^ ]*\.trycloudflare\.com' | head -1)
           
-          # Сохраняем URL в выходную переменную
+          if [ -z "$TUNNEL_URL" ]; then
+            echo "❌ Не удалось получить URL из логов:"
+            cat cloudflared.log
+            exit 1
+          fi
+          
           echo "tunnel-url=$TUNNEL_URL" >> $GITHUB_OUTPUT
           echo "✅ Туннель создан: $TUNNEL_URL"
           
@@ -61,13 +65,8 @@ jobs:
           
       - name: Update client .env with tunnel URL
         run: |
-          # Создаем папку client если её нет
           mkdir -p client
-          
-          # Записываем URL в .env файл
           echo "VITE_PROXY_URL=${{ steps.tunnel.outputs.tunnel-url }}" > client/.env
-          
-          # Показываем результат
           echo "✅ .env файл обновлен:"
           cat client/.env
           
@@ -80,8 +79,8 @@ jobs:
           
       - name: Keep tunnel alive
         run: |
-          echo "🔄 Туннель активен. Нажмите Cancel чтобы остановить"
-          echo "📝 URL сохранен в client/.env и в артефактах"
+          echo "🔄 Туннель активен. URL: ${{ steps.tunnel.outputs.tunnel-url }}"
+          echo "📝 Нажмите Cancel чтобы остановить"
           while true; do
             sleep 60
           done
