@@ -7,14 +7,13 @@ import Header from './assets/components/Header/Header'
 import DashBoard from './assets/pages/Dashboard/DashBoard'
 import Setting from './assets/pages/Setting/Setting'
 import Search from './assets/pages/Search/Serch'
-import TestGemini from './assets/TestGemini'
+
 
 function App() {
   
 
   return (
     <BrowserRouter>
-      <TestGemini /> 
       <Header></Header>
        <div className='container__contant'>
           <Routes>

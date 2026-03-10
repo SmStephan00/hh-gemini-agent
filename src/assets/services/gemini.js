@@ -1,9 +1,10 @@
-import { GoogleGenAI } from "@google/genai";
+import axios from 'axios';
 
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+// Используем твой TryCloudflare URL
+const PROXY_URL = 'https://corporate-optimum-proprietary-tech.trycloudflare.com';
 
 export const analyzeVacancy = async (vacancy, resumeText) => {
-    console.log('🔵 Анализ вакансии:', vacancy.title);
+    console.log('🔵 Анализ вакансии через прокси:', vacancy.title);
     
     const prompt = `
 Ты — HR-эксперт. Оцени соответствие кандидата вакансии.
@@ -12,7 +13,6 @@ export const analyzeVacancy = async (vacancy, resumeText) => {
 Название: ${vacancy.title}
 Компания: ${vacancy.company}
 Требования: ${vacancy.keySkills?.join(', ') || 'не указаны'}
-Описание: ${vacancy.description || 'нет описания'}
 
 РЕЗЮМЕ КАНДИДАТА:
 ${resumeText}
@@ -21,18 +21,23 @@ ${resumeText}
 `;
 
     try {
-        const response = await ai.models.generateContent({
-            model: "gemini-3-flash-preview",  // или gemini-2.0-flash-exp, gemini-1.5-flash
-            contents: prompt,
+        // Отправляем запрос НА ПРОКСИ, а не напрямую в Google
+        const response = await axios.post(`${PROXY_URL}/api/gemini/generate`, {
+            model: 'gemini-1.5-flash',  // используй стабильную модель
+            contents: prompt
         });
         
-        const text = response.text;
-        console.log('📝 Ответ Gemini:', text);
+        const text = response.data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        console.log('📝 Ответ от прокси:', text);
         
         const score = parseInt(text.match(/\d+/)?.[0] || '0');
         return Math.min(100, Math.max(0, score));
-    } catch (err) {
-        console.error('❌ Ошибка Gemini:', err);
+        
+    } catch (error) {
+        console.error('❌ Ошибка прокси:', error.message);
+        if (error.response) {
+            console.error('Детали:', error.response.data);
+        }
         return 0;
     }
 };
@@ -48,18 +53,20 @@ ${vacancy.title} в компании ${vacancy.company}
 РЕЗЮМЕ КАНДИДАТА:
 ${resumeText}
 
-Напиши письмо (3-5 предложений), подчеркивая соответствие кандидата требованиям.
+Напиши письмо (3-5 предложений).
 `;
 
     try {
-        const response = await ai.models.generateContent({
-            model: "gemini-3-flash-preview",
-            contents: prompt,
+        const response = await axios.post(`${PROXY_URL}/api/gemini/generate`, {
+            model: 'gemini-1.5-flash',
+            contents: prompt
         });
         
-        return response.text;
-    } catch (err) {
-        console.error('❌ Ошибка Gemini:', err);
+        return response.data.candidates?.[0]?.content?.parts?.[0]?.text || 
+               'Не удалось сгенерировать письмо';
+        
+    } catch (error) {
+        console.error('❌ Ошибка прокси:', error.message);
         return 'Не удалось сгенерировать письмо';
     }
 };
