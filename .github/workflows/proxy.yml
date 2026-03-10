@@ -31,7 +31,11 @@ jobs:
       - name: Start proxy server
         run: |
           cd proxy
+          # Запускаем прокси в фоне
           node server.js &
+          # Сохраняем PID процесса
+          echo "PROXY_PID=$!" >> $GITHUB_ENV
+          # Даем время на запуск
           sleep 5
           echo "✅ Прокси-сервер запущен на порту 3001"
           
@@ -62,6 +66,14 @@ jobs:
           echo "🔗 Health check: ${{ steps.tunnel.outputs.tunnel-url }}/health"
           echo "🤖 Gemini endpoint: ${{ steps.tunnel.outputs.tunnel-url }}/api/gemini/generate"
           echo "==========================================="
+          
+      - name: Send tunnel URL to proxy
+        run: |
+          # Отправляем URL прокси-серверу
+          curl -X POST http://localhost:3001/tunnel-url \
+            -H "Content-Type: application/json" \
+            -d '{"url": "${{ steps.tunnel.outputs.tunnel-url }}"}'
+          echo "✅ URL отправлен прокси"
           
       - name: Update client .env with tunnel URL
         run: |
