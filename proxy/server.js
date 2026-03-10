@@ -20,6 +20,10 @@ app.get('/health', (req, res) => {
     res.json({ status: 'ok', message: 'Прокси работает!' });
 });
 
+app.get('/tunnel-url', (req, res) => {
+  res.json({ url: process.env.TUNNEL_URL || null });
+});
+
 // Основной обработчик для Gemini
 app.post('/api/gemini/generate', async (req, res) => {
     try {
