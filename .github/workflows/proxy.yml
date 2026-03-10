@@ -1,0 +1,29 @@
+name: Run Gemini Proxy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-proxy:          
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3  
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v3 
+        with:
+          node-version: '18'  
+          
+      - name: Install dependencies
+        run: |
+          cd proxy  # Переходим в папку с прокси
+          npm install  
+          
+      - name: Start proxy server
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}  # Секретный ключ
+        run: |
+          cd proxy
+          node server.js  
