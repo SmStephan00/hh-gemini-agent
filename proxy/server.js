@@ -8,9 +8,6 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Хранилище для текущего URL туннеля
-let currentTunnelUrl = null;
-
 app.use(cors());
 app.use(express.json());
 
@@ -19,31 +16,8 @@ app.get('/health', (req, res) => {
     res.json({ 
         status: 'ok', 
         timestamp: new Date().toISOString(),
-        message: 'Прокси работает!',
-        tunnelUrl: currentTunnelUrl 
+        message: 'Прокси работает!'
     });
-});
-
-// Получить текущий URL туннеля
-// Добавь эти строки в server.js если их нет
-
-app.get('/tunnel-url', (req, res) => {
-    if (currentTunnelUrl) {
-        res.json({ url: currentTunnelUrl });
-    } else {
-        res.status(404).json({ error: 'Tunnel URL not set' });
-    }
-});
-
-app.post('/tunnel-url', express.json(), (req, res) => {
-    const { url } = req.body;
-    if (url) {
-        currentTunnelUrl = url;
-        console.log('✅ Tunnel URL updated:', url);
-        res.json({ success: true });
-    } else {
-        res.status(400).json({ error: 'URL required' });
-    }
 });
 
 // Основной обработчик для Gemini
@@ -95,6 +69,5 @@ app.post('/api/gemini/generate', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`\n🚀 Прокси запущен на порту ${PORT}`);
     console.log(`🏥 Health check: http://localhost:${PORT}/health`);
-    console.log(`🔗 Tunnel URL endpoint: http://localhost:${PORT}/tunnel-url`);
     console.log(`🤖 Gemini endpoint: http://localhost:${PORT}/api/gemini/generate\n`);
 });
