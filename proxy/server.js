@@ -3,47 +3,43 @@ import axios from 'axios';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
-console.log('🚀 Сервер запускается с обработчиками:');
-console.log(' - GET /health');
-console.log(' - POST /api/gemini/generate');
-
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Хранилище для текущего URL туннеля
+let currentTunnelUrl = null;
+
 app.use(cors());
 app.use(express.json());
 
-let currentTunnelUrl = null;
+// Health check
+app.get('/health', (req, res) => {
+    res.json({ 
+        status: 'ok', 
+        timestamp: new Date().toISOString(),
+        message: 'Прокси работает!',
+        tunnelUrl: currentTunnelUrl 
+    });
+});
 
-// Endpoint для получения текущего URL туннеля
+// Получить текущий URL туннеля
 app.get('/tunnel-url', (req, res) => {
     if (currentTunnelUrl) {
         res.json({ url: currentTunnelUrl });
     } else {
-        res.status(404).json({ error: 'Tunnel URL not set' });
+        res.status(404).json({ error: 'Tunnel URL not set yet' });
     }
 });
 
-// Health check - для проверки
-app.get('/health', (req, res) => {
-    res.json({ status: 'ok', message: 'Прокси работает!' });
-});
-
-app.get('/tunnel-url', (req, res) => {
-  res.json({ url: process.env.TUNNEL_URL || null });
-});
-
-
-
-// Endpoint для установки URL (будет вызываться из workflow)
+// Установить URL туннеля (вызывается из workflow)
 app.post('/tunnel-url', express.json(), (req, res) => {
     const { url } = req.body;
     if (url) {
         currentTunnelUrl = url;
         console.log('✅ Tunnel URL updated:', url);
-        res.json({ success: true });
+        res.json({ success: true, url });
     } else {
         res.status(400).json({ error: 'URL required' });
     }
@@ -79,15 +75,25 @@ app.post('/api/gemini/generate', async (req, res) => {
         
     } catch (error) {
         console.error('❌ Ошибка прокси:', error.message);
-        res.status(500).json({ 
-            error: 'Proxy Error', 
-            message: error.message 
-        });
+        
+        if (error.response) {
+            res.status(error.response.status).json({
+                error: 'Gemini API Error',
+                details: error.response.data,
+                message: error.message
+            });
+        } else {
+            res.status(500).json({ 
+                error: 'Proxy Error', 
+                message: error.message 
+            });
+        }
     }
 });
 
 app.listen(PORT, () => {
     console.log(`\n🚀 Прокси запущен на порту ${PORT}`);
     console.log(`🏥 Health check: http://localhost:${PORT}/health`);
+    console.log(`🔗 Tunnel URL endpoint: http://localhost:${PORT}/tunnel-url`);
     console.log(`🤖 Gemini endpoint: http://localhost:${PORT}/api/gemini/generate\n`);
 });
