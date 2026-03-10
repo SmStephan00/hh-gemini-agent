@@ -26,4 +26,5 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}  # Секретный ключ
         run: |
           cd proxy
+          echo
           node server.js  
