@@ -1,4 +1,4 @@
-name: Run Gemini Proxy with TryCloudflare
+name: Run Gemini Proxy with Auto Tunnel
 
 on:
   workflow_dispatch:
@@ -16,43 +16,48 @@ jobs:
         with:
           node-version: '18'
           
-      - name: Install cloudflared
-        run: |
-          curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
-          chmod +x cloudflared
-          sudo mv cloudflared /usr/local/bin/
-          cloudflared --version
-          
       - name: Install dependencies
         run: |
           cd proxy
           npm install
           
-      - name: Start proxy with TryCloudflare
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      - name: Start proxy server
+        id: proxy
         run: |
           cd proxy
-          echo ""
-          echo "==========================================="
-          echo "🚀 Запуск прокси с TryCloudflare"
-          echo "==========================================="
-          
-          # Запускаем прокси в фоне
           node server.js &
-          
-          # Даём время на запуск
+          echo "PROXY_PID=$!" >> $GITHUB_ENV
           sleep 5
           
-          # Проверяем, что прокси работает локально
-          echo "🔄 Проверка локального прокси..."
-          curl -f http://localhost:3001/health || (echo "❌ Прокси не запущен!" && exit 1)
-          echo "✅ Прокси работает локально"
+      - name: Create tunnel with Expose Tunnel
+        id: tunnel
+        uses: codetalkio/expose-tunnel@v1.5.0
+        with:
+          service: bore.pub
+          port: 3001
           
-          echo ""
-          echo "🔄 Запуск TryCloudflare Tunnel..."
-          echo "URL будет показан ниже:"
-          echo ""
+      - name: Display tunnel URL
+        run: |
+          echo "==========================================="
+          echo "🌐 Туннель создан!"
+          echo "📡 URL: ${{ steps.tunnel.outputs.tunnel-url }}"
+          echo "🔗 Health check: ${{ steps.tunnel.outputs.tunnel-url }}/health"
+          echo "🤖 Gemini endpoint: ${{ steps.tunnel.outputs.tunnel-url }}/api/gemini/generate"
+          echo "==========================================="
           
-          # Запускаем Quick Tunnel (без токена, без аккаунта)
-          cloudflared tunnel --url http://localhost:3001
+          # Сохраняем URL в файл для следующего шага
+          echo "${{ steps.tunnel.outputs.tunnel-url }}" > tunnel-url.txt
+          
+      - name: Save URL as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tunnel-url
+          path: tunnel-url.txt
+          retention-days: 1
+          
+      - name: Keep alive
+        run: |
+          echo "🔄 Туннель активен. Нажмите Cancel чтобы остановить"
+          while true; do
+            sleep 60
+          done
