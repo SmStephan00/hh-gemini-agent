@@ -24,7 +24,7 @@ ${resumeText}
     try {
         // Отправляем запрос НА ПРОКСИ, а не напрямую в Google
         const response = await axios.post(`${PROXY_URL}/api/gemini/generate`, {
-            model: 'gemini-1.5-flash',  // используй стабильную модель
+            model: 'gemini-3-flash-preview',  // используй стабильную модель
             contents: prompt
         });
         
