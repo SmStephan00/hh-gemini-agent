@@ -1,4 +1,4 @@
-name: Run Gemini Proxy with Auto Tunnel
+name: Run Gemini Proxy
 
 on:
   workflow_dispatch:
@@ -42,44 +42,27 @@ jobs:
           sleep 15
           TUNNEL_URL=$(cat cloudflared.log | grep -o 'https://[^ ]*\.trycloudflare\.com' | head -1)
           
-          if [ -z "$TUNNEL_URL" ]; then
-            echo "❌ Не удалось получить URL"
-            exit 1
-          fi
+          echo "==========================================="
+          echo "🌐 ТВОЙ НОВЫЙ URL (СКОПИРУЙ ЕГО):"
+          echo "$TUNNEL_URL"
+          echo "==========================================="
+          echo "🔗 Health check: $TUNNEL_URL/health"
+          echo "🤖 Gemini endpoint: $TUNNEL_URL/api/gemini/generate"
+          echo "==========================================="
           
-          echo "tunnel-url=$TUNNEL_URL" >> $GITHUB_OUTPUT
-          echo "✅ Туннель создан: $TUNNEL_URL"
+          # Сохраняем в файл для артефакта
+          echo "$TUNNEL_URL" > tunnel-url.txt
           
-      - name: Send URL to proxy
-        run: |
-          curl -X POST http://localhost:3001/tunnel-url \
-            -H "Content-Type: application/json" \
-            -d '{"url": "${{ steps.tunnel.outputs.tunnel-url }}"}'
-          
-      - name: Update client .env
-        run: |
-          mkdir -p client
-          echo "VITE_PROXY_URL=${{ steps.tunnel.outputs.tunnel-url }}" > client/.env
-          echo "✅ .env обновлен: ${{ steps.tunnel.outputs.tunnel-url }}"
-          
-      - name: Commit and push updated .env
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add client/.env
-          git commit -m "Auto-update tunnel URL: ${{ steps.tunnel.outputs.tunnel-url }}" || echo "No changes to commit"
-          git push
-          
-      - name: Save URL as artifact
+      - name: Upload URL as artifact
         uses: actions/upload-artifact@v4
         with:
           name: tunnel-url
-          path: client/.env
-          retention-days: 7
+          path: tunnel-url.txt
+          retention-days: 1
           
       - name: Keep tunnel alive
         run: |
-          echo "🔄 Туннель активен. URL автоматически сохранен в client/.env и закоммичен в репозиторий"
+          echo "🔄 Туннель активен. Нажмите Cancel чтобы остановить"
           while true; do
             sleep 60
           done
