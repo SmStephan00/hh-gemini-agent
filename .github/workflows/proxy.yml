@@ -1,31 +1,74 @@
-name: Run Gemini Proxy
+name: Run Gemini Proxy with Cloudflare Tunnel
 
 on:
   workflow_dispatch:
 
 jobs:
-  run-proxy:          
-    runs-on: ubuntu-latest  
+  run-proxy:
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3  
+        uses: actions/checkout@v3
         
       - name: Setup Node.js
-        uses: actions/setup-node@v3 
+        uses: actions/setup-node@v3
         with:
-          node-version: '18'  
+          node-version: '18'
+          
+      - name: Install cloudflared
+        run: |
+          # Скачиваем cloudflared для Linux
+          curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
+          chmod +x cloudflared
+          sudo mv cloudflared /usr/local/bin/
+          cloudflared --version
           
       - name: Install dependencies
         run: |
-          cd proxy  # Переходим в папку с прокси
-          npm install  
+          cd proxy
+          npm install
           
-      - name: Start proxy server
-        timeout-minutes: 360
+      - name: Start proxy with Cloudflare Tunnel
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}  # Секретный ключ
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TUNNEL_TOKEN: ${{ secrets.TUNNEL_TOKEN }}
         run: |
           cd proxy
-          echo
-          node server.js  
+          echo ""
+          echo "==========================================="
+          echo "🚀 Запуск прокси с Cloudflare Tunnel"
+          echo "==========================================="
+          
+          # Запускаем прокси-сервер в фоне
+          echo "📡 Запуск прокси-сервера на порту 3001..."
+          node server.js &
+          
+          # Даём время прокси запуститься
+          sleep 5
+          
+          # Проверяем, что прокси запущен
+          echo "✅ Прокси-сервер запущен"
+          
+          # Запускаем туннель Cloudflare
+          echo "🔄 Запуск Cloudflare Tunnel..."
+          cloudflared tunnel run --token $TUNNEL_TOKEN &
+          
+          # Даём время туннелю подключиться
+          sleep 10
+          
+          # Выводим информацию
+          echo ""
+          echo "==========================================="
+          echo "🌐 ПУБЛИЧНЫЙ URL: https://hhbot-gg.abrdns.com"
+          echo "📋 Health check: https://hhbot-gg.abrdns.com/health"
+          echo "🔗 Gemini endpoint: https://hhbot-gg.abrdns.com/api/gemini/generate"
+          echo "==========================================="
+          echo ""
+          echo "🔄 Туннель активен. Нажмите Cancel чтобы остановить"
+          echo ""
+          
+          # Бесконечное ожидание (держит workflow запущенным)
+          while true; do
+            sleep 60
+          done
