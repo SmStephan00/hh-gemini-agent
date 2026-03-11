@@ -29,11 +29,13 @@ jobs:
           npm install
           
       - name: Start proxy server
+        env:                          # ← ЭТОЙ СЕКЦИИ НЕ ХВАТАЛО!
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           cd proxy
           node server.js &
           sleep 5
-          echo "✅ Прокси-сервер запущен"
+          echo "✅ Прокси-сервер запущен с ключом"
           
       - name: Create tunnel with Cloudflare
         id: tunnel
