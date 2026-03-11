@@ -1,13 +1,14 @@
-import fs from 'fs'
-import pdf from 'pdf-parse'
+import fs from 'fs';
+import * as pdfParser from 'pdf-parse';  // <- импортируем всё как объект
 
 export async function loadResumeFromPdf(pdfPath) {
     try{
         console.log(`📄 Загрузка резюме из: ${pdfPath}`)
 
         const dataBuffer = fs.readFileSync(pdfPath);
-
-        const data = await pdf(dataBuffer)
+        
+        // Используем default экспорт из объекта
+        const data = await pdfParser.default(dataBuffer);
 
         console.log(`✅ Резюме загружено, ${data.text.length} символов`);
         return data.text;
@@ -15,7 +16,6 @@ export async function loadResumeFromPdf(pdfPath) {
         console.error('❌ Ошибка загрузки PDF:', err.message);
         throw err;
     }
-
 }
 
 export function saveResumeToEnv(resumeText){
