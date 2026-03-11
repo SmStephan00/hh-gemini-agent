@@ -4,27 +4,65 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-proxy:          
-    runs-on: ubuntu-latest  
+  run-proxy:
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3  
+        uses: actions/checkout@v3
         
       - name: Setup Node.js
-        uses: actions/setup-node@v3 
+        uses: actions/setup-node@v3
         with:
-          node-version: '18'  
+          node-version: '18'
+          
+      - name: Install cloudflared
+        run: |
+          curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
+          chmod +x cloudflared
+          sudo mv cloudflared /usr/local/bin/
+          cloudflared --version
           
       - name: Install dependencies
         run: |
           cd proxy
-          npm install  
+          npm install
           
       - name: Start proxy server
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           cd proxy
-          echo
-          node server.js
+          node server.js &
+          sleep 5
+          echo "✅ Прокси-сервер запущен"
+          
+      - name: Create tunnel with Cloudflare
+        id: tunnel
+        run: |
+          cloudflared tunnel --url http://localhost:3001 > cloudflared.log 2>&1 &
+          sleep 15
+          TUNNEL_URL=$(cat cloudflared.log | grep -o 'https://[^ ]*\.trycloudflare\.com' | head -1)
+          
+          echo "==========================================="
+          echo "🌐 ТВОЙ НОВЫЙ URL (СКОПИРУЙ ЕГО):"
+          echo "$TUNNEL_URL"
+          echo "==========================================="
+          echo "🔗 Health check: $TUNNEL_URL/health"
+          echo "🤖 Gemini endpoint: $TUNNEL_URL/api/gemini/generate"
+          echo "==========================================="
+          
+          # Сохраняем в файл для артефакта
+          echo "$TUNNEL_URL" > tunnel-url.txt
+          
+      - name: Upload URL as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tunnel-url
+          path: tunnel-url.txt
+          retention-days: 1
+          
+      - name: Keep tunnel alive
+        run: |
+          echo "🔄 Туннель активен. Нажмите Cancel чтобы остановить"
+          while true; do
+            sleep 60
+          done

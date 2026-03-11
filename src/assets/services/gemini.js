@@ -1,9 +1,11 @@
-import { GoogleGenAI } from "@google/genai";
+import axios from 'axios';
 
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+// Берем URL из .env - ты его сам копируешь туда
+const PROXY_URL = import.meta.env.VITE_PROXY_URL;
 
 export const analyzeVacancy = async (vacancy, resumeText) => {
-    console.log('🔵 Анализ вакансии:', vacancy.title);
+    console.log('🔵 Анализ вакансии через прокси:', vacancy.title);
+    console.log('📡 Прокси URL:', PROXY_URL);
     
     const prompt = `
 Ты — HR-эксперт. Оцени соответствие кандидата вакансии.
@@ -12,7 +14,6 @@ export const analyzeVacancy = async (vacancy, resumeText) => {
 Название: ${vacancy.title}
 Компания: ${vacancy.company}
 Требования: ${vacancy.keySkills?.join(', ') || 'не указаны'}
-Описание: ${vacancy.description || 'нет описания'}
 
 РЕЗЮМЕ КАНДИДАТА:
 ${resumeText}
@@ -21,45 +22,21 @@ ${resumeText}
 `;
 
     try {
-        const response = await ai.models.generateContent({
-            model: "gemini-3-flash-preview",  // или gemini-2.0-flash-exp, gemini-1.5-flash
-            contents: prompt,
+        const response = await axios.post(`${PROXY_URL}/api/gemini/generate`, {
+            model: 'gemini-2.0-flash-exp',
+            contents: prompt
         });
         
-        const text = response.text;
-        console.log('📝 Ответ Gemini:', text);
+        const text = response.data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        console.log('📝 Ответ от прокси:', text);
         
         const score = parseInt(text.match(/\d+/)?.[0] || '0');
         return Math.min(100, Math.max(0, score));
-    } catch (err) {
-        console.error('❌ Ошибка Gemini:', err);
+        
+    } catch (error) {
+        console.error('❌ Ошибка прокси:', error.message);
         return 0;
     }
 };
 
-export const generateCoverLetter = async (vacancy, resumeText, userPrompt) => {
-    const prompt = `
-${userPrompt || 'Напиши сопроводительное письмо от имени кандидата.'}
-
-ВАКАНСИЯ:
-${vacancy.title} в компании ${vacancy.company}
-Требования: ${vacancy.keySkills?.join(', ')}
-
-РЕЗЮМЕ КАНДИДАТА:
-${resumeText}
-
-Напиши письмо (3-5 предложений), подчеркивая соответствие кандидата требованиям.
-`;
-
-    try {
-        const response = await ai.models.generateContent({
-            model: "gemini-3-flash-preview",
-            contents: prompt,
-        });
-        
-        return response.text;
-    } catch (err) {
-        console.error('❌ Ошибка Gemini:', err);
-        return 'Не удалось сгенерировать письмо';
-    }
-};
+// аналогично для generateCoverLetter
