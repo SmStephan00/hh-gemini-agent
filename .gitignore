@@ -25,3 +25,6 @@ dist-ssr
 
 # Env
 .env
+echo "debug-*.html" >> ../.gitignore
+echo "debug-*.png" >> ../.gitignore
+echo "debug-*.log" >> ../.gitignore

@@ -28,8 +28,8 @@ export async function searchVacancies(page, query, options = {}) {
 
         console.log(`📡 URL: ${url}`);
 
-        await page.goto(url,{waitUntil: 'networkidle'})
-
+        await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 }) 
+        
         await page.waitForSelector('[data-qa="vacancy-serp__vacancy"]', { timeout: 10000 });
 
         const allVacancies = []
