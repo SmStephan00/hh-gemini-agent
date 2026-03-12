@@ -24,16 +24,15 @@ jobs:
         run: npm ci
         working-directory: ./proxy
 
-      - name: Start proxy with API key
-        id: start-proxy
+      - name: Start proxy server with API key
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           cd proxy
-          echo "🔑 Ключ получен, длина: ${#GEMINI_API_KEY}"
+          echo "🔑 Длина ключа в workflow: ${#GEMINI_API_KEY}"
           node server.js &
           sleep 5
-          echo "✅ Прокси запущен"
+          echo "✅ Прокси-сервер запущен"
 
       - name: Start tunnel and get URL
         id: tunnel
