@@ -5,6 +5,11 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+console.log("=== ОТЛАДКА ПРОКСИ ===");
+console.log("GEMINI_API_KEY загружен:", process.env.GEMINI_API_KEY ? "✅ ДА" : "❌ НЕТ");
+console.log("Длина ключа:", process.env.GEMINI_API_KEY ? process.env.GEMINI_API_KEY.length : 0);
+console.log("========================");
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
