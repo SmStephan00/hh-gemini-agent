@@ -18,8 +18,8 @@ app.use(express.json());
 
 // Health check
 app.get('/health', (req, res) => {
-    res.json({ 
-        status: 'ok', 
+    res.json({
+        status: 'ok',
         timestamp: new Date().toISOString(),
         message: 'Прокси работает!'
     });
@@ -30,12 +30,12 @@ app.post('/api/gemini/generate', async (req, res) => {
     try {
         const { model, contents } = req.body;
         console.log(`📤 Запрос к Gemini через прокси: ${model}`);
-        
+
         // Проверяем наличие ключа
         if (!process.env.GEMINI_API_KEY) {
             throw new Error('GEMINI_API_KEY не найден');
         }
-        
+
         // Отправляем запрос в Google
         const response = await axios.post(
             `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`,
@@ -49,13 +49,13 @@ app.post('/api/gemini/generate', async (req, res) => {
                 timeout: 30000
             }
         );
-        
+
         console.log('✅ Ответ получен от Gemini');
         res.json(response.data);
-        
+
     } catch (error) {
         console.error('❌ Ошибка прокси:', error.message);
-        
+
         if (error.response) {
             res.status(error.response.status).json({
                 error: 'Gemini API Error',
@@ -63,9 +63,9 @@ app.post('/api/gemini/generate', async (req, res) => {
                 message: error.message
             });
         } else {
-            res.status(500).json({ 
-                error: 'Proxy Error', 
-                message: error.message 
+            res.status(500).json({
+                error: 'Proxy Error',
+                message: error.message
             });
         }
     }
