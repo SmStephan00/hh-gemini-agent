@@ -28,18 +28,36 @@ jobs:
           cd proxy
           npm install
           
-      - name: Start proxy server
+      - name: Start proxy server with API key
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           cd proxy
+          echo "==========================================="
+          echo "🔑 ПРОВЕРКА ПЕРЕДАЧИ КЛЮЧА"
+          echo "==========================================="
+          echo "Длина ключа: ${#GEMINI_API_KEY}"
+          echo "Первые 5 символов: ${GEMINI_API_KEY:0:5}..."
+          echo "Ключ загружен: ${GEMINI_API_KEY:0:10}..."
+          echo "==========================================="
+          
+          # Запускаем прокси в фоне
           node server.js &
+          
+          # Даем время на запуск
           sleep 5
           echo "✅ Прокси-сервер запущен"
           
       - name: Create tunnel with Cloudflare
         id: tunnel
         run: |
+          # Запускаем туннель в фоне
           cloudflared tunnel --url http://localhost:3001 > cloudflared.log 2>&1 &
+          
+          # Ждем создания туннеля
           sleep 15
+          
+          # Извлекаем URL из логов
           TUNNEL_URL=$(cat cloudflared.log | grep -o 'https://[^ ]*\.trycloudflare\.com' | head -1)
           
           echo "==========================================="
@@ -50,7 +68,7 @@ jobs:
           echo "🤖 Gemini endpoint: $TUNNEL_URL/api/gemini/generate"
           echo "==========================================="
           
-          # Сохраняем в файл для артефакта
+          # Сохраняем URL в файл
           echo "$TUNNEL_URL" > tunnel-url.txt
           
       - name: Upload URL as artifact
@@ -63,6 +81,7 @@ jobs:
       - name: Keep tunnel alive
         run: |
           echo "🔄 Туннель активен. Нажмите Cancel чтобы остановить"
+          echo "📝 URL сохранен в артефактах"
           while true; do
             sleep 60
           done
