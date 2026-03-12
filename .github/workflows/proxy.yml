@@ -6,82 +6,58 @@ on:
 jobs:
   run-proxy:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
         with:
           node-version: '18'
-          
+
       - name: Install cloudflared
         run: |
           curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
           chmod +x cloudflared
           sudo mv cloudflared /usr/local/bin/
-          cloudflared --version
-          
+
       - name: Install dependencies
-        run: |
-          cd proxy
-          npm install
-          
-      - name: Start proxy server with API key
+        run: npm ci
+        working-directory: ./proxy
+
+      - name: Start proxy with API key
+        id: start-proxy
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           cd proxy
-          echo "==========================================="
-          echo "🔑 ПРОВЕРКА ПЕРЕДАЧИ КЛЮЧА"
-          echo "==========================================="
-          echo "Длина ключа: ${#GEMINI_API_KEY}"
-          echo "Первые 5 символов: ${GEMINI_API_KEY:0:5}..."
-          echo "Ключ загружен: ${GEMINI_API_KEY:0:10}..."
-          echo "==========================================="
-          
-          # Запускаем прокси в фоне
+          echo "🔑 Ключ получен, длина: ${#GEMINI_API_KEY}"
           node server.js &
-          
-          # Даем время на запуск
           sleep 5
-          echo "✅ Прокси-сервер запущен"
-          
-      - name: Create tunnel with Cloudflare
+          echo "✅ Прокси запущен"
+
+      - name: Start tunnel and get URL
         id: tunnel
         run: |
-          # Запускаем туннель в фоне
-          cloudflared tunnel --url http://localhost:3001 > cloudflared.log 2>&1 &
-          
-          # Ждем создания туннеля
+          cloudflared tunnel --url http://localhost:3001 > tunnel.log 2>&1 &
           sleep 15
-          
-          # Извлекаем URL из логов
-          TUNNEL_URL=$(cat cloudflared.log | grep -o 'https://[^ ]*\.trycloudflare\.com' | head -1)
-          
+          TUNNEL_URL=$(grep -o 'https://[^ ]*\.trycloudflare\.com' tunnel.log | head -1)
+          echo "url=$TUNNEL_URL" >> $GITHUB_OUTPUT
+
+      - name: Show connection info
+        run: |
           echo "==========================================="
-          echo "🌐 ТВОЙ НОВЫЙ URL (СКОПИРУЙ ЕГО):"
-          echo "$TUNNEL_URL"
+          echo "🌐 URL: ${{ steps.tunnel.outputs.url }}"
+          echo "🔗 Health: ${{ steps.tunnel.outputs.url }}/health"
+          echo "🤖 Gemini: ${{ steps.tunnel.outputs.url }}/api/gemini/generate"
           echo "==========================================="
-          echo "🔗 Health check: $TUNNEL_URL/health"
-          echo "🤖 Gemini endpoint: $TUNNEL_URL/api/gemini/generate"
-          echo "==========================================="
-          
-          # Сохраняем URL в файл
-          echo "$TUNNEL_URL" > tunnel-url.txt
-          
+
       - name: Upload URL as artifact
         uses: actions/upload-artifact@v4
         with:
           name: tunnel-url
           path: tunnel-url.txt
-          retention-days: 1
-          
-      - name: Keep tunnel alive
+
+      - name: Keep alive
         run: |
-          echo "🔄 Туннель активен. Нажмите Cancel чтобы остановить"
-          echo "📝 URL сохранен в артефактах"
-          while true; do
-            sleep 60
-          done
+          echo "🔄 Туннель активен: ${{ steps.tunnel.outputs.url }}"
+          while true; do sleep 60; done
