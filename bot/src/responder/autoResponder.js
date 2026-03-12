@@ -16,7 +16,10 @@ export async function autoRespond(page, vacancyUrl, resumeText, userPrompt = '',
         } = options;
         
         // Переходим на страницу вакансии
-        await page.goto(vacancyUrl, { waitUntil: 'networkidle' });
+        await page.goto(vacancyUrl, { 
+            waitUntil: 'networkidle', 
+            timeout: 60000  // 60 секунд вместо 30
+        });
         
         // Парсим данные вакансии
         const vacancyData = await parseVacancyPage(page);
@@ -108,10 +111,21 @@ export async function autoRespond(page, vacancyUrl, resumeText, userPrompt = '',
         }
         
         if (letterField) {
-            // Очищаем поле и вставляем письмо
-            await letterField.fill('');
-            await letterField.type(coverLetter, { delay: 50 });
-            console.log('✍️ Письмо вставлено');
+            try {
+                // Очищаем поле
+                await letterField.fill('');
+
+                // Устанавливаем больший таймаут для этой операции
+                await page.waitForTimeout(500);
+
+                // Печатаем с задержкой 30-50 мс (красиво, но быстрее)
+                await letterField.type(coverLetter, { delay: 30 });
+        
+        console.log('✍️ Письмо введено');
+        
+    } catch (error) {
+        console.log('⚠️ Ошибка при вводе письма:', error.message);
+    }
         } else {
             console.log('⚠️ Поле для письма не найдено');
         }
@@ -156,7 +170,11 @@ export async function autoRespond(page, vacancyUrl, resumeText, userPrompt = '',
             '.vacancy-response-success',
             'div:has-text("Отклик отправлен")',
             'div:has-text("Вы успешно откликнулись")',
-            '[data-qa="vacancy-response-success"]'
+            '[data-qa="vacancy-response-success"]',
+            'div:has-text("Ваш отклик отправлен")',        
+            'div:has-text("Отклик принят")',               
+            '.bloko-text:has-text("отправлен")',           
+            '[class*="success"]:has-text("отправлен")'     
         ];
         
         let success = false;

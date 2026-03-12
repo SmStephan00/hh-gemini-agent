@@ -3,22 +3,18 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// URL прокси (из .env или localhost)
-const PROXY_URL = process.env.VITE_PROXY_URL || 'http://localhost:3001';
+const PROXY_URL = process.env.VITE_PROXY_URL;
 
-/**
- * Генерирует сопроводительное письмо через Gemini
- * @param {Object} vacancy - Данные вакансии
- * @param {string} resumeText - Текст резюме
- * @param {string} userPrompt - Дополнительные пожелания
- * @returns {Promise<string>} - Сгенерированное письмо
- */
 export async function generateCoverLetter(vacancy, resumeText, userPrompt = '') {
     try {
         console.log('📝 Генерация сопроводительного письма...');
         
+        if (!PROXY_URL) {
+            throw new Error('VITE_PROXY_URL не задан в .env');
+        }
+        
         const prompt = `
-Ты — профессиональный HR-специалист и карьерный консультант. Напиши сопроводительное письмо от имени кандидата.
+Ты — профессиональный HR-специалист. Напиши сопроводительное письмо от имени кандидата.
 
 ### ВАКАНСИЯ:
 Название: ${vacancy.title}
@@ -29,20 +25,17 @@ export async function generateCoverLetter(vacancy, resumeText, userPrompt = '') 
 ### РЕЗЮМЕ КАНДИДАТА:
 ${resumeText.substring(0, 2000)}
 
-### ДОПОЛНИТЕЛЬНЫЕ ПОЖЕЛАНИЯ:
-${userPrompt || 'Напиши профессиональное, но не слишком формальное письмо. Подчеркни соответствие навыков кандидата требованиям вакансии. Упомяни конкретные технологии и опыт.'}
-
 ### ТРЕБОВАНИЯ К ПИСЬМУ:
 - Длина: 3-5 предложений
 - Язык: русский
 - Стиль: профессиональный, но живой
-- Не используй шаблонные фразы
 - Персонализируй под конкретную компанию и вакансию
 `;
 
-        // Отправляем запрос через прокси
+        console.log(`📡 Отправка запроса на: ${PROXY_URL}/api/gemini/generate`);
+        
         const response = await axios.post(`${PROXY_URL}/api/gemini/generate`, {
-            model: 'gemini-2.0-flash-exp',
+            model: 'gemini-3-flash-preview',
             contents: prompt
         }, {
             timeout: 30000,
@@ -51,61 +44,25 @@ ${userPrompt || 'Напиши профессиональное, но не сли
 
         const letter = response.data.candidates?.[0]?.content?.parts?.[0]?.text || '';
         
-        console.log(`✅ Письмо сгенерировано (${letter.length} символов)`);
+        if (!letter) {
+            throw new Error('Пустой ответ от Gemini');
+        }
         
+        console.log(`✅ Письмо сгенерировано (${letter.length} символов)`);
         return letter;
 
     } catch (error) {
-        console.error('❌ Ошибка генерации письма:', error.message);
+        console.error('❌ Ошибка Gemini:', error.message);
+        if (error.response) {
+            console.error('Статус:', error.response.status);
+            console.error('Данные:', error.response.data);
+        }
         
-        // Возвращаем запасной вариант
-        return getFallbackLetter(vacancy);
+        // Запасной вариант
+        return getTemplateLetter(vacancy);
     }
 }
 
-/**
- * Запасной вариант письма (если Gemini не отвечает)
- */
-function getFallbackLetter(vacancy) {
-    const templates = [
-        `Здравствуйте! Меня заинтересовала вакансия ${vacancy.title} в компании ${vacancy.company}. Мой опыт и навыки соответствуют вашим требованиям. Буду рад обсудить детали на собеседовании.`,
-        
-        `Добрый день! Я хочу предложить свою кандидатуру на позицию ${vacancy.title}. Уверен, что мой опыт будет полезен для развития проектов ${vacancy.company}. Готов к сотрудничеству!`,
-        
-        `Приветствую команду ${vacancy.company}! Изучив вашу вакансию ${vacancy.title}, я понял, что это именно то, чем я хочу заниматься. Мои компетенции идеально подходят для решения ваших задач.`
-    ];
-    
-    return templates[Math.floor(Math.random() * templates.length)];
-}
-
-/**
- * Генерирует письмо на основе ID вакансии (получает данные через парсер)
- * @param {Page} page - Страница Playwright с открытой вакансией
- * @param {string} resumeText - Текст резюме
- * @returns {Promise<string>}
- */
-export async function generateLetterFromPage(page, resumeText) {
-    try {
-        // Парсим вакансию прямо со страницы
-        const vacancyData = await page.evaluate(() => {
-            const title = document.querySelector('[data-qa="vacancy-title"]')?.textContent?.trim() || '';
-            const company = document.querySelector('[data-qa="vacancy-company-name"]')?.textContent?.trim() || '';
-            
-            const skills = [];
-            document.querySelectorAll('[data-qa="bloko-tag__text"]').forEach(el => {
-                const skill = el.textContent?.trim();
-                if (skill) skills.push(skill);
-            });
-            
-            const description = document.querySelector('[data-qa="vacancy-description"]')?.textContent?.trim() || '';
-            
-            return { title, company, skills, description };
-        });
-        
-        return await generateCoverLetter(vacancyData, resumeText);
-        
-    } catch (error) {
-        console.error('❌ Ошибка генерации письма со страницы:', error.message);
-        throw error;
-    }
+function getTemplateLetter(vacancy) {
+    return `Здравствуйте! Меня заинтересовала вакансия ${vacancy.title} в компании ${vacancy.company}. Мой опыт и навыки соответствуют вашим требованиям. Буду рад обсудить детали на собеседовании.`;
 }

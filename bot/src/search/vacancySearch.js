@@ -28,7 +28,20 @@ export async function searchVacancies(page, query, options = {}) {
 
         console.log(`📡 URL: ${url}`);
 
-        await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 }) 
+        let retries = 3;
+        let success = false;
+            
+        while (retries > 0 && !success) {
+            try {
+                await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+                success = true;
+            } catch (err) {
+                retries--;
+                console.log(`⚠️ Попытка ${3-retries}/3 не удалась, повтор через 5 сек...`);
+                if (retries > 0) await page.waitForTimeout(5000);
+                else throw err;
+            }
+        }
         
         await page.waitForSelector('[data-qa="vacancy-serp__vacancy"]', { timeout: 10000 });
 
