@@ -29,13 +29,15 @@ jobs:
           npm install
           
       - name: Start proxy server
-        env:                          # ← ЭТОЙ СЕКЦИИ НЕ ХВАТАЛО!
+        env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           cd proxy
+          # Выводим для отладки (первые 10 символов)
+          echo "Ключ загружен: ${GEMINI_API_KEY:0:10}..."
           node server.js &
           sleep 5
-          echo "✅ Прокси-сервер запущен с ключом"
+          echo "✅ Прокси-сервер запущен"
           
       - name: Create tunnel with Cloudflare
         id: tunnel
@@ -52,7 +54,6 @@ jobs:
           echo "🤖 Gemini endpoint: $TUNNEL_URL/api/gemini/generate"
           echo "==========================================="
           
-          # Сохраняем в файл для артефакта
           echo "$TUNNEL_URL" > tunnel-url.txt
           
       - name: Upload URL as artifact
