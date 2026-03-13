@@ -13,6 +13,9 @@ export async function generateCoverLetter(vacancy, resumeText, userPrompt = '') 
             throw new Error('VITE_PROXY_URL не задан в .env');
         }
         
+        const model = 'gemini-3-flash-preview';
+        const apiKey = process.env.GEMINI_API_KEY; // Убедись, что ключ есть в .env бота!
+        
         const prompt = `
 Ты — профессиональный HR-специалист. Напиши сопроводительное письмо от имени кандидата.
 
@@ -32,11 +35,14 @@ ${resumeText.substring(0, 2000)}
 - Персонализируй под конкретную компанию и вакансию
 `;
 
-        console.log(`📡 Отправка запроса на: ${PROXY_URL}/api/gemini/generate`);
+        // ПРАВИЛЬНЫЙ URL для Worker
+        const url = `${PROXY_URL}/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        console.log(`📡 Отправка запроса на: ${url.replace(apiKey, '***')}`);
         
-        const response = await axios.post(`${PROXY_URL}/api/gemini/generate`, {
-            model: 'gemini-3-flash-preview',
-            contents: prompt
+        const response = await axios.post(url, {
+            contents: [{
+                parts: [{ text: prompt }]
+            }]
         }, {
             timeout: 30000,
             headers: { 'Content-Type': 'application/json' }
