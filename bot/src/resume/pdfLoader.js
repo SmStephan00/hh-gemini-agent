@@ -1,53 +1,50 @@
 import fs from 'fs';
+import { extractText, getDocumentProxy } from 'unpdf';
 
 /**
- * Загружает резюме из файла (поддерживает .txt и .pdf)
- * @param {string} filePath - Путь к файлу
- * @returns {Promise<string>} - Текст резюме
+ * Загружает и парсит PDF-файл с резюме (работает везде)
  */
 export async function loadResumeFromPdf(filePath) {
     try {
-        console.log(`📄 Загрузка резюме из: ${filePath}`);
+        console.log(`📄 Загрузка резюме из PDF: ${filePath}`);
         
-        // Если файл с расширением .txt - читаем как текст
+        // Проверяем файл
+        if (!fs.existsSync(filePath)) {
+            throw new Error(`Файл не найден: ${filePath}`);
+        }
+        
+        // Читаем файл в буфер
+        const buffer = fs.readFileSync(filePath);
+        
+        // Получаем PDF документ
+        const pdf = await getDocumentProxy(new Uint8Array(buffer));
+        
+        // Извлекаем текст (mergePages: true чтобы получить одну строку)
+        const { text } = await extractText(pdf, { mergePages: true });
+        
+        console.log(`✅ PDF успешно распарсен, получено ${text.length} символов`);
+        
+        // Очищаем от лишних символов
+        const cleanText = text
+            .replace(/\s+/g, ' ')
+            .replace(/[^\w\sа-яА-ЯёЁ\-.,!?;:()]/g, '')
+            .trim();
+        
+        return cleanText;
+        
+    } catch (error) {
+        console.error('❌ Ошибка загрузки PDF:', error.message);
+        
+        // Запасной вариант для TXT
         if (filePath.toLowerCase().endsWith('.txt')) {
-            const text = fs.readFileSync(filePath, 'utf8');
-            console.log(`✅ Резюме загружено, ${text.length} символов`);
-            return text;
+            try {
+                const text = fs.readFileSync(filePath, 'utf8');
+                console.log('✅ Текст загружен из TXT (запасной вариант)');
+                return text;
+            } catch (txtError) {
+                throw new Error('Не удалось прочитать файл');
+            }
         }
-        
-        // Если файл с расширением .pdf - используем простой парсинг
-        if (filePath.toLowerCase().endsWith('.pdf')) {
-            console.log('⚠️ PDF парсинг упрощён, используем тестовый текст');
-            return `Смагин Степан Романович
-Frontend разработчик с опытом 3 года
-Навыки: React, TypeScript, Redux, JavaScript, HTML, CSS
-Опыт работы в крупных проектах, командная разработка`;
-        }
-        
-        // Если неизвестный формат
-        throw new Error('Поддерживаются только .txt и .pdf файлы');
-        
-    } catch (err) {
-        console.error('❌ Ошибка загрузки:', err.message);
-        throw err;
+        throw error;
     }
-}
-
-export function saveResumeToEnv(resumeText) {
-    const envPath = '../client/.env';
-    let envContent = '';
-
-    if (fs.existsSync(envPath)) {
-        envContent = fs.readFileSync(envPath, 'utf8');
-    }
-
-    if (envContent.includes('VITE_RESUME_TEXT=')) {
-        envContent = envContent.replace(/VITE_RESUME_TEXT=.*/g, `VITE_RESUME_TEXT="${resumeText}"`);
-    } else {
-        envContent += `\nVITE_RESUME_TEXT="${resumeText}"`;
-    }
-
-    fs.writeFileSync(envPath, envContent);
-    console.log('✅ Резюме сохранено в .env');
 }
