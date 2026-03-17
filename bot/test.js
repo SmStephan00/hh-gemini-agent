@@ -1,14 +1,12 @@
-// index.js - ГЛАВНЫЙ ФАЙЛ ДЛЯ ЗАПУСКА БОТА В КОНСОЛИ
 import { launchStealthBrowser } from './src/browser/stealthLauncher.js';
 import { manualAuth, checkAuth, logout } from './src/auth/hhAuth.js';
 import { searchVacancies, filterVacancies, sortVacancies } from './src/search/vacancySearch.js';
 import { autoRespond, batchRespond } from './src/responder/autoResponder.js';
 import { loadResumeFromPdf } from './src/resume/pdfLoader.js';
 import { DailyCounter } from './src/counter/dailyCounter.js';
-import { generateCoverLetter } from './src/gemini/letterGenerator.js';
+import readline from 'readline';
 import fs from 'fs';
 import path from 'path';
-import readline from 'readline';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 
@@ -17,12 +15,14 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// 🔥 СОЗДАЕМ ОДИН ГЛОБАЛЬНЫЙ READLINE
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
     terminal: true
 });
 
+// 🔥 Функция для вопросов (использует глобальный rl)
 function ask(query) {
     return new Promise((resolve) => {
         rl.question(query, (answer) => {
@@ -31,75 +31,64 @@ function ask(query) {
     });
 }
 
-function printHeader(title) {
-    console.log('\n' + '='.repeat(60));
-    console.log(`🚀 ${title}`);
-    console.log('='.repeat(60));
+// 🔥 Функция для ожидания Enter
+async function pressEnter(message) {
+    console.log(message);
+    await ask('⏎ Нажми Enter чтобы продолжить...');
 }
 
-function printSuccess(message) {
-    console.log(`✅ ${message}`);
-}
+// 🔥 Обработка Ctrl+C
+process.on('SIGINT', async () => {
+    console.log('\n\n⚠️ Прервано пользователем');
+    rl.close();
+    process.exit(0);
+});
 
-function printWarning(message) {
-    console.log(`⚠️ ${message}`);
-}
-
-function printError(message) {
-    console.log(`❌ ${message}`);
-}
-
-async function checkApiKeys() {
-    const keys = {
-        GEMINI_API_KEY: process.env.GEMINI_API_KEY,
-        OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
-        VITE_PROXY_URL: process.env.VITE_PROXY_URL
-    };
-    
-    console.log('\n🔑 ПРОВЕРКА API КЛЮЧЕЙ:');
-    console.log(`   Gemini: ${keys.GEMINI_API_KEY ? '✅ Есть' : '❌ Нет'}`);
-    console.log(`   OpenRouter: ${keys.OPENROUTER_API_KEY ? '✅ Есть' : '❌ Нет'}`);
-    console.log(`   Прокси: ${keys.VITE_PROXY_URL ? '✅ Есть' : '❌ Нет'}`);
-    
-    if (!keys.OPENROUTER_API_KEY && !keys.GEMINI_API_KEY) {
-        printError('Нет ни одного API ключа!');
-        return false;
-    }
-    
-    return true;
-}
-
+// ===== ОСНОВНАЯ ФУНКЦИЯ =====
 async function main() {
-    printHeader('HH.RU АВТОМАТИЧЕСКИЙ БОТ ДЛЯ ОТКЛИКОВ');
+    console.log('\n' + '='.repeat(60));
+    console.log('🚀 HH.RU АВТОМАТИЧЕСКИЙ БОТ ДЛЯ ОТКЛИКОВ');
+    console.log('='.repeat(60));
     
-    // Проверяем API ключи
-    const hasKeys = await checkApiKeys();
-    if (!hasKeys) {
-        printError('Добавьте ключи в .env файл');
+    // Проверка API ключей
+    console.log('\n🔑 ПРОВЕРКА API КЛЮЧЕЙ:');
+    console.log(`   Gemini: ${process.env.GEMINI_API_KEY ? '✅ Есть' : '❌ Нет'}`);
+    console.log(`   OpenRouter: ${process.env.OPENROUTER_API_KEY ? '✅ Есть' : '❌ Нет'}`);
+    console.log(`   Прокси: ${process.env.VITE_PROXY_URL ? '✅ Есть' : '❌ Нет'}`);
+    
+    if (!process.env.OPENROUTER_API_KEY && !process.env.GEMINI_API_KEY) {
+        console.log('❌ Нет ни одного API ключа!');
+        rl.close();
         return;
     }
     
-    printSuccess('Настройки загружены');
+    console.log('✅ Настройки загружены');
     
-    // Запускаем браузер
+    // Запуск браузера
     console.log('\n🚀 Запуск браузера...');
     const { browser, page } = await launchStealthBrowser();
     
     try {
         // Авторизация
-        printHeader('АВТОРИЗАЦИЯ НА HH.RU');
-        const authSuccess = await manualAuth(page);
+        console.log('\n' + '='.repeat(60));
+        console.log('🚀 АВТОРИЗАЦИЯ НА HH.RU');
+        console.log('='.repeat(60));
+        
+        const authSuccess = await manualAuth(page, rl);
         
         if (!authSuccess) {
-            printError('Не удалось авторизоваться');
+            console.log('❌ Не удалось авторизоваться');
             return;
         }
         
-        printSuccess('Успешная авторизация!');
+        console.log('✅ Успешная авторизация!');
         
-        // Главное меню
-        while (true) {
-            printHeader('ГЛАВНОЕ МЕНЮ');
+        // ГЛАВНОЕ МЕНЮ
+        let running = true;
+        while (running) {
+            console.log('\n' + '='.repeat(60));
+            console.log('🚀 ГЛАВНОЕ МЕНЮ');
+            console.log('='.repeat(60));
             console.log('1 - Поиск вакансий');
             console.log('2 - Автоматические отклики');
             console.log('3 - Проверить авторизацию');
@@ -109,33 +98,41 @@ async function main() {
             const choice = await ask('\n👉 Выберите действие (0-4): ');
             
             if (choice === '0') {
-                printSuccess('Завершение работы...');
+                console.log('\n👋 Завершение работы...');
+                running = false;
                 break;
             }
             
             if (choice === '3') {
-                printHeader('ПРОВЕРКА АВТОРИЗАЦИИ');
+                console.log('\n' + '='.repeat(60));
+                console.log('🔐 ПРОВЕРКА АВТОРИЗАЦИИ');
+                console.log('='.repeat(60));
                 const isAuthed = await checkAuth(page);
                 console.log(isAuthed ? '✅ Вы авторизованы' : '❌ Сессия не активна');
-                await ask('\nНажми Enter чтобы продолжить...');
+                await pressEnter('\nНажми Enter чтобы продолжить...');
                 continue;
             }
             
             if (choice === '4') {
-                printHeader('ВЫХОД ИЗ АККАУНТА');
+                console.log('\n' + '='.repeat(60));
+                console.log('🚪 ВЫХОД ИЗ АККАУНТА');
+                console.log('='.repeat(60));
                 await logout(page);
-                printSuccess('Вы вышли из аккаунта');
+                console.log('✅ Вы вышли из аккаунта');
+                running = false;
                 break;
             }
             
             if (choice === '1') {
                 // РЕЖИМ ПОИСКА ВАКАНСИЙ
-                printHeader('ПОИСК ВАКАНСИЙ');
+                console.log('\n' + '='.repeat(60));
+                console.log('🔍 ПОИСК ВАКАНСИЙ');
+                console.log('='.repeat(60));
                 
                 const query = await ask('🔍 Поисковый запрос (например "frontend разработчик"): ');
                 
                 if (!query) {
-                    printWarning('Поисковый запрос не может быть пустым');
+                    console.log('⚠️ Поисковый запрос не может быть пустым');
                     continue;
                 }
                 
@@ -145,29 +142,29 @@ async function main() {
                 
                 const excludeWords = excludeInput ? excludeInput.split(',').map(w => w.trim()) : [];
                 
-                printHeader('ПОИСК...');
+                console.log('\n🔍 ПОИСК...');
                 const vacancies = await searchVacancies(page, query, {
                     maxPages: parseInt(maxPages) || 3,
                     delay: 2000
                 });
                 
                 if (vacancies.length === 0) {
-                    printWarning('Вакансии не найдены');
+                    console.log('⚠️ Вакансии не найдены');
                     continue;
                 }
                 
-                printSuccess(`Найдено ${vacancies.length} вакансий`);
+                console.log(`✅ Найдено ${vacancies.length} вакансий`);
                 
                 const filtered = filterVacancies(vacancies, excludeWords);
                 
                 if (filtered.length < vacancies.length) {
-                    printSuccess(`После фильтрации: ${filtered.length} вакансий`);
+                    console.log(`✅ После фильтрации: ${filtered.length} вакансий`);
                 }
                 
                 // Сохраняем результаты
                 const filename = `vacancies-${Date.now()}.json`;
                 fs.writeFileSync(filename, JSON.stringify(filtered, null, 2));
-                printSuccess(`Результаты сохранены в ${filename}`);
+                console.log(`💾 Результаты сохранены в ${filename}`);
                 
                 // Показываем первые 10
                 console.log('\n📋 ПЕРВЫЕ 10 ВАКАНСИЙ:');
@@ -180,12 +177,14 @@ async function main() {
                     console.log(`   📍 ${v.city}`);
                 });
                 
-                await ask('\nНажми Enter чтобы продолжить...');
+                await pressEnter('\nНажми Enter чтобы продолжить...');
             }
             
             if (choice === '2') {
                 // РЕЖИМ АВТОМАТИЧЕСКИХ ОТКЛИКОВ
-                printHeader('АВТОМАТИЧЕСКИЕ ОТКЛИКИ');
+                console.log('\n' + '='.repeat(60));
+                console.log('🤖 АВТОМАТИЧЕСКИЕ ОТКЛИКИ');
+                console.log('='.repeat(60));
                 
                 // 1. Проверяем файл с резюме
                 const defaultPdfPath = path.join(__dirname, 'resume.pdf');
@@ -204,14 +203,14 @@ async function main() {
                 }
                 
                 if (!fs.existsSync(pdfPath)) {
-                    printError('Файл не найден');
+                    console.log('❌ Файл не найден');
                     continue;
                 }
                 
                 // Загружаем резюме
                 console.log('\n📤 Загрузка резюме...');
                 const resumeText = await loadResumeFromPdf(pdfPath);
-                printSuccess(`Резюме загружено (${resumeText.length} символов)`);
+                console.log(`✅ Резюме загружено (${resumeText.length} символов)`);
                 
                 // 2. Дополнительные пожелания
                 const userPrompt = await ask('\n📝 Дополнительные пожелания к письму (Enter - пропустить): ');
@@ -220,35 +219,38 @@ async function main() {
                 const query = await ask('\n🔍 Поисковый запрос для вакансий: ');
                 
                 if (!query) {
-                    printWarning('Поисковый запрос не может быть пустым');
+                    console.log('⚠️ Поисковый запрос не может быть пустым');
                     continue;
                 }
                 
                 // 4. Параметры поиска
                 const maxPages = await ask('📄 Количество страниц для поиска (по умолчанию 3): ');
                 
-                printHeader('ПОИСК ВАКАНСИЙ');
+                console.log('\n' + '='.repeat(60));
+                console.log('🚀 ПОИСК ВАКАНСИЙ');
+                console.log('='.repeat(60));
+                
                 const vacancies = await searchVacancies(page, query, {
                     maxPages: parseInt(maxPages) || 3,
                     delay: 2000
                 });
                 
                 if (vacancies.length === 0) {
-                    printWarning('Вакансии не найдены');
+                    console.log('⚠️ Вакансии не найдены');
                     continue;
                 }
                 
-                printSuccess(`Найдено ${vacancies.length} вакансий`);
+                console.log(`✅ Найдено ${vacancies.length} вакансий`);
                 
                 // 5. Фильтрация
                 const excludeInput = await ask('\n🚫 Исключить слова (через запятую): ');
                 const excludeWords = excludeInput ? excludeInput.split(',').map(w => w.trim()) : [];
                 
                 const filtered = filterVacancies(vacancies, excludeWords);
-                printSuccess(`После фильтрации: ${filtered.length} вакансий`);
+                console.log(`✅ После фильтрации: ${filtered.length} вакансий`);
                 
                 if (filtered.length === 0) {
-                    printWarning('Нет вакансий для отклика');
+                    console.log('⚠️ Нет вакансий для отклика');
                     continue;
                 }
                 
@@ -261,7 +263,7 @@ async function main() {
                 console.log(`   Осталось: ${status.remaining}`);
                 
                 if (status.count >= status.maxDaily) {
-                    printWarning('Достигнут лимит откликов на сегодня');
+                    console.log('⚠️ Достигнут лимит откликов на сегодня');
                     continue;
                 }
                 
@@ -278,12 +280,14 @@ async function main() {
                 
                 const confirm = await ask('\n🚀 Запустить отклики? (y/n): ');
                 if (confirm.toLowerCase() !== 'y') {
-                    console.log('Отменено');
+                    console.log('❌ Отменено');
                     continue;
                 }
                 
                 // 8. ЗАПУСК ОТКЛИКОВ
-                printHeader('ЗАПУСК АВТОМАТИЧЕСКИХ ОТКЛИКОВ');
+                console.log('\n' + '='.repeat(60));
+                console.log('🚀 ЗАПУСК АВТОМАТИЧЕСКИХ ОТКЛИКОВ');
+                console.log('='.repeat(60));
                 
                 const results = await batchRespond(page, filtered.slice(0, maxResponses), resumeText, userPrompt, {
                     delay: delay,
@@ -303,7 +307,7 @@ async function main() {
                 if (results.details && results.details.length > 0) {
                     const filename = `responses-${Date.now()}.json`;
                     fs.writeFileSync(filename, JSON.stringify(results.details, null, 2));
-                    printSuccess(`Детали откликов сохранены в ${filename}`);
+                    console.log(`💾 Детали откликов сохранены в ${filename}`);
                 }
                 
                 // 11. ИТОГИ
@@ -314,13 +318,12 @@ async function main() {
                 console.log(`❌ Ошибок: ${results.failed}`);
                 console.log(`⏭️  Пропущено: ${results.skipped || 0}`);
                 
-                await ask('\nНажми Enter чтобы продолжить...');
+                await pressEnter('\nНажми Enter чтобы продолжить...');
             }
         }
         
     } catch (error) {
-        printError(`Ошибка: ${error.message}`);
-        console.log(error);
+        console.error('❌ Критическая ошибка:', error);
     } finally {
         rl.close();
         await browser.close();
@@ -328,12 +331,5 @@ async function main() {
     }
 }
 
-// Обработка Ctrl+C
-process.on('SIGINT', async () => {
-    console.log('\n\n⚠️ Прервано пользователем');
-    rl.close();
-    process.exit(0);
-});
-
 // Запуск
-main();
+main().catch(console.error);

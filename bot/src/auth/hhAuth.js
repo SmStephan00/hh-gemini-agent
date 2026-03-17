@@ -4,20 +4,19 @@ import readline from 'readline';
 
 const COOKIES_PATH = path.join(process.cwd(), 'hh_cookies.json');
 
-function askQuestion(query) {
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
+// 🔥 Функция для вопросов (принимает глобальный rl)
+function askQuestion(rl, query) {
+    return new Promise(resolve => {
+        rl.question(query, ans => {
+            resolve(ans.trim());
+        });
     });
-    return new Promise(resolve => rl.question(query, ans => {
-        rl.close();
-        resolve(ans);
-    }));
 }
 
-async function pressEnter(message) {
+// 🔥 Функция для ожидания Enter (принимает глобальный rl)
+async function pressEnter(rl, message) {
     console.log(message);
-    await askQuestion('⏎ Нажми Enter чтобы продолжить...');
+    await askQuestion(rl, '⏎ Нажми Enter чтобы продолжить...');
 }
 
 /**
@@ -66,8 +65,9 @@ export async function checkAuth(page) {
 
 /**
  * Ручная авторизация на hh.ru (только ручной вход)
+ * 🔥 ПРИНИМАЕТ ГЛОБАЛЬНЫЙ READLINE
  */
-export async function manualAuth(page) {
+export async function manualAuth(page, rl) {
     try {
         console.log('🔑 Ручная авторизация на hh.ru...');
         
@@ -98,7 +98,7 @@ export async function manualAuth(page) {
         console.log('3. ПОСЛЕ входа вернись сюда и нажми Enter');
         console.log('='.repeat(50) + '\n');
         
-        await pressEnter('🔄 Нажми Enter чтобы открыть hh.ru...');
+        await pressEnter(rl, '🔄 Нажми Enter чтобы открыть hh.ru...');
         
         // Открываем главную страницу с увеличенным таймаутом
         console.log('⏳ Загружаем страницу...');
@@ -123,7 +123,7 @@ export async function manualAuth(page) {
         console.log('');
         
         // Ждём ручного входа
-        await pressEnter('✅ После того как вошёл в аккаунт, нажми Enter');
+        await pressEnter(rl, '✅ После того как вошёл в аккаунт, нажми Enter');
 
         // Даём время на перезагрузку
         console.log('⏳ Ждём 5 секунд...');
@@ -154,9 +154,9 @@ export async function manualAuth(page) {
             console.log('📸 Посмотри скриншот debug-after-login.png');
             console.log('Видно ли на нём, что ты авторизован?');
             
-            const retry = await askQuestion('\nПопробовать снова? (y/n): ');
-            if (retry.toLowerCase() === 'y') {
-                return manualAuth(page);
+            const answer = await askQuestion(rl, '\nПопробовать снова? (y/n): ');
+            if (answer.toLowerCase() === 'y') {
+                return manualAuth(page, rl);
             }
             return false;
         }

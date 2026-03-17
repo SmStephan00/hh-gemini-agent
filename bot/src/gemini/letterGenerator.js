@@ -6,25 +6,93 @@ dotenv.config();
 
 const PROXY_URL = process.env.VITE_PROXY_URL;
 
+// 🔥 НОВАЯ ФУНКЦИЯ ДЛЯ ИЗВЛЕЧЕНИЯ КЛЮЧЕВЫХ НАВЫКОВ ИЗ ОПИСАНИЯ
+function extractKeySkills(vacancy) {
+    // Если навыки уже есть в структурированном виде
+    if (vacancy.skills && vacancy.skills.length > 0) {
+        return vacancy.skills.slice(0, 4).join(', ');
+    }
+    
+    // Иначе пытаемся извлечь из описания
+    const commonSkills = [
+        'React', 'TypeScript', 'JavaScript', 'Node.js', 'Next.js',
+        'Vue', 'Angular', 'Redux', 'Webpack', 'HTML', 'CSS',
+        'Git', 'Docker', 'REST API', 'GraphQL', 'Jest'
+    ];
+    
+    const foundSkills = [];
+    const description = (vacancy.description || '').toLowerCase();
+    
+    for (const skill of commonSkills) {
+        if (description.includes(skill.toLowerCase())) {
+            foundSkills.push(skill);
+            if (foundSkills.length >= 4) break;
+        }
+    }
+    
+    return foundSkills.length > 0 ? foundSkills.join(', ') : 'современный стек';
+}
+
+// 🔥 НОВАЯ ФУНКЦИЯ ДЛЯ ИЗВЛЕЧЕНИЯ ДОСТИЖЕНИЙ ИЗ РЕЗЮМЕ
+function extractAchievements(resumeText) {
+    // Ищем упоминания цифр и достижений
+    const achievements = [];
+    
+    // Простой парсинг: ищем предложения с цифрами
+    const sentences = resumeText.split(/[.!?]+/);
+    
+    for (const sentence of sentences) {
+        if (sentence.includes('%') || 
+            sentence.includes('увеличил') || 
+            sentence.includes('сократил') ||
+            sentence.includes('оптимизировал') ||
+            sentence.includes('внедрил') ||
+            /\d+%|\d+\s*(раз|раза)/.test(sentence)) {
+            achievements.push(sentence.trim());
+            if (achievements.length >= 3) break;
+        }
+    }
+    
+    // Если не нашли, используем стандартные
+    if (achievements.length === 0) {
+        return 'оптимизация производительности, внедрение CI/CD, участие в 5+ проектах';
+    }
+    
+    return achievements.join('. ');
+}
+
+/**
+ * 🔥 ОБНОВЛЕННЫЙ ПРОМПТ - строго по твоим требованиям
+ */
 function buildPrompt(vacancy, resumeText, userPrompt) {
+    // Извлекаем данные для промпта
+    const keySkills = extractKeySkills(vacancy);
+    const achievements = extractAchievements(resumeText);
+    const yearsOfExperience = '3+'; // Можно вычислить из резюме
+    
     return `
-Ты — профессиональный HR-специалист. Напиши сопроводительное письмо от имени кандидата.
+Ты — эксперт по найму. Напиши сопроводительное письмо для позиции "${vacancy.title}" в компанию "${vacancy.company}".
 
-### ВАКАНСИЯ:
-Название: ${vacancy.title}
-Компания: ${vacancy.company}
-Ключевые навыки: ${vacancy.skills?.join(', ') || 'не указаны'}
-Описание: ${vacancy.description?.substring(0, 1000) || 'нет описания'}
+Мой опыт: ${yearsOfExperience} лет, ключевые навыки: ${keySkills}.
+Главные достижения (с цифрами): ${achievements}.
 
-### РЕЗЮМЕ КАНДИДАТА:
-${resumeText.substring(0, 2000)}
+ТРЕБОВАНИЯ К ПИСЬМУ:
+1. Структура:
+   - Приветствие + кто я (1 предложение)
+   - Чем полезен компании (2 предложения с цифрами)
+   - Мотивация и почему именно эта компания (1 предложение)
+   - Призыв к действию (1 предложение)
 
-### ТРЕБОВАНИЯ К ПИСЬМУ:
-- Длина: 3-5 предложений
-- Язык: русский
-- Стиль: профессиональный, но живой
-- Персонализируй под конкретную компанию и вакансию
-${userPrompt ? `\n### ДОПОЛНИТЕЛЬНЫЕ УКАЗАНИЯ:\n${userPrompt}` : ''}
+2. Важно:
+   - Максимум 600 символов
+   - Живой язык без канцеляризмов
+   - Использовать ключевые слова из вакансии: ${keySkills}
+   - Не дублировать резюме — только самое важное
+
+3. Дополнительная информация о компании:
+   ${vacancy.description?.substring(0, 500) || ''}
+
+${userPrompt ? `\nДОПОЛНИТЕЛЬНЫЕ УКАЗАНИЯ:\n${userPrompt}` : ''}
 `;
 }
 
@@ -32,7 +100,6 @@ export function getTemplateLetter(vacancy) {
     return `Здравствуйте! Меня заинтересовала вакансия ${vacancy.title} в компании ${vacancy.company}. Мой опыт и навыки соответствуют вашим требованиям. Буду рад обсудить детали на собеседовании.`;
 }
 
-// ⚠️ ВАЖНО: Добавляем export перед функциями!
 export async function callGemini(modelConfig, prompt) {
     console.log(`   📡 Отправка в Gemini (модель: ${modelConfig.modelId})...`);
     
@@ -74,7 +141,6 @@ export async function callGemini(modelConfig, prompt) {
     }
 }
 
-// ⚠️ ВАЖНО: Добавляем export перед функцией!
 export async function callOpenRouter(modelConfig, prompt) {
     console.log(`   📡 Отправка в OpenRouter (модель: ${modelConfig.modelId})...`);
     
@@ -97,14 +163,14 @@ export async function callOpenRouter(modelConfig, prompt) {
             messages: [
                 {
                     role: 'system',
-                    content: 'Ты профессиональный HR-специалист. Пиши сопроводительные письма на русском языке, 3-5 предложений, персонализированные под вакансию.'
+                    content: 'Ты эксперт по найму. Пиши сопроводительные письма строго по заданной структуре. Максимум 600 символов. Живой язык, без канцеляризмов.'
                 },
                 {
                     role: 'user',
                     content: prompt
                 }
             ],
-            max_tokens: 1000,
+            max_tokens: 800,  // Уменьшили для соблюдения лимита 600 символов
             temperature: 0.7
         };
         
@@ -136,23 +202,22 @@ export async function callOpenRouter(modelConfig, prompt) {
     }
 }
 
-// ⚠️ ВАЖНО: Добавляем export перед функцией!
 export async function generateCoverLetter(vacancy, resumeText, userPrompt = '') {
     try {
         console.log('📝 Генерация сопроводительного письма...');
         
         const MODELS = [
             {
+                name: 'Gemini Flash',
+                modelId: 'gemini-2.5-flash-lite',
+                apiKey: process.env.GEMINI_API_KEY,
+                callFunction: callGemini
+            },
+            {
                 name: 'OpenRouter Free',
                 modelId: 'openrouter/free',
                 apiKey: process.env.OPENROUTER_API_KEY,
                 callFunction: callOpenRouter
-            },
-            {
-                name: 'Gemini Flash',
-                modelId: 'gemini-3-flash-preview',
-                apiKey: process.env.GEMINI_API_KEY,
-                callFunction: callGemini
             },
             {
                 name: 'Claude Haiku (via OpenRouter)',
