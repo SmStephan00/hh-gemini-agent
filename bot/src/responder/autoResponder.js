@@ -1,3 +1,4 @@
+// src/responder/autoRespond.js
 import { generateCoverLetter } from '../gemini/letterGenerator.js';
 import { parseVacancyPage } from '../parser/vacancyParser.js';
 import { detectPageType, answerQuestions } from './questionHandler.js';
@@ -264,25 +265,19 @@ export async function autoRespond(page, vacancyUrl, resumeText, userPrompt = '',
             return await parseVacancyPage(page);
         }, 3, 3000);
         
-        // 3. Проверяем тип страницы ДО нажатия кнопки
-        const pageType = await detectPageType(page);
-        console.log(`📊 Тип страницы: ${pageType}`);
+        // 3. Проверяем тип страницы ДО нажатия кнопки (только для информации)
+        const initialPageType = await detectPageType(page);
+        console.log(`📊 Тип страницы (до нажатия): ${initialPageType}`);
 
         // 4. Обработка тестового задания
-        if (pageType === 'test_task') {
+        if (initialPageType === 'test_task') {
             console.log('⏭️  Тестовое задание - пропускаем');
             return { success: false, reason: 'test_task', skipped: true };
         }
 
-        // 5. Если вопросы на самой странице вакансии
-        if (pageType === 'questions') {
-            console.log('📋 Вопросы на странице вакансии - отвечаем...');
-            await answerQuestions(page, resumeText, vacancyData);
-            
-            // Проверяем успех после ответов
-            const success = await checkSuccessWithRetry(page);
-            return { success, data: vacancyData };
-        }
+        // 5. ВАЖНО: НЕ обрабатываем вопросы на странице вакансии!
+        // Даже если detectPageType ошибочно показал 'questions', мы все равно идем дальше
+        // Потому что на странице вакансии вопросов быть не может по логике HH
         
         console.log(`📋 Вакансия: ${vacancyData.title} в ${vacancyData.company}`);
         
@@ -324,19 +319,44 @@ export async function autoRespond(page, vacancyUrl, resumeText, userPrompt = '',
         
         console.log('✅ Кнопка нажата, ждём модальное окно...');
         await page.waitForTimeout(3000);
-        
-        // 10. Проверяем, не перенаправило ли на вопросы
-        const redirectedPageType = await detectPageType(page);
-        
-        if (redirectedPageType === 'questions') {
-            console.log('📋 После нажатия кнопки открылись вопросы - отвечаем...');
-            await answerQuestions(page, resumeText, vacancyData);
-            
-            const success = await checkSuccessWithRetry(page);
-            return { success, data: vacancyData };
+
+        console.log('🔍 Анализ страницы...');
+
+        async function debugPageContent(page) {
+            const debug = await page.evaluate(() => {
+                return {
+                    hasQuestionsTitle: !!document.querySelector('[data-qa="employer-asking-for-test"]'),
+                    taskBodyCount: document.querySelectorAll('[data-qa="task-body"]').length,
+                    taskTextareas: document.querySelectorAll('textarea[name*="task"]').length,
+                    hasLetterField: !!document.querySelector('[data-qa*="letter"], textarea[name="letter"]'),
+                    url: window.location.href,
+                    title: document.title
+                };
+            });
+            console.log('🔍 Отладка страницы:', debug);
         }
         
-        // 11. Ищем поле для письма
+
+
+        await debugPageContent(page);
+        const afterClickPageType = await detectPageType(page);
+        console.log(`📊 Тип страницы (после нажатия): ${afterClickPageType}`);
+        
+        // 11. Если открылись вопросы - отвечаем
+        if (afterClickPageType === 'questions') {
+            console.log('📋 После нажатия кнопки открылись вопросы - отвечаем...');
+            const answered = await answerQuestions(page, resumeText, vacancyData);
+            
+            if (answered) {
+                console.log('✅ Ответы на вопросы отправлены');
+                const success = await checkSuccessWithRetry(page);
+                return { success, data: vacancyData };
+            } else {
+                console.log('⚠️ Не удалось ответить на вопросы');
+            }
+        }
+        
+        // 12. Ищем поле для письма
         const { element: letterField, selector: letterSelector } = await findLetterField(page);
         
         if (letterField && letterSelector) {
@@ -361,21 +381,21 @@ export async function autoRespond(page, vacancyUrl, resumeText, userPrompt = '',
             }
         }
         
-        // 12. Ищем кнопку отправки
+        // 13. Ищем кнопку отправки
         const submitButton = await withRetry(async () => {
             const button = await findSubmitButton(page);
             if (!button) throw new Error('Кнопка отправки не найдена');
             return button;
         }, 3, 2000);
         
-        // 13. Отправляем отклик
+        // 14. Отправляем отклик
         await withRetry(async () => {
             await submitButton.click();
             console.log('📤 Отправляем отклик...');
             await page.waitForTimeout(3000);
         }, 3, 2000);
         
-        // 14. Проверяем успех
+        // 15. Проверяем успех
         const success = await checkSuccessWithRetry(page);
         
         if (success) {
@@ -466,64 +486,3 @@ export async function closeModal(page) {
 /**
  * Пакетный отклик на несколько вакансий
  */
-export async function batchRespond(page, vacancies, resumeText, userPrompt = '', options = {}) {
-    const {
-        delay = 30000,
-        randomDelay = true,
-        maxResponses = 80,
-        ...otherOptions
-    } = options;
-    
-    console.log(`\n🚀 ЗАПУСК ПАКЕТНОГО ОТКЛИКА`);
-    console.log(`📊 Всего вакансий: ${vacancies.length}`);
-    console.log(`⏱️  Задержка: ${delay/1000} сек ${randomDelay ? '(рандомная)' : ''}`);
-    
-    const results = {
-        total: vacancies.length,
-        success: 0,
-        failed: 0,
-        skipped: 0,
-        details: []
-    };
-    
-    for (let i = 0; i < vacancies.length; i++) {
-        if (results.success >= maxResponses) {
-            console.log(`\n⚠️ Достигнут лимит откликов (${maxResponses})`);
-            break;
-        }
-        
-        const vacancy = vacancies[i];
-        console.log(`\n--- [${i+1}/${vacancies.length}] ${vacancy.title} ---`);
-        
-        const result = await autoRespond(page, vacancy.url, resumeText, userPrompt, otherOptions);
-        
-        if (result.success) {
-            results.success++;
-            if (result.data) results.details.push(result.data);
-        } else {
-            results.failed++;
-        }
-        
-        // Пауза между откликами
-        if (i < vacancies.length - 1 && results.success < maxResponses) {
-            let pauseTime = delay;
-            if (randomDelay) {
-                pauseTime = delay + Math.random() * 60000;
-            }
-            console.log(`⏳ Пауза ${Math.round(pauseTime/1000)} сек...`);
-            await new Promise(resolve => setTimeout(resolve, pauseTime));
-        }
-    }
-    
-    results.skipped = vacancies.length - results.success - results.failed;
-    
-    console.log('\n' + '='.repeat(50));
-    console.log('📊 ИТОГИ ОТКЛИКОВ');
-    console.log('='.repeat(50));
-    console.log(`✅ Успешно: ${results.success}`);
-    console.log(`❌ Ошибок: ${results.failed}`);
-    console.log(`⏭️  Пропущено: ${results.skipped}`);
-    console.log('='.repeat(50));
-    
-    return results;
-}

@@ -188,107 +188,51 @@ export async function callOpenRouter(modelConfig, prompt) {
     }
 }
 
-export async function callDashScope(modelConfig ,prompt) {
-    if(!PROXY_URL){
-        throw new Error('PROXY_URL не настроен');
-    }
-
-    try{
-        const url = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation'
-        
- 
-        const response = await axios.post(url, {
+export async function callOnlySq(modelConfig, prompt) {
+    console.log(`   📡 Отправка в OnlySq (${modelConfig.modelId})...`);
+    
+    try {
+        // OnlySq API endpoint
+        const response = await axios.post('https://api.onlysq.ru/ai/openai/chat/completions', {
             model: modelConfig.modelId,
-            input: {
-                messages: [
-                    { role: 'user', content: prompt }
-                ]
-            },
-            parameters: {
-                max_tokens: 800,
-                temperature: 0.7
-            }
+            messages: [
+                {
+                    role: 'system',
+                    content: 'Ты эксперт по найму. Пиши сопроводительные письма строго по заданной структуре. Максимум 600 символов. Живой язык, без канцеляризмов.'
+                },
+                {
+                    role: 'user',
+                    content: prompt
+                }
+            ],
+            max_tokens: 800,
+            temperature: 0.7
         }, {
             headers: {
-                'Authorization': `Bearer ${modelConfig.apiKey}`,  // Должно быть именно так!
+                'Authorization': `Bearer ${modelConfig.apiKey}`,
                 'Content-Type': 'application/json'
             },
             timeout: 30000
         });
 
-    const letter = response.data.output?.choices?.[0]?.message?.content || '';
-    
-    if (!letter) {
-            throw new Error('Пустой ответ от DashScope');
-        }
-        
-    return letter;
-
-    }catch(err){
-        console.log(`   ❌ DashScope ошибка: ${err.message}`);
-        
-        if (err.response) {
-            console.log(`   Статус: ${err.response.status}`);
-            if (err.response.status === 429) {
-                console.log(`   ⚠️ Превышен лимит запросов к DashScope`);
-            }
-        }
-        
-        throw err;
-    }
-}
-
-export async function callHuggingFace(modelConfig, prompt) {
-    console.log(`   📡 Отправка в Hugging Face (${modelConfig.modelId})...`);
-    
-    if (!PROXY_URL) {
-        throw new Error('PROXY_URL не настроен');
-    }
-
-    try {
-        const url = `https://api-inference.huggingface.co/models/${modelConfig.modelId}`;
-
-        const response = await axios.post(url,
-            {
-                inputs: prompt,
-                parameters: {
-                    max_new_tokens: 800,
-                    temperature: 0.7,
-                    return_full_text: false
-                }
-            },
-            {
-                headers: {
-                    'Authorization': `Bearer ${modelConfig.apiKey}`,
-                    'Content-Type': 'application/json'
-                },
-                timeout: 60000
-            }
-        );
-
-        let letter = '';
-        if (Array.isArray(response.data)) {
-            letter = response.data[0]?.generated_text || '';
-        } else {
-            letter = response.data?.generated_text || '';
-        }
-        
-        if (letter.includes(prompt)) {
-            letter = letter.replace(prompt, '').trim();
-        }
+        const letter = response.data.choices?.[0]?.message?.content || '';
         
         if (!letter) {
-            throw new Error('Пустой ответ от Hugging Face');
+            throw new Error('Пустой ответ от OnlySq');
         }
         
-        console.log(`   ✅ Hugging Face ответил (${letter.length} символов)`);
-        return letter; 
-    } catch (err) {
-        console.log(`   ❌ Hugging Face ошибка: ${err.message}`);
-        if (err.response) {
-            console.log(`   Статус: ${err.response.status}`);
+        console.log(`   ✅ OnlySq ответил (${letter.length} символов)`);
+        return letter;
+        
+    } catch (error) {
+        console.log(`   ❌ OnlySq ошибка: ${error.message}`);
+        if (error.response) {
+            console.log(`   Статус: ${error.response.status}`);
+            if (error.response.data?.error) {
+                console.log(`   Детали:`, error.response.data.error);
+            }
         }
-        throw err;
+        throw error;
     }
 }
 
@@ -298,22 +242,26 @@ export async function generateCoverLetter(vacancy, resumeText, userPrompt = '') 
         
         const MODELS = [
             {
-                name: 'DashScope',
-                modelId: 'qwen-max',
-                apiKey: process.env.DASHSCOPE_API_KEY,
-                callFunction: callDashScope
-            },
-            {
-                name: 'Hugging Face',
-                modelId: 'meta-llama/Llama-3.3-70B-Instruct',
-                apiKey: process.env.HUGGINGFACE_API_KEY,
-                callFunction: callHuggingFace
-            },
-            {
                 name: 'AI Worker Proxy',
                 modelId: 'google/gemini-2.5-flash-lite',
-                apiKey: process.env.PROXY_AUTH_TOKEN,  // Токен прокси
+                apiKey: process.env.PROXY_AUTH_TOKEN,
                 callFunction: callAIWorkerProxy
+            },
+
+            // 🆕 OnlySq - GPT-5 (бесплатно!)
+            {
+                name: 'OnlySq GPT-3.5',
+                modelId: 'gpt-3.5-turbo',
+                apiKey: process.env.ONLYSQ_API_KEY,
+                callFunction: callOnlySq
+            },
+
+            // 🆕 OnlySq - Claude 4.6
+            {
+                name: 'OnlySq GPT-5-nano',
+                modelId: 'gpt-5-nano',
+                apiKey: process.env.ONLYSQ_API_KEY,
+                callFunction: callOnlySq
             },
             {
                 name: 'OpenRouter Free',
