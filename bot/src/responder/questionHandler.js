@@ -125,6 +125,81 @@ export async function typeTextSafely(page, element, text) {
 /**
  * Определение типа страницы (нормальная, вопросы, тестовое задание)
  */
+
+// Функция для обработки вопросов с вариантами ответов
+async function handleMultipleChoiceQuestions(page) {
+  const questionBlocks = await page.$$('[data-qa="task-body"]');
+  console.log(`📋 Найдено ${questionBlocks.length} вопросов`);
+  
+  for (let i = 0; i < questionBlocks.length; i++) {
+    const block = questionBlocks[i];
+    
+    // Получаем текст вопроса
+    const questionText = await block.$eval('.g-user-content', el => el.textContent.trim());
+    console.log(`\nВопрос ${i+1}: ${questionText.substring(0, 50)}...`);
+    
+    // Ищем все radio-кнопки в этом блоке
+    const radioButtons = await block.$$('input[type="radio"]');
+    
+    if (radioButtons.length > 0) {
+      console.log(`   Найдено ${radioButtons.length} вариантов ответа`);
+      
+      // Определяем правильный ответ для каждого вопроса
+      let answerIndex = 0; // По умолчанию выбираем первый вариант
+      
+      // Логика выбора ответа в зависимости от вопроса
+      if (questionText.includes('компонент, который получает список объектов')) {
+        // В React для оптимизации списков используем ключи + React.memo
+        // Но нужно выбрать правильный вариант из предложенных
+        answerIndex = 0; // "Добавить уникальные ключи"
+      } 
+      else if (questionText.includes('форма, которая обновляет состояние')) {
+        // Для формы с задержками лучше всего debounce
+        answerIndex = 2; // "Использовать контролируемые компоненты и Debounce"
+      }
+      else if (questionText.includes('пересчитываются и рендерятся компоненты')) {
+        // Для предотвращения ненужных рендеров
+        answerIndex = 3; // "Все вышеперечисленное"
+      }
+      else if (questionText.includes('динамичную таблицу с множеством данных')) {
+        // Для больших таблиц - виртуализация
+        answerIndex = 1; // "Применить виртуализацию списка"
+      }
+      else if (questionText.includes('формат работы')) {
+        // Выбираем удаленный формат или гибрид
+        answerIndex = 2; // "Удаленный"
+      }
+      
+      // Кликаем по выбранной radio-кнопке
+      if (radioButtons[answerIndex]) {
+        await radioButtons[answerIndex].click({ force: true });
+        console.log(`   ✅ Выбран вариант ${answerIndex + 1}`);
+      }
+    }
+    
+    // Проверяем, есть ли текстовое поле (для варианта "Свой вариант")
+    const textarea = await block.$('textarea');
+    if (textarea) {
+      // Если текстовое поле видимо (после выбора "Свой вариант"), заполняем его
+      const isVisible = await textarea.isVisible();
+      if (isVisible) {
+        const answer = generateAnswerForQuestion(questionText); // Ваша логика генерации
+        await textarea.fill(answer);
+        console.log(`   ✅ Заполнено текстовое поле`);
+      }
+    }
+  }
+  
+  // После заполнения всех вопросов, ищем кнопку отправки
+  const submitButton = await page.$('button[type="submit"][data-qa="vacancy-response-submit-popup"]');
+  if (submitButton) {
+    await submitButton.click();
+    console.log('📤 Ответы отправлены');
+    return true;
+  }
+  
+  return false;
+}
 export async function detectPageType(page) {
     // Используем evaluate, чтобы выполнить проверку прямо в браузере
     const pageType = await page.evaluate(() => {

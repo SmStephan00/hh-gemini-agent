@@ -100,43 +100,29 @@ export function getTemplateLetter(vacancy) {
     return `Здравствуйте! Меня заинтересовала вакансия ${vacancy.title} в компании ${vacancy.company}. Мой опыт и навыки соответствуют вашим требованиям. Буду рад обсудить детали на собеседовании.`;
 }
 
-export async function callGemini(modelConfig, prompt) {
-    console.log(`   📡 Отправка в Gemini (модель: ${modelConfig.modelId})...`);
+export async function callAIWorkerProxy(modelConfig, prompt) {
+    console.log(`   📡 Отправка в AI Worker Proxy...`);
     
-    if (!PROXY_URL) {
-        throw new Error('PROXY_URL не настроен');
-    }
-
     try {
-        const url = `${PROXY_URL}/v1beta/models/${modelConfig.modelId}:generateContent?key=${modelConfig.apiKey}`;
-        
-        const response = await axios.post(url, {
-            contents: [{
-                parts: [{ text: prompt }]
-            }]
-        }, {
-            timeout: 30000,
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        const letter = response.data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-        
-        if (!letter) {
-            throw new Error('Пустой ответ от Gemini');
-        }
-        
-        return letter;
-        
-    } catch (error) {
-        console.log(`   ❌ Gemini ошибка: ${error.message}`);
-        
-        if (error.response) {
-            console.log(`   Статус: ${error.response.status}`);
-            if (error.response.status === 429) {
-                console.log(`   ⚠️ Превышен лимит запросов к Gemini`);
+        const response = await axios.post(
+            `https://ai-worker-proxy.evgeniikorn99.workers.dev/v1/chat/completions`,
+            {
+                model: modelConfig.modelId,
+                messages: [
+                    { role: 'user', content: prompt }
+                ]
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                timeout: 30000
             }
-        }
-        
+        );
+
+        return response.data.choices[0].message.content;
+    } catch (error) {
+        console.log(`   ❌ AI Worker Proxy ошибка: ${error.message}`);
         throw error;
     }
 }
@@ -202,16 +188,132 @@ export async function callOpenRouter(modelConfig, prompt) {
     }
 }
 
+export async function callDashScope(modelConfig ,prompt) {
+    if(!PROXY_URL){
+        throw new Error('PROXY_URL не настроен');
+    }
+
+    try{
+        const url = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation'
+        
+ 
+        const response = await axios.post(url, {
+            model: modelConfig.modelId,
+            input: {
+                messages: [
+                    { role: 'user', content: prompt }
+                ]
+            },
+            parameters: {
+                max_tokens: 800,
+                temperature: 0.7
+            }
+        }, {
+            headers: {
+                'Authorization': `Bearer ${modelConfig.apiKey}`,  // Должно быть именно так!
+                'Content-Type': 'application/json'
+            },
+            timeout: 30000
+        });
+
+    const letter = response.data.output?.choices?.[0]?.message?.content || '';
+    
+    if (!letter) {
+            throw new Error('Пустой ответ от DashScope');
+        }
+        
+    return letter;
+
+    }catch(err){
+        console.log(`   ❌ DashScope ошибка: ${err.message}`);
+        
+        if (err.response) {
+            console.log(`   Статус: ${err.response.status}`);
+            if (err.response.status === 429) {
+                console.log(`   ⚠️ Превышен лимит запросов к DashScope`);
+            }
+        }
+        
+        throw err;
+    }
+}
+
+export async function callHuggingFace(modelConfig, prompt) {
+    console.log(`   📡 Отправка в Hugging Face (${modelConfig.modelId})...`);
+    
+    if (!PROXY_URL) {
+        throw new Error('PROXY_URL не настроен');
+    }
+
+    try {
+        const url = `https://api-inference.huggingface.co/models/${modelConfig.modelId}`;
+
+        const response = await axios.post(url,
+            {
+                inputs: prompt,
+                parameters: {
+                    max_new_tokens: 800,
+                    temperature: 0.7,
+                    return_full_text: false
+                }
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${modelConfig.apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                timeout: 60000
+            }
+        );
+
+        let letter = '';
+        if (Array.isArray(response.data)) {
+            letter = response.data[0]?.generated_text || '';
+        } else {
+            letter = response.data?.generated_text || '';
+        }
+        
+        if (letter.includes(prompt)) {
+            letter = letter.replace(prompt, '').trim();
+        }
+        
+        if (!letter) {
+            throw new Error('Пустой ответ от Hugging Face');
+        }
+        
+        console.log(`   ✅ Hugging Face ответил (${letter.length} символов)`);
+        return letter; 
+    } catch (err) {
+        console.log(`   ❌ Hugging Face ошибка: ${err.message}`);
+        if (err.response) {
+            console.log(`   Статус: ${err.response.status}`);
+        }
+        throw err;
+    }
+}
+
 export async function generateCoverLetter(vacancy, resumeText, userPrompt = '') {
     try {
         console.log('📝 Генерация сопроводительного письма...');
         
         const MODELS = [
             {
-                name: 'Gemini Flash',
-                modelId: 'gemini-2.5-flash-lite',
-                apiKey: process.env.GEMINI_API_KEY,
-                callFunction: callGemini
+                name: 'DashScope',
+                modelId: 'qwen-max',
+                apiKey: process.env.DASHSCOPE_API_KEY,
+                callFunction: callDashScope
+            },
+            {
+                name: 'Hugging Face',
+                modelId: 'meta-llama/Llama-3.3-70B-Instruct',
+                apiKey: process.env.HUGGINGFACE_API_KEY,
+                callFunction: callHuggingFace
+            },
+            {
+                name: 'AI Worker Proxy',
+                modelId: 'google/gemini-2.5-flash-lite',
+                apiKey: process.env.PROXY_AUTH_TOKEN,  // Токен прокси
+                callFunction: callAIWorkerProxy
             },
             {
                 name: 'OpenRouter Free',
