@@ -2,6 +2,7 @@
 import { generateCoverLetter } from '../gemini/letterGenerator.js';
 import { parseVacancyPage } from '../parser/vacancyParser.js';
 import { detectPageType, answerQuestions } from './questionHandler.js';
+import fs from 'fs';  
 
 /* ======================================================
    ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
@@ -479,10 +480,143 @@ export async function closeModal(page) {
     }
 }
 
-/* ======================================================
+
+ /* ======================================================
    ПАКЕТНЫЙ ОТКЛИК
    ====================================================== */
 
 /**
  * Пакетный отклик на несколько вакансий
  */
+export async function batchRespond(page, vacancies, resumeText, userPrompt = '', options = {}) {
+    const {
+        delay = 30000,
+        randomDelay = true,
+        maxResponses = 80,
+        ...otherOptions
+    } = options;
+    
+    console.log(`\n🚀 ЗАПУСК ПАКЕТНОГО ОТКЛИКА`);
+    console.log(`📊 Всего вакансий: ${vacancies.length}`);
+    console.log(`⏱️  Задержка: ${delay/1000} сек ${randomDelay ? '(рандомная)' : ''}`);
+    
+    // 📂 Загружаем оба листа
+    let pendingResponses = [];
+    let completedResponses = [];
+    
+    try {
+        pendingResponses = JSON.parse(fs.readFileSync('pending-responses.json', 'utf8'));
+    } catch {
+        pendingResponses = [];
+    }
+    
+    try {
+        completedResponses = JSON.parse(fs.readFileSync('completed-responses.json', 'utf8'));
+    } catch {
+        completedResponses = [];
+    }
+    
+    console.log(`📋 В очереди: ${pendingResponses.length}, Выполнено: ${completedResponses.length}`);
+    
+    const results = {
+        total: vacancies.length,
+        success: 0,
+        failed: 0,
+        skipped: 0,
+        details: []
+    };
+    
+    for (let i = 0; i < vacancies.length; i++) {
+        if (results.success >= maxResponses) {
+            console.log(`\n⚠️ Достигнут лимит откликов (${maxResponses})`);
+            break;
+        }
+        
+        const vacancy = vacancies[i];
+        console.log(`\n--- [${i+1}/${vacancies.length}] ${vacancy.title} ---`);
+        
+        // 🔍 Проверяем, не откликались ли уже на эту вакансию
+        const alreadyCompleted = completedResponses.find(r => r.url === vacancy.url);
+        const alreadyPending = pendingResponses.find(r => r.url === vacancy.url);
+        
+        if (alreadyCompleted) {
+            console.log(`⏭️  Уже откликались на эту вакансию (${alreadyCompleted.timestamp})`);
+            results.skipped++;
+            continue;
+        }
+        
+        if (alreadyPending) {
+            console.log(`⏳ Уже в очереди (добавлено: ${alreadyPending.addedAt})`);
+            results.skipped++;
+            continue;
+        }
+        
+        // 📌 Добавляем в лист ожидания
+        const pendingItem = {
+            id: vacancy.id || Date.now().toString(),
+            title: vacancy.title,
+            company: vacancy.company,
+            url: vacancy.url,
+            status: 'pending',
+            addedAt: new Date().toISOString()
+        };
+        
+        pendingResponses.push(pendingItem);
+        fs.writeFileSync('pending-responses.json', JSON.stringify(pendingResponses, null, 2));
+        console.log(`📌 Добавлено в список ожидания (всего в работе: ${pendingResponses.length})`);
+        
+        // 📤 Отправляем отклик
+        const result = await autoRespond(page, vacancy.url, resumeText, userPrompt, otherOptions);
+        
+        // 🗑️ Убираем из листа ожидания
+        pendingResponses = pendingResponses.filter(p => p.url !== vacancy.url);
+        fs.writeFileSync('pending-responses.json', JSON.stringify(pendingResponses, null, 2));
+        
+        if (result.success) {
+            results.success++;
+            
+            // ✅ Добавляем в историю успешных откликов
+            const completedItem = {
+                id: vacancy.id || Date.now().toString(),
+                title: vacancy.title,
+                company: vacancy.company,
+                url: vacancy.url,
+                timestamp: new Date().toISOString(),
+                coverLetter: result.data?.coverLetter || '',
+                status: 'completed'
+            };
+            
+            completedResponses.push(completedItem);
+            fs.writeFileSync('completed-responses.json', JSON.stringify(completedResponses, null, 2));
+            
+            console.log(`✅ Отклик успешен! Всего выполнено: ${completedResponses.length}`);
+            if (result.data) results.details.push(result.data);
+            
+        } else {
+            results.failed++;
+            console.log(`❌ Ошибка, вакансия удалена из очереди`);
+        }
+        
+        // Пауза между откликами
+        if (i < vacancies.length - 1 && results.success < maxResponses) {
+            let pauseTime = delay;
+            if (randomDelay) {
+                pauseTime = delay + Math.random() * 60000;
+            }
+            console.log(`⏳ Пауза ${Math.round(pauseTime/1000)} сек...`);
+            await new Promise(resolve => setTimeout(resolve, pauseTime));
+        }
+    }
+    
+    // Итоги
+    console.log('\n' + '='.repeat(50));
+    console.log('📊 ИТОГИ ОТКЛИКОВ');
+    console.log('='.repeat(50));
+    console.log(`✅ Успешно: ${results.success}`);
+    console.log(`❌ Ошибок: ${results.failed}`);
+    console.log(`⏭️  Пропущено (уже в работе/выполнено): ${results.skipped}`);
+    console.log(`📋 Осталось в очереди: ${pendingResponses.length}`);
+    console.log('='.repeat(50));
+    
+    return results;
+}
