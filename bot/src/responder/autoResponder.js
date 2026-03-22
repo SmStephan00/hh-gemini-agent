@@ -2,15 +2,110 @@
 import { generateCoverLetter } from '../gemini/letterGenerator.js';
 import { parseVacancyPage } from '../parser/vacancyParser.js';
 import { detectPageType, answerQuestions } from './questionHandler.js';
-import fs from 'fs';  
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+/* ======================================================
+   КОНСТАНТЫ
+   ====================================================== */
+
+const TIMEOUTS = {
+    PAGE_LOAD: 90000,
+    MODAL_WAIT_ATTEMPTS: 10,
+    MODAL_WAIT_DELAY: 1500,
+    ELEMENT_WAIT: 30000,
+    TYPE_DELAY: 30,
+    PAUSE_AFTER_CLICK: 2000,
+    BUTTON_ACTIVATE_WAIT: 2000,
+    BUTTON_ACTIVATE_ATTEMPTS: 15,
+    SUCCESS_CHECK_ATTEMPTS: 20
+};
+
+const SELECTORS = {
+    // Кнопка отклика
+    RESPONSE_BUTTON: [
+        '[data-qa="vacancy-response-link-top"]',
+        '[data-qa="vacancy-response-button"]',
+        'a:has-text("Откликнуться")',
+        'button:has-text("Откликнуться")'
+    ],
+    
+    // Поле для письма (на странице вакансии)
+    LETTER_FIELD_ON_PAGE: [
+        '[data-qa="vacancy-response-letter"]',
+        '[data-qa="cover-letter"]',
+        'textarea[name="letter"]',
+        'textarea[name="message"]',
+        '[data-qa*="letter"]'
+    ],
+    
+    // Поле для письма (в модальном окне)
+    LETTER_FIELD_IN_MODAL: [
+        '[data-qa="vacancy-response-popup-form-letter-input"]',
+        'textarea[data-qa="vacancy-response-popup-form-letter-input"]',
+        '[data-qa="response-letter"]',
+        'textarea[name="letter"]',
+        '[data-qa*="letter"]',
+        'textarea'
+    ],
+    
+    // Кнопка отправки
+    SUBMIT_BUTTON: [
+        '[data-qa="vacancy-response-submit-popup"]',
+        'button[type="submit"]',
+        'button:has-text("Откликнуться")',
+        'button:has-text("Отправить")'
+    ],
+    
+    // Успешные сообщения
+    SUCCESS_MESSAGES: [
+        'Резюме доставлено',
+        'Отклик отправлен',
+        'Вы успешно откликнулись',
+        'Ваш отклик отправлен',
+        'Отклик принят'
+    ],
+    
+    // Признаки вопросов
+    QUESTION_INDICATORS: [
+        '[data-qa="employer-asking-for-test"]',
+        '[data-qa="task-body"]',
+        'textarea[name*="task"]',
+        'input[type="radio"]'
+    ],
+    
+    // Признаки предупреждения о релокации
+    RELOCATION_WARNING: {
+        title: '[data-qa="relocation-warning-title"]',
+        confirm: '[data-qa="relocation-warning-confirm"]',
+        abort: '[data-qa="relocation-warning-abort"]'
+    },
+    
+    // Признаки внешнего отклика
+    EXTERNAL_RESPONSE: [
+        'Вакансия с прямым откликом',
+        'заполнив анкету на сайте работодателя',
+        'Перейти на сайт',
+        'На сайте работодателя',
+        'внешний сайт'
+    ],
+    
+    // Признаки ошибок
+    ERROR_INDICATORS: [
+        '[class*="error"]',
+        '[data-qa*="error"]',
+        '.bloko-text_color_alert'
+    ]
+};
 
 /* ======================================================
    ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
    ====================================================== */
 
-/**
- * Вспомогательная функция для повторных попыток
- */
 async function withRetry(fn, maxAttempts = 3, delay = 2000) {
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         try {
@@ -23,17 +118,11 @@ async function withRetry(fn, maxAttempts = 3, delay = 2000) {
     }
 }
 
-/**
- * Нормализация URL (замена karakan.hh.ru на hh.ru)
- */
 function normalizeUrl(url) {
     if (!url) return url;
     return url.replace('karakan.hh.ru', 'hh.ru');
 }
 
-/**
- * Шаблонное письмо
- */
 function getTemplateLetter(vacancy) {
     return `Здравствуйте! Меня заинтересовала вакансия ${vacancy.title} в компании ${vacancy.company}. Мой опыт и навыки соответствуют вашим требованиям. Буду рад обсудить детали на собеседовании.`;
 }
@@ -42,84 +131,74 @@ function getTemplateLetter(vacancy) {
    ПРОВЕРКА УСПЕХА ОТПРАВКИ
    ====================================================== */
 
-/**
- * УЛУЧШЕННАЯ ПРОВЕРКА УСПЕХА ОТПРАВКИ
- */
 async function checkSuccessWithRetry(page) {
     console.log('   🔍 Проверка подтверждения отправки...');
     
-    const successPatterns = [
-        // Селекторы data-qa
-        { selector: '[data-qa="response-success-message"]', text: null },
-        { selector: '[data-qa="response-success"]', text: null },
-        { selector: '[data-qa="vacancy-response-success"]', text: null },
-        { selector: '[data-qa="vacancy-response-success-message"]', text: null },
-        
-        // Селекторы для блока "Резюме доставлено"
-        { selector: 'div:has-text("Резюме доставлено")', text: null },
-        { selector: '[data-qa="vacancy-response-link-view-topic"]', text: null },
-        
-        // По тексту (русский)
-        { selector: 'div', text: 'Резюме доставлено' },
-        { selector: 'div', text: 'Отклик отправлен' },
-        { selector: 'div', text: 'Вы успешно откликнулись' },
-        { selector: 'div', text: 'Ваш отклик отправлен' },
-        { selector: 'div', text: 'Отклик принят' },
-        
-        // По классам
-        { selector: '.vacancy-response-success', text: null },
-        { selector: '.response-success', text: null },
-        { selector: '.bloko-text:has-text("отправлен")', text: null },
-        { selector: '[class*="success"]', text: 'отправлен' },
-        { selector: '[class*="success"]', text: 'success' },
-        
-        // По атрибутам
-        { selector: '[aria-label*="успешно"]', text: null },
-        { selector: '[data-state="success"]', text: null },
-        { selector: '[data-status="success"]', text: null },
-        
-        // В модалке
-        { selector: 'div[role="dialog"] div:has-text("отправлен")', text: null },
-        { selector: 'div[class*="modal"] div:has-text("отправлен")', text: null },
-        
-        // Специально для блока "Резюме доставлено"
-        { selector: '.magritte-card___bhGKz_8-3-7 div:has-text("Резюме доставлено")', text: null }
-    ];
-
-    const maxAttempts = 15;
-    const delayBetween = 2000;
-
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
-        for (const pattern of successPatterns) {
+    for (let attempt = 0; attempt < TIMEOUTS.SUCCESS_CHECK_ATTEMPTS; attempt++) {
+        // Проверяем успешные сообщения
+        for (const text of SELECTORS.SUCCESS_MESSAGES) {
             try {
-                if (pattern.text) {
-                    // Поиск по тексту
-                    const element = await page.getByText(pattern.text, { exact: false }).first();
-                    if (await element?.isVisible()) {
-                        console.log(`   ✅ Найдено подтверждение по тексту: "${pattern.text}" (попытка ${attempt + 1})`);
-                        return true;
-                    }
-                } else {
-                    // Поиск по селектору
-                    const element = await page.$(pattern.selector);
-                    if (element && await element.isVisible()) {
-                        console.log(`   ✅ Найдено подтверждение по селектору: ${pattern.selector} (попытка ${attempt + 1})`);
-                        return true;
+                const element = await page.getByText(text, { exact: false }).first();
+                if (await element?.isVisible()) {
+                    console.log(`   ✅ Найдено подтверждение: "${text}" (попытка ${attempt + 1})`);
+                    return true;
+                }
+            } catch (e) {}
+        }
+        
+        // Проверяем селекторы успеха
+        const successSelectors = [
+            '[data-qa="response-success-message"]',
+            '[data-qa="response-success"]',
+            '[data-qa="vacancy-response-success"]',
+            'div:has-text("Резюме доставлено")'
+        ];
+        
+        for (const selector of successSelectors) {
+            try {
+                const element = await page.$(selector);
+                if (element && await element.isVisible()) {
+                    console.log(`   ✅ Найдено подтверждение: ${selector} (попытка ${attempt + 1})`);
+                    return true;
+                }
+            } catch (e) {}
+        }
+        
+        // Проверяем URL - если на внешнем сайте, отклик не удался
+        const currentUrl = page.url();
+        if (!currentUrl.includes('hh.ru')) {
+            console.log(`   ❌ Перенаправление на внешний сайт: ${currentUrl}`);
+            return false;
+        }
+        
+        // Проверяем, закрылось ли модальное окно
+        const modal = await page.$('[role="dialog"], .magritte-modal-content-wrapper___23XFT');
+        if (!modal) {
+            console.log(`   ✅ Модальное окно закрылось (попытка ${attempt + 1})`);
+            return true;
+        }
+        
+        // Проверяем наличие ошибок
+        for (const selector of SELECTORS.ERROR_INDICATORS) {
+            try {
+                const errorEl = await page.$(selector);
+                if (errorEl && await errorEl.isVisible()) {
+                    const errorText = await errorEl.textContent();
+                    if (errorText && errorText.length > 0) {
+                        console.log(`   ❌ Найдена ошибка: ${errorText}`);
+                        return false;
                     }
                 }
-            } catch (e) {
-                // Игнорируем ошибки при проверке
-            }
+            } catch (e) {}
         }
         
-        if (attempt < maxAttempts - 1) {
-            console.log(`   ⏳ Попытка ${attempt + 1}/${maxAttempts} не дала результата, ждём...`);
-            await page.waitForTimeout(delayBetween);
+        if (attempt < TIMEOUTS.SUCCESS_CHECK_ATTEMPTS - 1) {
+            console.log(`   ⏳ Попытка ${attempt + 1}/${TIMEOUTS.SUCCESS_CHECK_ATTEMPTS} не дала результата, ждём...`);
+            await page.waitForTimeout(2000);
         }
     }
-
+    
     console.log('   ⚠️ Не удалось найти подтверждение отправки');
-    await page.screenshot({ path: `debug-success-fail-${Date.now()}.png`, fullPage: true });
     return false;
 }
 
@@ -127,137 +206,326 @@ async function checkSuccessWithRetry(page) {
    ФУНКЦИИ ПОИСКА ЭЛЕМЕНТОВ
    ====================================================== */
 
-/**
- * Поиск кнопки отклика
- */
 async function findResponseButton(page) {
-    // Приоритетные селекторы (новые и самые надежные)
-    const prioritySelectors = [
-        '[data-qa="vacancy-response-link-top"]',  // Из твоего HTML
-        '[data-qa="vacancy-response-button"]',
-        'a:has-text("Откликнуться")',
-        'button:has-text("Откликнуться")'
-    ];
-    
-    for (const selector of prioritySelectors) {
+    for (const selector of SELECTORS.RESPONSE_BUTTON) {
         const button = await page.$(selector);
         if (button && await button.isVisible()) {
             console.log(`✅ Найдена кнопка по селектору: ${selector}`);
             return button;
         }
     }
-    
-    // Альтернативные селекторы
-    console.log('🔍 Ищем альтернативные селекторы...');
-    const altSelectors = [
-        '[data-qa="vacancy-response-button-top"]',
-        '[data-qa="vacancy-response-button-side"]',
-        '[data-qa="vacancy-response-button-desktop"]',
-        '[data-qa="vacancy-response-button-mobile"]',
-        '[data-qa="response-button"]',
-        'button:has-text("Apply")',
-        '[class*="response-button"]',
-        '[class*="apply-button"]',
-        '.vacancy-response-button'
-    ];
-    
-    for (const selector of altSelectors) {
-        const button = await page.$(selector);
-        if (button && await button.isVisible()) {
-            console.log(`✅ Найдена кнопка по селектору: ${selector}`);
-            return button;
-        }
-    }
-    
+    console.log('⚠️ Кнопка отклика не найдена');
     return null;
 }
 
-/**
- * Поиск поля для письма
- */
-async function findLetterField(page) {
-    const selectors = [
-        '[data-qa="response-letter"]',
-        '[data-qa="response-letter-input"]',
-        '[data-qa="response-letter-textarea"]',
-        '[data-qa="cover-letter"]',
-        'textarea[name="letter"]',
-        'textarea[name="message"]',
-        'div[contenteditable="true"][data-qa*="letter"]',
-        '[data-qa*="letter"]',
-        'textarea'
-    ];
+async function findLetterField(page, inModal = false) {
+    const selectors = inModal ? SELECTORS.LETTER_FIELD_IN_MODAL : SELECTORS.LETTER_FIELD_ON_PAGE;
     
     for (const selector of selectors) {
-        const element = await page.$(selector);
-        if (element && await element.isVisible()) {
-            console.log(`✅ Найдено поле для письма: ${selector}`);
-            return { element, selector };
-        }
+        try {
+            const element = await page.$(selector);
+            if (element) {
+                const isVisible = await element.isVisible().catch(() => false);
+                if (isVisible) {
+                    console.log(`✅ Найдено поле для письма: ${selector}`);
+                    return { element, selector };
+                }
+            }
+        } catch (e) {}
     }
     
-    console.log('⚠️ Поле для письма не найдено');
+    // Поиск через лейбл
+    try {
+        const labelElement = await page.getByText('Сопроводительное письмо').first();
+        if (labelElement) {
+            const textarea = await labelElement.evaluateHandle(el => {
+                const parent = el.closest('[data-qa="textarea-wrapper"], .magritte-textarea___ugvor');
+                return parent ? parent.querySelector('textarea') : null;
+            });
+            if (textarea && await textarea.asElement()?.isVisible()) {
+                console.log(`✅ Найдено поле для письма через лейбл`);
+                return { element: textarea.asElement(), selector: 'label' };
+            }
+        }
+    } catch (e) {}
+    
+    console.log(`⚠️ Поле для письма не найдено (inModal: ${inModal})`);
     return { element: null, selector: null };
 }
 
-/**
- * Поиск кнопки отправки
- */
-async function findSubmitButton(page) {
-    const selectors = [
-        '[data-qa="response-submit"]',
-        '[data-qa="response-submit-button"]',
-        '[data-qa="submit-response"]',
-        '[data-qa="apply-submit"]',
-        'button[type="submit"]',
-        'button:has-text("Отправить")',
-        'button:has-text("Откликнуться")',
-        'button:has-text("Откликнуться без теста")',
-        'button:has-text("Submit")',
-        'button:has-text("Apply")',
-        '[class*="submit"]:is(button, input)',
-        '[data-qa="vacancy-response-submit-popup"]'
-    ];
+async function findActiveSubmitButton(page) {
+    const buttons = await page.$$('button[type="submit"], [data-qa="vacancy-response-submit-popup"]');
     
-    for (const selector of selectors) {
-        const element = await page.$(selector);
-        if (element && await element.isVisible()) {
-            console.log(`✅ Найдена кнопка отправки: ${selector}`);
-            return element;
+    for (const btn of buttons) {
+        const isVisible = await btn.isVisible();
+        const isDisabled = await btn.evaluate(el => el.disabled).catch(() => true);
+        if (isVisible && !isDisabled) {
+            console.log(`✅ Найдена активная кнопка отправки`);
+            return btn;
+        }
+    }
+    return null;
+}
+
+/* ======================================================
+   ПРОВЕРКИ
+   ====================================================== */
+
+async function hasQuestionsOnPage(page) {
+    const result = await page.evaluate((indicators) => {
+        for (const selector of indicators) {
+            if (document.querySelector(selector)) {
+                return true;
+            }
+        }
+        return false;
+    }, SELECTORS.QUESTION_INDICATORS);
+    return result;
+}
+
+async function isExternalResponse(page) {
+    const result = await page.evaluate((indicators) => {
+        const bodyText = document.body.innerText;
+        for (const indicator of indicators) {
+            if (bodyText.includes(indicator)) {
+                return true;
+            }
+        }
+        return false;
+    }, SELECTORS.EXTERNAL_RESPONSE);
+    return result;
+}
+
+async function handleRelocationWarning(page) {
+    const warningTitle = await page.$(SELECTORS.RELOCATION_WARNING.title);
+    if (warningTitle && await warningTitle.isVisible()) {
+        console.log('⚠️ Обнаружено предупреждение о релокации');
+        
+        const confirmButton = await page.$(SELECTORS.RELOCATION_WARNING.confirm);
+        if (confirmButton && await confirmButton.isVisible()) {
+            console.log('✅ Нажимаем "Все равно откликнуться"');
+            await confirmButton.click();
+            await page.waitForTimeout(2000);
+            return true;
+        }
+    }
+    return false;
+}
+
+async function waitForModal(page) {
+    let attempts = 0;
+    
+    while (attempts < TIMEOUTS.MODAL_WAIT_ATTEMPTS) {
+        attempts++;
+        await page.waitForTimeout(TIMEOUTS.MODAL_WAIT_DELAY);
+        
+        const modal = await page.$('[role="dialog"], .magritte-modal-content-wrapper___23XFT');
+        if (modal) {
+            console.log(`✅ Модальное окно появилось (попытка ${attempts})`);
+            return modal;
+        }
+        
+        // Проверяем, не перешли ли на страницу с вопросами
+        const isResponsePage = page.url().includes('/applicant/vacancy_response');
+        if (isResponsePage) {
+            console.log(`✅ Переход на страницу отклика (попытка ${attempts})`);
+            return null; // Сигнал, что это страница, а не модалка
+        }
+        
+        if (attempts === 1) {
+            console.log(`   ⏳ Ожидание модального окна (${attempts}/${TIMEOUTS.MODAL_WAIT_ATTEMPTS})...`);
         }
     }
     
+    console.log('⚠️ Модальное окно не появилось');
     return null;
+}
+
+/* ======================================================
+   ЗАПОЛНЕНИЕ ПОЛЯ ДЛЯ ПИСЬМА
+   ====================================================== */
+
+async function fillLetterField(page, letterField, coverLetter) {
+    try {
+        const freshElement = await page.$(letterField.selector);
+        if (!freshElement) throw new Error('Поле для письма исчезло');
+        
+        await freshElement.click({ clickCount: 3 });
+        await page.keyboard.press('Backspace');
+        await page.waitForTimeout(500);
+        await freshElement.type(coverLetter, { 
+            delay: TIMEOUTS.TYPE_DELAY,
+            timeout: TIMEOUTS.ELEMENT_WAIT
+        });
+        console.log('✍️ Письмо введено');
+        return true;
+    } catch (error) {
+        console.log('⚠️ Ошибка при вводе письма:', error.message);
+        return false;
+    }
+}
+
+/* ======================================================
+   ГЕНЕРАЦИЯ ПИСЬМА
+   ====================================================== */
+
+async function generateCoverLetterWithFallback(vacancyData, resumeText, userPrompt, useGemini) {
+    if (!useGemini) {
+        return getTemplateLetter(vacancyData);
+    }
+    
+    try {
+        console.log('🤖 Генерация сопроводительного письма...');
+        const coverLetter = await generateCoverLetter(vacancyData, resumeText, userPrompt);
+        console.log(`📨 Письмо сгенерировано (${coverLetter.length} символов)`);
+        return coverLetter;
+    } catch (error) {
+        console.log('⚠️ Gemini не доступен, используем шаблон');
+        return getTemplateLetter(vacancyData);
+    }
+}
+
+/* ======================================================
+   ОСНОВНОЙ ЦИКЛИЧЕСКИЙ АЛГОРИТМ ОБРАБОТКИ МОДАЛЬНЫХ ОКОН
+   ====================================================== */
+
+/**
+ * Рекурсивная обработка модальных окон
+ * Возвращает true если отклик успешен
+ */
+async function processModalRecursive(page, resumeText, vacancyData, useGemini, userPrompt, depth = 0) {
+    // Защита от бесконечной рекурсии
+    if (depth > 5) {
+        console.log('⚠️ Слишком много вложенных модальных окон, останавливаемся');
+        return false;
+    }
+    
+    console.log(`\n🔍 Обработка модального окна (уровень ${depth + 1})...`);
+    
+    // 1. ПРОВЕРЯЕМ ПРЕДУПРЕЖДЕНИЕ О РЕЛОКАЦИИ
+    const relocationHandled = await handleRelocationWarning(page);
+    if (relocationHandled) {
+        console.log('✅ Предупреждение о релокации обработано');
+        await page.waitForTimeout(1500);
+        // После обработки предупреждения продолжаем проверять текущее окно
+    }
+    
+    // 2. ПРОВЕРЯЕМ НАЛИЧИЕ ВОПРОСОВ
+    const hasQuestions = await hasQuestionsOnPage(page);
+    
+    if (hasQuestions) {
+        console.log('📋 Обнаружены вопросы');
+        
+        // Обрабатываем вопросы
+        const answered = await answerQuestions(page, resumeText, vacancyData);
+        
+        if (!answered) {
+            console.log('⚠️ Не удалось ответить на вопросы');
+            return false;
+        }
+        
+        console.log('✅ Ответы на вопросы отправлены');
+        await page.waitForTimeout(2000);
+        
+        // ПОСЛЕ ОТВЕТОВ ПРОВЕРЯЕМ, НЕ ПОЯВИЛОСЬ ЛИ НОВОЕ ОКНО
+        const newModal = await page.$('[role="dialog"], .magritte-modal-content-wrapper___23XFT');
+        const isResponsePage = page.url().includes('/applicant/vacancy_response');
+        
+        if (newModal || isResponsePage) {
+            console.log('🔄 После вопросов появилось новое окно, продолжаем обработку...');
+            await page.waitForTimeout(1500);
+            return await processModalRecursive(page, resumeText, vacancyData, useGemini, userPrompt, depth + 1);
+        }
+        
+        // Если нового окна нет, ищем кнопку отправки
+        const submitButton = await findActiveSubmitButton(page);
+        if (submitButton) {
+            await submitButton.click();
+            await page.waitForTimeout(TIMEOUTS.PAUSE_AFTER_CLICK);
+            return await checkSuccessWithRetry(page);
+        }
+        
+        return false;
+    }
+    
+    // 3. ЕСЛИ ВОПРОСОВ НЕТ - ИЩЕМ ПОЛЕ ДЛЯ ПИСЬМА
+    console.log('📝 Вопросов нет, ищем поле для письма...');
+    
+    const letterField = await findLetterField(page, true);
+    let letterFilled = false;
+    
+    if (letterField.element) {
+        // Генерируем письмо
+        const coverLetter = await generateCoverLetterWithFallback(vacancyData, resumeText, userPrompt, useGemini);
+        
+        // Заполняем поле
+        letterFilled = await fillLetterField(page, letterField, coverLetter);
+        
+        if (letterFilled) {
+            console.log('✍️ Письмо заполнено');
+            await page.waitForTimeout(TIMEOUTS.BUTTON_ACTIVATE_WAIT);
+        }
+    } else {
+        console.log('⚠️ Поле для письма не найдено');
+    }
+    
+    // 4. ИЩЕМ КНОПКУ ОТПРАВКИ
+    const submitButton = await findActiveSubmitButton(page);
+    
+    if (submitButton) {
+        console.log('📤 Нажимаем кнопку отправки...');
+        await submitButton.click();
+        await page.waitForTimeout(TIMEOUTS.PAUSE_AFTER_CLICK);
+        
+        // ПОСЛЕ НАЖАТИЯ ПРОВЕРЯЕМ, НЕ ПОЯВИЛОСЬ ЛИ НОВОЕ ОКНО
+        const newModal = await page.$('[role="dialog"], .magritte-modal-content-wrapper___23XFT');
+        const isResponsePage = page.url().includes('/applicant/vacancy_response');
+        
+        if (newModal || isResponsePage) {
+            console.log('🔄 После нажатия кнопки появилось новое окно, продолжаем обработку...');
+            await page.waitForTimeout(1500);
+            return await processModalRecursive(page, resumeText, vacancyData, useGemini, userPrompt, depth + 1);
+        }
+        
+        // Если нового окна нет, проверяем успех
+        return await checkSuccessWithRetry(page);
+    }
+    
+    // 5. КНОПКИ НЕТ - ПРОВЕРЯЕМ УСПЕХ (возможно отправилось автоматически)
+    console.log('🔍 Кнопка отправки не найдена, проверяем успех...');
+    const success = await checkSuccessWithRetry(page);
+    
+    if (success) {
+        return true;
+    }
+    
+    // 6. ЕСЛИ НЕ УСПЕХ - ПРОВЕРЯЕМ, НЕ ПОЯВИЛОСЬ ЛИ НОВОЕ ОКНО
+    const newModalAfter = await page.$('[role="dialog"], .magritte-modal-content-wrapper___23XFT');
+    if (newModalAfter) {
+        console.log('🔄 Появилось новое модальное окно, продолжаем обработку...');
+        await page.waitForTimeout(1500);
+        return await processModalRecursive(page, resumeText, vacancyData, useGemini, userPrompt, depth + 1);
+    }
+    
+    return false;
 }
 
 /* ======================================================
    ОСНОВНАЯ ФУНКЦИЯ АВТОМАТИЧЕСКОГО ОТКЛИКА
    ====================================================== */
 
-/**
- * Автоматический отклик на вакансию
- */
 export async function autoRespond(page, vacancyUrl, resumeText, userPrompt = '', options = {}) {
     try {
         const normalizedUrl = normalizeUrl(vacancyUrl);
-        if (normalizedUrl !== vacancyUrl) {
-            console.log(`🔄 URL нормализован: ${vacancyUrl} -> ${normalizedUrl}`);
-        }
-        
         console.log(`\n📝 ОТКЛИК НА ВАКАНСИЮ: ${normalizedUrl}`);
         
-        const {
-            minScore = 0,
-            useGemini = true,
-            forceResponse = false,
-            debug = false
-        } = options;
+        const { useGemini = true } = options;
         
-        // 1. Переходим на страницу вакансии
+        // 1. Загружаем страницу
         await withRetry(async () => {
             await page.goto(normalizedUrl, { 
                 waitUntil: 'networkidle', 
-                timeout: 60000
+                timeout: TIMEOUTS.PAGE_LOAD
             });
         }, 3, 5000);
         
@@ -266,242 +534,171 @@ export async function autoRespond(page, vacancyUrl, resumeText, userPrompt = '',
             return await parseVacancyPage(page);
         }, 3, 3000);
         
-        // 3. Проверяем тип страницы ДО нажатия кнопки (только для информации)
+        // 3. Проверяем тип страницы ДО нажатия
         const initialPageType = await detectPageType(page);
         console.log(`📊 Тип страницы (до нажатия): ${initialPageType}`);
 
-        // 4. Обработка тестового задания
         if (initialPageType === 'test_task') {
             console.log('⏭️  Тестовое задание - пропускаем');
             return { success: false, reason: 'test_task', skipped: true };
         }
-
-        // 5. ВАЖНО: НЕ обрабатываем вопросы на странице вакансии!
-        // Даже если detectPageType ошибочно показал 'questions', мы все равно идем дальше
-        // Потому что на странице вакансии вопросов быть не может по логике HH
         
         console.log(`📋 Вакансия: ${vacancyData.title} в ${vacancyData.company}`);
         
-        // 6. Проверяем, не откликались ли уже
+        // 4. Проверяем, не откликались ли уже
         const alreadyResponded = await page.$('[data-qa="vacancy-response-success-message"]');
         if (alreadyResponded) {
             console.log('⚠️ Уже откликались на эту вакансию');
             return { success: false, reason: 'already_responded' };
         }
         
-        // 7. Ищем кнопку отклика
-        let responseButton = await withRetry(async () => {
+        // 5. Проверяем на внешний отклик
+        const isExternal = await isExternalResponse(page);
+        if (isExternal) {
+            console.log('⚠️ Вакансия с внешним откликом - пропускаем');
+            return { success: false, reason: 'external_response', skipped: true };
+        }
+        
+        // 6. ИЩЕМ ПОЛЕ ДЛЯ ПИСЬМА НА СТРАНИЦЕ (ДО НАЖАТИЯ КНОПКИ)
+        const { element: letterFieldOnPage, selector: letterSelectorOnPage } = await findLetterField(page, false);
+        
+        // 7. ЕСЛИ ЕСТЬ ПОЛЕ ДЛЯ ПИСЬМА НА СТРАНИЦЕ - ЗАПОЛНЯЕМ
+        if (letterFieldOnPage && letterSelectorOnPage) {
+            console.log('📝 Найдено поле для письма на странице, заполняем...');
+            
+            const coverLetter = await generateCoverLetterWithFallback(vacancyData, resumeText, userPrompt, useGemini);
+            await fillLetterField(page, { element: letterFieldOnPage, selector: letterSelectorOnPage }, coverLetter);
+        }
+        
+        // 8. НАЖИМАЕМ КНОПКУ ОТКЛИКА
+        const responseButton = await withRetry(async () => {
             const button = await findResponseButton(page);
             if (!button) throw new Error('Кнопка отклика не найдена');
             return button;
         }, 3, 2000);
         
-        // 8. Генерируем сопроводительное письмо
-        let coverLetter = '';
-        
-        if (useGemini) {
-            try {
-                console.log('🤖 Генерация сопроводительного письма...');
-                coverLetter = await generateCoverLetter(vacancyData, resumeText, userPrompt);
-                console.log(`📨 Письмо сгенерировано (${coverLetter.length} символов)`);
-            } catch (error) {
-                console.log('⚠️ Gemini не доступен, используем шаблон');
-                coverLetter = getTemplateLetter(vacancyData);
-            }
-        } else {
-            coverLetter = getTemplateLetter(vacancyData);
-        }
-        
-        // 9. Кликаем по кнопке отклика
         await withRetry(async () => {
             await responseButton.click();
-            await page.waitForTimeout(1000);
+            await page.waitForTimeout(TIMEOUTS.PAUSE_AFTER_CLICK);
         }, 3, 2000);
         
-        console.log('✅ Кнопка нажата, ждём модальное окно...');
-        await page.waitForTimeout(3000);
-
-        console.log('🔍 Анализ страницы...');
-
-        async function debugPageContent(page) {
-            const debug = await page.evaluate(() => {
-                return {
-                    hasQuestionsTitle: !!document.querySelector('[data-qa="employer-asking-for-test"]'),
-                    taskBodyCount: document.querySelectorAll('[data-qa="task-body"]').length,
-                    taskTextareas: document.querySelectorAll('textarea[name*="task"]').length,
-                    hasLetterField: !!document.querySelector('[data-qa*="letter"], textarea[name="letter"]'),
-                    url: window.location.href,
-                    title: document.title
-                };
-            });
-            console.log('🔍 Отладка страницы:', debug);
-        }
+        console.log('✅ Кнопка отклика нажата');
         
-
-
-        await debugPageContent(page);
-        const afterClickPageType = await detectPageType(page);
-        console.log(`📊 Тип страницы (после нажатия): ${afterClickPageType}`);
+        // 9. ЖДЕМ ПОЯВЛЕНИЯ МОДАЛЬНОГО ОКНА ИЛИ ПЕРЕХОДА НА СТРАНИЦУ
+        const modal = await waitForModal(page);
         
-        // 11. Если открылись вопросы - отвечаем
-        if (afterClickPageType === 'questions') {
-            console.log('📋 После нажатия кнопки открылись вопросы - отвечаем...');
-            const answered = await answerQuestions(page, resumeText, vacancyData);
+        // Если модалки нет, проверяем успех
+        if (!modal) {
+            // Проверяем, не перешли ли на страницу с вопросами
+            const isResponsePage = page.url().includes('/applicant/vacancy_response');
+            if (isResponsePage) {
+                console.log('📄 Переход на страницу отклика');
+                // Рекурсивно обрабатываем страницу как модальное окно
+                const success = await processModalRecursive(page, resumeText, vacancyData, useGemini, userPrompt);
+                if (success) {
+                    console.log('✅ Отклик успешно отправлен!');
+                    return { success: true, data: vacancyData };
+                }
+                return { success: false, reason: 'modal_processing_failed' };
+            }
             
-            if (answered) {
-                console.log('✅ Ответы на вопросы отправлены');
-                const success = await checkSuccessWithRetry(page);
-                return { success, data: vacancyData };
-            } else {
-                console.log('⚠️ Не удалось ответить на вопросы');
+            // Если нет ни модалки, ни страницы, проверяем успех
+            const success = await checkSuccessWithRetry(page);
+            if (success) {
+                console.log('✅ Отклик успешно отправлен!');
+                return { success: true, data: vacancyData };
             }
+            return { success: false, reason: 'modal_not_found' };
         }
         
-        // 12. Ищем поле для письма
-        const { element: letterField, selector: letterSelector } = await findLetterField(page);
+        // 10. ЗАПУСКАЕМ РЕКУРСИВНУЮ ОБРАБОТКУ МОДАЛЬНЫХ ОКОН
+        const modalSuccess = await processModalRecursive(page, resumeText, vacancyData, useGemini, userPrompt);
         
-        if (letterField && letterSelector) {
-            try {
-                await withRetry(async () => {
-                    // Ищем элемент заново перед каждым действием
-                    const freshElement = await page.$(letterSelector);
-                    if (!freshElement) throw new Error('Поле для письма исчезло');
-                    
-                    await freshElement.click({ clickCount: 3 });
-                    await page.keyboard.press('Backspace');
-                    await page.waitForTimeout(500);
-                    await freshElement.type(coverLetter, { 
-                        delay: 30,
-                        timeout: 60000
-                    });
-                    console.log('✍️ Письмо введено');
-                }, 3, 1000);
-                
-            } catch (error) {
-                console.log('⚠️ Ошибка при вводе письма:', error.message);
-            }
-        }
-        
-        // 13. Ищем кнопку отправки
-        const submitButton = await withRetry(async () => {
-            const button = await findSubmitButton(page);
-            if (!button) throw new Error('Кнопка отправки не найдена');
-            return button;
-        }, 3, 2000);
-        
-        // 14. Отправляем отклик
-        await withRetry(async () => {
-            await submitButton.click();
-            console.log('📤 Отправляем отклик...');
-            await page.waitForTimeout(3000);
-        }, 3, 2000);
-        
-        // 15. Проверяем успех
-        const success = await checkSuccessWithRetry(page);
-        
-        if (success) {
+        if (modalSuccess) {
             console.log('✅ Отклик успешно отправлен!');
-            
-            const responseInfo = {
-                title: vacancyData.title,
-                company: vacancyData.company,
-                url: normalizedUrl,
-                timestamp: new Date().toISOString(),
-                coverLetter: coverLetter ? coverLetter.substring(0, 100) + '...' : null
-            };
-            
-            return { success: true, data: responseInfo };
-            
-        } else {
-            console.log('⚠️ Не удалось подтвердить отправку');
-            await page.screenshot({ path: `debug-no-confirmation-${Date.now()}.png` });
-            return { success: false, reason: 'no_confirmation' };
+            return { success: true, data: vacancyData };
         }
+        
+        console.log('⚠️ Не удалось обработать модальное окно');
+        return { success: false, reason: 'modal_processing_failed' };
         
     } catch (error) {
         console.error('❌ Ошибка отклика:', error.message);
-        await page.screenshot({ path: `debug-error-${Date.now()}.png` });
         return { success: false, reason: 'error', error: error.message };
     }
 }
 
 /* ======================================================
-   ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ РАБОТЫ С ОКНАМИ
+   ЗАКРЫТИЕ МОДАЛЬНОГО ОКНА
    ====================================================== */
 
-/**
- * Закрытие модального окна
- */
 export async function closeModal(page) {
     try {
-        console.log('🔍 Ищем кнопку закрытия модального окна...');
-        
         const closeButtonSelectors = [
             '[data-qa="modal-close"]',
             '[data-qa="dialog-close"]',
             '[data-qa="close-button"]',
             '[aria-label="Закрыть"]',
-            '[aria-label="Close"]',
-            '.modal-close',
-            '.dialog-close',
-            '.close-button',
             'button:has-text("×")',
             'button:has-text("Закрыть")',
-            'button:has-text("Close")',
-            'button:has-text("Отмена")'
+            '[data-qa="response-popup-close"]'
         ];
         
         for (const selector of closeButtonSelectors) {
-            try {
-                const closeButton = await page.$(selector);
-                if (closeButton && await closeButton.isVisible()) {
-                    console.log(`✅ Найдена кнопка закрытия: ${selector}`);
-                    await closeButton.click();
-                    await page.waitForTimeout(1000);
-                    return true;
-                }
-            } catch (e) {}
+            const closeButton = await page.$(selector);
+            if (closeButton && await closeButton.isVisible()) {
+                await closeButton.click();
+                await page.waitForTimeout(1000);
+                return true;
+            }
         }
         
-        try {
-            console.log('⌨️ Пробуем нажать Escape');
-            await page.keyboard.press('Escape');
-            await page.waitForTimeout(1000);
-            return true;
-        } catch (e) {
-            console.log('❌ Escape не сработал');
-        }
-        
-        return false;
-        
+        await page.keyboard.press('Escape');
+        await page.waitForTimeout(1000);
+        return true;
     } catch (error) {
         console.error('❌ Ошибка при закрытии модального окна:', error.message);
         return false;
     }
 }
 
-
- /* ======================================================
-   ПАКЕТНЫЙ ОТКЛИК
-   ====================================================== */
-
-/**
- * Пакетный отклик на несколько вакансий
- */
 /* ======================================================
    ПАКЕТНЫЙ ОТКЛИК
    ====================================================== */
 
-/**
- * Пакетный отклик на несколько вакансий
- */
+function loadData(filePath) {
+    try {
+        const fullPath = path.join(__dirname, '..', '..', filePath);
+        if (fs.existsSync(fullPath)) {
+            return JSON.parse(fs.readFileSync(fullPath, 'utf8'));
+        }
+    } catch (e) {}
+    return [];
+}
+
+function saveData(filePath, data) {
+    try {
+        const fullPath = path.join(__dirname, '..', '..', filePath);
+        const dir = path.dirname(fullPath);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+        fs.writeFileSync(fullPath, JSON.stringify(data, null, 2));
+    } catch (e) {
+        console.log(`⚠️ Ошибка сохранения ${filePath}: ${e.message}`);
+    }
+}
+
 export async function batchRespond(page, vacancies, resumeText, userPrompt = '', options = {}) {
     const {
         delay = 30000,
         randomDelay = true,
         maxResponses = 80,
-        onSuccess = null,      // 🔥 ДОБАВЛЕНО
-        onError = null,        // 🔥 ДОБАВЛЕНО
+        pendingFile = 'pending-responses.json',
+        completedFile = 'completed-responses.json',
+        onSuccess = null,
+        onError = null,
+        onHtmlSave = null,
         ...otherOptions
     } = options;
     
@@ -509,21 +706,8 @@ export async function batchRespond(page, vacancies, resumeText, userPrompt = '',
     console.log(`📊 Всего вакансий: ${vacancies.length}`);
     console.log(`⏱️  Задержка: ${delay/1000} сек ${randomDelay ? '(рандомная)' : ''}`);
     
-    // 📂 Загружаем оба листа
-    let pendingResponses = [];
-    let completedResponses = [];
-    
-    try {
-        pendingResponses = JSON.parse(fs.readFileSync('pending-responses.json', 'utf8'));
-    } catch {
-        pendingResponses = [];
-    }
-    
-    try {
-        completedResponses = JSON.parse(fs.readFileSync('completed-responses.json', 'utf8'));
-    } catch {
-        completedResponses = [];
-    }
+    let pendingResponses = loadData(pendingFile);
+    let completedResponses = loadData(completedFile);
     
     console.log(`📋 В очереди: ${pendingResponses.length}, Выполнено: ${completedResponses.length}`);
     
@@ -544,12 +728,11 @@ export async function batchRespond(page, vacancies, resumeText, userPrompt = '',
         const vacancy = vacancies[i];
         console.log(`\n--- [${i+1}/${vacancies.length}] ${vacancy.title} ---`);
         
-        // 🔍 Проверяем, не откликались ли уже на эту вакансию
         const alreadyCompleted = completedResponses.find(r => r.url === vacancy.url);
         const alreadyPending = pendingResponses.find(r => r.url === vacancy.url);
         
         if (alreadyCompleted) {
-            console.log(`⏭️  Уже откликались на эту вакансию (${alreadyCompleted.timestamp})`);
+            console.log(`⏭️  Уже откликались (${alreadyCompleted.timestamp})`);
             results.skipped++;
             continue;
         }
@@ -560,7 +743,6 @@ export async function batchRespond(page, vacancies, resumeText, userPrompt = '',
             continue;
         }
         
-        // 📌 Добавляем в лист ожидания
         const pendingItem = {
             id: vacancy.id || Date.now().toString(),
             title: vacancy.title,
@@ -571,20 +753,23 @@ export async function batchRespond(page, vacancies, resumeText, userPrompt = '',
         };
         
         pendingResponses.push(pendingItem);
-        fs.writeFileSync('pending-responses.json', JSON.stringify(pendingResponses, null, 2));
-        console.log(`📌 Добавлено в список ожидания (всего в работе: ${pendingResponses.length})`);
+        saveData(pendingFile, pendingResponses);
+        console.log(`📌 Добавлено в очередь (всего: ${pendingResponses.length})`);
         
-        // 📤 Отправляем отклик
-        const result = await autoRespond(page, vacancy.url, resumeText, userPrompt, otherOptions);
+        let result = null;
         
-        // 🗑️ Убираем из листа ожидания
+        try {
+            result = await autoRespond(page, vacancy.url, resumeText, userPrompt, otherOptions);
+        } catch (error) {
+            result = { success: false, error: error };
+        }
+        
         pendingResponses = pendingResponses.filter(p => p.url !== vacancy.url);
-        fs.writeFileSync('pending-responses.json', JSON.stringify(pendingResponses, null, 2));
+        saveData(pendingFile, pendingResponses);
         
         if (result.success) {
             results.success++;
             
-            // ✅ Добавляем в историю успешных откликов
             const completedItem = {
                 id: vacancy.id || Date.now().toString(),
                 title: vacancy.title,
@@ -596,12 +781,11 @@ export async function batchRespond(page, vacancies, resumeText, userPrompt = '',
             };
             
             completedResponses.push(completedItem);
-            fs.writeFileSync('completed-responses.json', JSON.stringify(completedResponses, null, 2));
+            saveData(completedFile, completedResponses);
             
             console.log(`✅ Отклик успешен! Всего выполнено: ${completedResponses.length}`);
             if (result.data) results.details.push(result.data);
             
-            // 🔥 ВЫЗЫВАЕМ КОЛБЭК ПРИ УСПЕХЕ
             if (onSuccess) {
                 try {
                     await onSuccess(result, vacancy);
@@ -612,9 +796,19 @@ export async function batchRespond(page, vacancies, resumeText, userPrompt = '',
             
         } else {
             results.failed++;
-            console.log(`❌ Ошибка, вакансия удалена из очереди`);
+            console.log(`❌ Ошибка отклика: ${result.error?.message || 'Неизвестная ошибка'}`);
             
-            // 🔥 ВЫЗЫВАЕМ КОЛБЭК ПРИ ОШИБКЕ
+            if (onHtmlSave && page) {
+                try {
+                    await onHtmlSave(page, vacancy.url, 'error', {
+                        vacancy: vacancy.title,
+                        error: result.error?.message
+                    });
+                } catch (e) {
+                    console.log(`⚠️ Не удалось сохранить HTML: ${e.message}`);
+                }
+            }
+            
             if (onError) {
                 try {
                     await onError(result.error || new Error('Неизвестная ошибка'), vacancy);
@@ -624,24 +818,19 @@ export async function batchRespond(page, vacancies, resumeText, userPrompt = '',
             }
         }
         
-        // Пауза между откликами
         if (i < vacancies.length - 1 && results.success < maxResponses) {
-            let pauseTime = delay;
-            if (randomDelay) {
-                pauseTime = delay + Math.random() * 60000;
-            }
+            let pauseTime = randomDelay ? delay + Math.random() * 60000 : delay;
             console.log(`⏳ Пауза ${Math.round(pauseTime/1000)} сек...`);
             await new Promise(resolve => setTimeout(resolve, pauseTime));
         }
     }
     
-    // Итоги
     console.log('\n' + '='.repeat(50));
     console.log('📊 ИТОГИ ОТКЛИКОВ');
     console.log('='.repeat(50));
     console.log(`✅ Успешно: ${results.success}`);
     console.log(`❌ Ошибок: ${results.failed}`);
-    console.log(`⏭️  Пропущено (уже в работе/выполнено): ${results.skipped}`);
+    console.log(`⏭️  Пропущено: ${results.skipped}`);
     console.log(`📋 Осталось в очереди: ${pendingResponses.length}`);
     console.log('='.repeat(50));
     

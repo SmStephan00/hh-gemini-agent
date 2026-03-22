@@ -1,11 +1,11 @@
 .header{
-    padding: 10px;
+    padding: 2vh;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #1d1d1b;
     color:#cdc6be;
-    border-radius: 0 0 10px 10px;
+    border-radius: 0 0 5px 5px;
 }
 
 .nav__list{

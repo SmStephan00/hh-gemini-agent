@@ -1,41 +1,48 @@
 .block__dashboard{
-    margin: 15px 0;
+    margin: 2vh 0;
     
 }
 
 .box__statistic, .box__activity__to__week, .box__status__ai{
-    margin-top: 20px;
-    padding: 8px 8px 8px 8px;
+    max-height: 20vh;
+    margin-top: 1.5vh;
+    padding: 2.7vh 8px 1.5vh 8px;
     border-radius: 5px;
     background-color:#1d1d1b;
 }
 
+.box__activity__to__week{
+    max-height: 26vh;
+}
+
 .title{
     background-color: #cdc6be;
-    padding-bottom: 10px;
+    padding-bottom: 2vh;
     border-bottom: 8px solid #1d1d1b;
-    border-radius: 5px;
-    padding: 8px;
+    border-radius: 5px 5px 0 0;
+    padding: 1vh;
     display: flex;
     align-items: center;
-    font-size: 22px;
+    font-size: 1.7vh;
     letter-spacing: 2px;
     font-weight: 700;
 }
 
 .list__response, .col__name__item, .col__progressbar, .col__procent{
     background-color: #cdc6be;
-    font-size: 20px;
+    font-size: 1.4vh;
 }
 
 .list__response{
     display: flex;
     justify-content: space-between;
+    border-radius: 0 0 5px 5px;
 }
 
 .list__response p{
+    font-size: 1.5vh;
     text-align: center;
-    padding: 5px 0;
+    padding: 0.5vh 0;
 }
 
 .item__response{
@@ -55,25 +62,31 @@
 
 .col__name__item{
     width: 15%;
+    border-radius: 5px 0 0 5px;
 }
 
 .col__procent, .col__name__item{
     text-align: center;
     padding: 0 8px;
-    border-radius: 5px;
+    
 }
 
 .name__item, .progressbar, .procent__item{
-    height: 45px;
-    margin: 5px 0;
+    height: 2vh;
+    margin: 0.3vh 0;
     display: flex;
     align-items: center;
 }
 
 .col__progressbar{
-    border-radius: 5px;
-    width: 75%;
+    
+    width: 80%;
     padding: 0 8px;
+}
+
+.col__procent{
+    width: 5%;
+    border-radius: 0 5px 5px 0;
 }
 
 .progressbar{
@@ -82,9 +95,10 @@
 }
 
 .progressbar span{
+    min-width: 4px;
     display: block;
     background-color: #1d1d1b;
-    height: 25px;
+    height: 1.5vh;
 }
 
 

@@ -21,6 +21,7 @@ function App() {
             <Route path='/' element={<DashBoard />} />
             <Route path="/search" element={<Search />} />
             <Route path="/setting" element={<Setting />} />
+            <Route path="/history" element={<Setting />} />
           </Routes>
         </div>
       </div>
