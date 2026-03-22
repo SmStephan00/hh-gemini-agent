@@ -488,11 +488,20 @@ export async function closeModal(page) {
 /**
  * Пакетный отклик на несколько вакансий
  */
+/* ======================================================
+   ПАКЕТНЫЙ ОТКЛИК
+   ====================================================== */
+
+/**
+ * Пакетный отклик на несколько вакансий
+ */
 export async function batchRespond(page, vacancies, resumeText, userPrompt = '', options = {}) {
     const {
         delay = 30000,
         randomDelay = true,
         maxResponses = 80,
+        onSuccess = null,      // 🔥 ДОБАВЛЕНО
+        onError = null,        // 🔥 ДОБАВЛЕНО
         ...otherOptions
     } = options;
     
@@ -592,9 +601,27 @@ export async function batchRespond(page, vacancies, resumeText, userPrompt = '',
             console.log(`✅ Отклик успешен! Всего выполнено: ${completedResponses.length}`);
             if (result.data) results.details.push(result.data);
             
+            // 🔥 ВЫЗЫВАЕМ КОЛБЭК ПРИ УСПЕХЕ
+            if (onSuccess) {
+                try {
+                    await onSuccess(result, vacancy);
+                } catch (e) {
+                    console.log(`⚠️ Ошибка в onSuccess: ${e.message}`);
+                }
+            }
+            
         } else {
             results.failed++;
             console.log(`❌ Ошибка, вакансия удалена из очереди`);
+            
+            // 🔥 ВЫЗЫВАЕМ КОЛБЭК ПРИ ОШИБКЕ
+            if (onError) {
+                try {
+                    await onError(result.error || new Error('Неизвестная ошибка'), vacancy);
+                } catch (e) {
+                    console.log(`⚠️ Ошибка в onError: ${e.message}`);
+                }
+            }
         }
         
         // Пауза между откликами

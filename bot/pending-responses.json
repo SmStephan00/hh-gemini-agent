@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "id": "131027750",
+    "title": "Frontend-разработчик (React TS)",
+    "company": "ТОО Smart International Business Online",
+    "url": "https://novokuznetsk.hh.ru/vacancy/131027750?query=frontend&hhtmFrom=vacancy_search_list",
+    "status": "pending",
+    "addedAt": "2026-03-21T13:44:16.570Z"
+  },
+  {
+    "id": "129973491",
+    "title": "Senior Frontend Developer (разработка игр)",
+    "company": "ITea RS d.o.o.",
+    "url": "https://novokuznetsk.hh.ru/vacancy/129973491?query=frontend&hhtmFrom=vacancy_search_list",
+    "status": "pending",
+    "addedAt": "2026-03-21T17:49:13.793Z"
+  }
+]

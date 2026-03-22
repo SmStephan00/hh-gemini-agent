@@ -14,14 +14,16 @@ function App() {
 
   return (
     <BrowserRouter>
+    <div className='container'>
       <Header></Header>
-       <div className='container__contant'>
+       <div className='box__contant'>
           <Routes>
             <Route path='/' element={<DashBoard />} />
             <Route path="/search" element={<Search />} />
             <Route path="/setting" element={<Setting />} />
           </Routes>
         </div>
+      </div>
     </BrowserRouter>
   )
 }

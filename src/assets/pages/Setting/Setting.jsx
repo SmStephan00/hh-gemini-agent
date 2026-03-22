@@ -1,15 +1,7 @@
-import useAppStore from '../../store/appStore'
+
 
 function Settings() {
-  const { 
-    minScore, 
-    setMinScore, 
-    searchQuery, 
-    setSearchQuery, 
-    resumeText,
-    setResumeText,
-    resetSettings 
-  } = useAppStore()
+ 
   
   return (
 

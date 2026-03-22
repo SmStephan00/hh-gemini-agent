@@ -1,0 +1,353 @@
+{
+  "lastUpdated": "2026-03-22T09:34:16.257Z",
+  "stats": {
+    "totalResponses": 27,
+    "successful": 15,
+    "failed": 12,
+    "skipped": 0,
+    "byDate": {
+      "2026-03-22": {
+        "success": 15,
+        "failed": 12,
+        "skipped": 0
+      }
+    }
+  },
+  "pending": [
+    {
+      "id": "131329300",
+      "title": "Frontend Developer / Фронтенд-разработчик в AntiDDoS",
+      "company": "RWB (Wildberries & Russ)",
+      "url": "https://karakan.hh.ru/vacancy/131329300?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-22T08:10:36.847Z",
+      "status": "pending"
+    },
+    {
+      "id": "131216529",
+      "title": "Frontend-разработчик (UI/UX дизайнер)",
+      "company": "Федерация хоккея России",
+      "url": "https://karakan.hh.ru/vacancy/131216529?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-22T08:10:36.854Z",
+      "status": "pending"
+    },
+    {
+      "id": "131027750",
+      "title": "Frontend-разработчик (React TS)",
+      "company": "ТОО Smart International Business Online",
+      "url": "https://karakan.hh.ru/vacancy/131027750?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-22T08:10:36.857Z",
+      "status": "pending"
+    },
+    {
+      "id": "131226810",
+      "title": "Frontend (React) разработчик",
+      "company": "ООО Быстрая поставка систем",
+      "url": "https://karakan.hh.ru/vacancy/131226810?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-22T08:10:37.490Z",
+      "status": "pending"
+    },
+    {
+      "id": "131122245",
+      "title": "Frontend разработчик (React)",
+      "company": "NBCom Group",
+      "url": "https://karakan.hh.ru/vacancy/131122245?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-22T08:10:37.550Z",
+      "status": "pending"
+    },
+    {
+      "id": "131197987",
+      "title": "Middle Frontend-разработчик (React, TypeScript)",
+      "company": "Xello",
+      "url": "https://karakan.hh.ru/vacancy/131197987?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-22T08:10:37.555Z",
+      "status": "pending"
+    },
+    {
+      "id": "131213067",
+      "title": "Frontend-разработчик",
+      "company": "Дядькин Сергей",
+      "url": "https://karakan.hh.ru/vacancy/131213067?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-22T08:10:37.563Z",
+      "status": "pending"
+    },
+    {
+      "id": "131217569",
+      "title": "Фронтенд Разработчик / Middle Frontend Developer (React)",
+      "company": "CATAPULTO.RU",
+      "url": "https://karakan.hh.ru/vacancy/131217569?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-22T08:10:37.567Z",
+      "status": "pending"
+    }
+  ],
+  "completed": [
+    {
+      "id": "1774172056253",
+      "title": "Frontend-разработчик (Middle+/Senior)",
+      "company": "ДЖЕЙКЕТ РАБОТА",
+      "url": "https://karakan.hh.ru/vacancy/130963134?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-22T09:34:16.253Z",
+      "coverLetter": "Здравствуйте, команда ДЖЕЙКЕТ РАБОТА! Я frontend-разработчик с 3+ годами опыта, в основном на React ...",
+      "status": "completed"
+    },
+    {
+      "id": "1774171888591",
+      "title": "Frontend-разработчик (React)",
+      "company": "Okko",
+      "url": "https://karakan.hh.ru/vacancy/131242293?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-22T09:31:28.591Z",
+      "coverLetter": "Здравствуйте — я frontend-разработчик с 3+ лет, работаю на React, TypeScript, JavaScript и HTML.  \nН...",
+      "status": "completed"
+    },
+    {
+      "id": "1774171733158",
+      "title": "Frontend-разработчик",
+      "company": "АРМО, ГК",
+      "url": "https://karakan.hh.ru/vacancy/130470097?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-22T09:28:53.158Z",
+      "coverLetter": "Здравствуйте, я Frontend-разработчик с 3+ лет опыта (React, TypeScript, Redux, Git).  \nАвтоматизиров...",
+      "status": "completed"
+    },
+    {
+      "id": "1774171574790",
+      "title": "Frontend-разработчик",
+      "company": "ООО ИЦ АЙ-ТЕКО",
+      "url": "https://karakan.hh.ru/vacancy/131408522?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-22T09:26:14.790Z",
+      "coverLetter": "Здравствуйте, я frontend‑разработчик с 3+ годами опыта, работаю с React, TypeScript, JavaScript и We...",
+      "status": "completed"
+    },
+    {
+      "id": "1774171457873",
+      "title": "Frontend-разработчик",
+      "company": "Rx2Go",
+      "url": "https://karakan.hh.ru/vacancy/131224143?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-22T09:24:17.873Z",
+      "coverLetter": "Здравствуйте, я frontend‑разработчик с 3+ лет опыта, работаю с React, TypeScript, JavaScript и Next....",
+      "status": "completed"
+    },
+    {
+      "id": "1774171331124",
+      "title": "Frontend-разработчик",
+      "company": "ООО Деус",
+      "url": "https://karakan.hh.ru/vacancy/131297163?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-22T09:22:11.124Z",
+      "coverLetter": "Здравствуйте, я фронтенд‑разработчик с 3+ лет опыта (React, JavaScript, Vue, HTML).  \nАвтоматизирова...",
+      "status": "completed"
+    },
+    {
+      "id": "1774171196615",
+      "title": "Middle Frontend разработчик (React)",
+      "company": "Плужников Евгений Геннадьевич",
+      "url": "https://karakan.hh.ru/vacancy/131228648?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-22T09:19:56.615Z",
+      "coverLetter": "Здравствуйте, я Middle Frontend разработчик с 3+ лет опыта. Автоматизировал первичный скрининг — вре...",
+      "status": "completed"
+    },
+    {
+      "id": "1774171070161",
+      "title": "Frontend-разработчик React/Typescript",
+      "company": "Вкусно — и точка",
+      "url": "https://karakan.hh.ru/vacancy/131291298?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-22T09:17:50.161Z",
+      "coverLetter": "Здравствуйте, я frontend‑разработчик с 3+ лет опыта, специализируюсь на React и TypeScript.\n\nНа плат...",
+      "status": "completed"
+    },
+    {
+      "id": "1774170905510",
+      "title": "Frontend-разработчик",
+      "company": "ООО Лаборатория интеллектуальных систем и технологий",
+      "url": "https://karakan.hh.ru/vacancy/131312309?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-22T09:15:05.510Z",
+      "coverLetter": "Здравствуйте, я фронтенд‑разработчик с 3+ лет опыта, работаю с React, TypeScript, CSS и Git.  \nВнедр...",
+      "status": "completed"
+    },
+    {
+      "id": "1774170725729",
+      "title": "Junior+ / Middle Frontend Developer (JavaScript)",
+      "company": "ООО GAME DESIGN INTERACTIVE",
+      "url": "https://karakan.hh.ru/vacancy/131302417?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-22T09:12:05.729Z",
+      "coverLetter": "Здравствуйте, я frontend‑разработчик с 3+ годами опыта в JavaScript, HTML и CSS. Автоматизировал пер...",
+      "status": "completed"
+    },
+    {
+      "id": "1774170584351",
+      "title": "Frontend-разработчик",
+      "company": "ООО ХАОС ГРУПП",
+      "url": "https://karakan.hh.ru/vacancy/130671639?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-22T09:09:44.351Z",
+      "coverLetter": "Здравствуйте, я фронтенд‑разработчик с 3+ годами опыта.  \nМогу ускорить интерфейс и масштабировать ф...",
+      "status": "completed"
+    },
+    {
+      "id": "1774170482972",
+      "title": "Frontend-разработчик (платформа Perfluence)",
+      "company": "Rambler&Co СберСеллер",
+      "url": "https://karakan.hh.ru/vacancy/131315136?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-22T09:08:02.972Z",
+      "coverLetter": "Здравствуйте, я frontend‑разработчик с 3+ годами опыта, работаю на React, TypeScript, Next.js и Redu...",
+      "status": "completed"
+    },
+    {
+      "id": "1774170309859",
+      "title": "Frontend developer (React, Typescript, ant-design, ionic/capacitor)",
+      "company": "ООО Вбетон",
+      "url": "https://karakan.hh.ru/vacancy/131377088?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-22T09:05:09.859Z",
+      "coverLetter": "Здравствуйте, я фронтенд-разработчик с 3+ лет опыта, работаю с React, TypeScript, Node.js и Git.  \nА...",
+      "status": "completed"
+    },
+    {
+      "id": "1774170148876",
+      "title": "Frontend разработчик",
+      "company": "ООО А-Кор",
+      "url": "https://karakan.hh.ru/vacancy/131335019?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-22T09:02:28.876Z",
+      "coverLetter": "Уважаемый менеджер по подбору персонала ООО \"А-Кор\"!\n\nМеня зовут [Ваше Имя], и я frontend-разработчи...",
+      "status": "completed"
+    },
+    {
+      "id": "1774170027625",
+      "title": "Frontend-разработчик",
+      "company": "Мосгосэкспертиза",
+      "url": "https://karakan.hh.ru/vacancy/130633861?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-22T09:00:27.625Z",
+      "coverLetter": "Уважаемый HR-менеджер \"Мосгосэкспертиза\",\n\nМеня зовут [Ваше Имя], и я — опытный Frontend-разработчик...",
+      "status": "completed"
+    }
+  ],
+  "errors": [
+    {
+      "id": "1774169850469",
+      "timestamp": "2026-03-22T08:57:30.469Z",
+      "vacancy": {
+        "title": "Senior Frontend Developer (разработка игр)",
+        "company": "ITea RS d.o.o.",
+        "url": "https://karakan.hh.ru/vacancy/128173642?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list"
+      },
+      "error": "Неизвестная ошибка",
+      "type": "unknown"
+    },
+    {
+      "id": "1774169626862",
+      "timestamp": "2026-03-22T08:53:46.862Z",
+      "vacancy": {
+        "title": "Senior Frontend Developer (разработка игр)",
+        "company": "ITea RS d.o.o.",
+        "url": "https://karakan.hh.ru/vacancy/129973491?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list"
+      },
+      "error": "Неизвестная ошибка",
+      "type": "unknown"
+    },
+    {
+      "id": "1774169446249",
+      "timestamp": "2026-03-22T08:50:46.249Z",
+      "vacancy": {
+        "title": "Frontend Разработчик (Стажёр) на React / React Native",
+        "company": "Purrweb",
+        "url": "https://karakan.hh.ru/vacancy/130877800?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list"
+      },
+      "error": "Неизвестная ошибка",
+      "type": "unknown"
+    },
+    {
+      "id": "1774169334690",
+      "timestamp": "2026-03-22T08:48:54.690Z",
+      "vacancy": {
+        "title": "Frontend-разработчик (html/css/js)",
+        "company": "Веб-студия Van Gogh-Link",
+        "url": "https://karakan.hh.ru/vacancy/130953292?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list"
+      },
+      "error": "Неизвестная ошибка",
+      "type": "unknown"
+    },
+    {
+      "id": "1774169217081",
+      "timestamp": "2026-03-22T08:46:57.081Z",
+      "vacancy": {
+        "title": "Старший Frontend-разработчик (в Офис)",
+        "company": "ООО Диджитал Сектор Поддержка",
+        "url": "https://karakan.hh.ru/vacancy/130639513?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list"
+      },
+      "error": "Неизвестная ошибка",
+      "type": "unknown"
+    },
+    {
+      "id": "1774168954588",
+      "timestamp": "2026-03-22T08:42:34.588Z",
+      "vacancy": {
+        "title": "Middle frontend/backend разработчик",
+        "company": "ООО АПИСЕРВИС",
+        "url": "https://karakan.hh.ru/vacancy/130693392?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list"
+      },
+      "error": "Неизвестная ошибка",
+      "type": "unknown"
+    },
+    {
+      "id": "1774168859763",
+      "timestamp": "2026-03-22T08:40:59.763Z",
+      "vacancy": {
+        "title": "Frontend developer (Middle/Middle+)",
+        "company": "ООО Gems development (Джемс Девелопмент)",
+        "url": "https://karakan.hh.ru/vacancy/130908977?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list"
+      },
+      "error": "Неизвестная ошибка",
+      "type": "unknown"
+    },
+    {
+      "id": "1774168579397",
+      "timestamp": "2026-03-22T08:36:19.397Z",
+      "vacancy": {
+        "title": "Frontend-разработчик (web-разработчик, по работе с CMS)",
+        "company": "ООО Калининградские информационные технологии",
+        "url": "https://karakan.hh.ru/vacancy/131396562?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list"
+      },
+      "error": "Неизвестная ошибка",
+      "type": "unknown"
+    },
+    {
+      "id": "1774168451232",
+      "timestamp": "2026-03-22T08:34:11.232Z",
+      "vacancy": {
+        "title": "Frontend разработчик",
+        "company": "ООО ДевСпаркКлаб",
+        "url": "https://karakan.hh.ru/vacancy/130926456?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list"
+      },
+      "error": "Неизвестная ошибка",
+      "type": "unknown"
+    },
+    {
+      "id": "1774168294558",
+      "timestamp": "2026-03-22T08:31:34.558Z",
+      "vacancy": {
+        "title": "Frontend-разработчик",
+        "company": "Ювенко",
+        "url": "https://karakan.hh.ru/vacancy/130715301?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list"
+      },
+      "error": "Неизвестная ошибка",
+      "type": "unknown"
+    },
+    {
+      "id": "1774168123610",
+      "timestamp": "2026-03-22T08:28:43.610Z",
+      "vacancy": {
+        "title": "Frontend-разработчик",
+        "company": "ТОО Documentolog",
+        "url": "https://karakan.hh.ru/vacancy/129871774?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list"
+      },
+      "error": "Неизвестная ошибка",
+      "type": "unknown"
+    },
+    {
+      "id": "1774167984231",
+      "timestamp": "2026-03-22T08:26:24.231Z",
+      "vacancy": {
+        "title": "Frontend-разработчик",
+        "company": "ЧК Kursiv Media Holding Ltd.",
+        "url": "https://karakan.hh.ru/vacancy/131427298?query=frontend-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA&hhtmFrom=vacancy_search_list"
+      },
+      "error": "Неизвестная ошибка",
+      "type": "unknown"
+    }
+  ]
+}

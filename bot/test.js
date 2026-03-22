@@ -15,14 +15,165 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 🔥 СОЗДАЕМ ОДИН ГЛОБАЛЬНЫЙ READLINE
+// 📂 ПУТЬ К ЕДИНОМУ ФАЙЛУ ДАННЫХ
+const DATA_FILE = path.join(__dirname, 'bot-data.json');
+
+// ===== ФУНКЦИИ ДЛЯ РАБОТЫ С ДАННЫМИ =====
+
+/**
+ * Загружает данные из bot-data.json
+ */
+function loadData() {
+    try {
+        const data = fs.readFileSync(DATA_FILE, 'utf8');
+        return JSON.parse(data);
+    } catch {
+        // Возвращаем структуру по умолчанию
+        return {
+            lastUpdated: new Date().toISOString(),
+            stats: {
+                totalResponses: 0,
+                successful: 0,
+                failed: 0,
+                skipped: 0,
+                byDate: {}
+            },
+            pending: [],           // Вакансии в процессе
+            completed: [],         // Успешные отклики
+            errors: []            // Ошибки с деталями
+        };
+    }
+}
+
+/**
+ * Сохраняет данные в bot-data.json
+ */
+function saveData(data) {
+    data.lastUpdated = new Date().toISOString();
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    console.log(`💾 Данные сохранены в ${DATA_FILE}`);
+}
+
+/**
+ * Добавляет запись об успешном отклике
+ */
+function addCompletedResponse(responseData) {
+    const data = loadData();
+    
+    // Добавляем в историю
+    data.completed.unshift(responseData); // Новые записи в начало
+    
+    // Обновляем статистику
+    data.stats.totalResponses++;
+    data.stats.successful++;
+    
+    // Обновляем статистику по дням
+    const today = new Date().toISOString().split('T')[0];
+    if (!data.stats.byDate[today]) {
+        data.stats.byDate[today] = { success: 0, failed: 0, skipped: 0 };
+    }
+    data.stats.byDate[today].success++;
+    
+    // Ограничиваем историю последними 1000 записями
+    if (data.completed.length > 1000) {
+        data.completed = data.completed.slice(0, 1000);
+    }
+    
+    saveData(data);
+}
+
+/**
+ * Добавляет запись об ошибке
+ */
+function addError(errorData, vacancyInfo) {
+    const data = loadData();
+    
+    const errorEntry = {
+        id: Date.now().toString(),
+        timestamp: new Date().toISOString(),
+        vacancy: vacancyInfo,
+        error: errorData.message || errorData,
+        type: errorData.type || 'unknown'
+    };
+    
+    data.errors.unshift(errorEntry);
+    data.stats.totalResponses++;
+    data.stats.failed++;
+    
+    // Обновляем статистику по дням
+    const today = new Date().toISOString().split('T')[0];
+    if (!data.stats.byDate[today]) {
+        data.stats.byDate[today] = { success: 0, failed: 0, skipped: 0 };
+    }
+    data.stats.byDate[today].failed++;
+    
+    // Ограничиваем историю ошибок последними 500 записями
+    if (data.errors.length > 500) {
+        data.errors = data.errors.slice(0, 500);
+    }
+    
+    saveData(data);
+}
+
+/**
+ * Добавляет вакансию в лист ожидания
+ */
+function addToPending(vacancy) {
+    const data = loadData();
+    
+    const pendingEntry = {
+        id: vacancy.id || Date.now().toString(),
+        title: vacancy.title,
+        company: vacancy.company,
+        url: vacancy.url,
+        addedAt: new Date().toISOString(),
+        status: 'pending'
+    };
+    
+    // Проверяем, нет ли уже в списке
+    const exists = data.pending.some(p => p.url === vacancy.url);
+    if (!exists) {
+        data.pending.push(pendingEntry);
+        saveData(data);
+        console.log(`📌 Добавлено в ожидание: ${vacancy.title}`);
+    }
+}
+
+/**
+ * Удаляет вакансию из листа ожидания
+ */
+function removeFromPending(vacancyUrl) {
+    const data = loadData();
+    const originalLength = data.pending.length;
+    data.pending = data.pending.filter(p => p.url !== vacancyUrl);
+    
+    if (originalLength !== data.pending.length) {
+        saveData(data);
+    }
+}
+
+/**
+ * Получает все данные для фронта
+ */
+function getFrontendData() {
+    const data = loadData();
+    return {
+        lastUpdated: data.lastUpdated,
+        stats: data.stats,
+        pending: data.pending,
+        completed: data.completed.slice(0, 100), // Последние 100 для фронта
+        errors: data.errors.slice(0, 50)          // Последние 50 ошибок
+    };
+}
+
+// ===== ОСТАЛЬНОЙ КОД БЕЗ ИЗМЕНЕНИЙ =====
+
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
     terminal: true
 });
 
-// 🔥 Функция для вопросов (использует глобальный rl)
 function ask(query) {
     return new Promise((resolve) => {
         rl.question(query, (answer) => {
@@ -31,13 +182,11 @@ function ask(query) {
     });
 }
 
-// 🔥 Функция для ожидания Enter
 async function pressEnter(message) {
     console.log(message);
     await ask('⏎ Нажми Enter чтобы продолжить...');
 }
 
-// 🔥 Обработка Ctrl+C
 process.on('SIGINT', async () => {
     console.log('\n\n⚠️ Прервано пользователем');
     rl.close();
@@ -93,14 +242,28 @@ async function main() {
             console.log('2 - Автоматические отклики');
             console.log('3 - Проверить авторизацию');
             console.log('4 - Выйти из аккаунта');
+            console.log('5 - Показать статистику');
             console.log('0 - Выход');
             
-            const choice = await ask('\n👉 Выберите действие (0-4): ');
+            const choice = await ask('\n👉 Выберите действие (0-5): ');
             
             if (choice === '0') {
                 console.log('\n👋 Завершение работы...');
                 running = false;
                 break;
+            }
+            
+            if (choice === '5') {
+                const data = getFrontendData();
+                console.log('\n📊 СТАТИСТИКА:');
+                console.log(`   Всего откликов: ${data.stats.totalResponses}`);
+                console.log(`   ✅ Успешно: ${data.stats.successful}`);
+                console.log(`   ❌ Ошибок: ${data.stats.failed}`);
+                console.log(`   ⏭️  Пропущено: ${data.stats.skipped || 0}`);
+                console.log(`   📋 В очереди: ${data.pending.length}`);
+                console.log(`   📅 Последнее обновление: ${data.lastUpdated}`);
+                await pressEnter('\nНажми Enter чтобы продолжить...');
+                continue;
             }
             
             if (choice === '3') {
@@ -124,7 +287,7 @@ async function main() {
             }
             
             if (choice === '1') {
-                // РЕЖИМ ПОИСКА ВАКАНСИЙ
+                // РЕЖИМ ПОИСКА ВАКАНСИЙ (без изменений)
                 console.log('\n' + '='.repeat(60));
                 console.log('🔍 ПОИСК ВАКАНСИЙ');
                 console.log('='.repeat(60));
@@ -161,12 +324,10 @@ async function main() {
                     console.log(`✅ После фильтрации: ${filtered.length} вакансий`);
                 }
                 
-                // Сохраняем результаты
                 const filename = `vacancies-${Date.now()}.json`;
                 fs.writeFileSync(filename, JSON.stringify(filtered, null, 2));
                 console.log(`💾 Результаты сохранены в ${filename}`);
                 
-                // Показываем первые 10
                 console.log('\n📋 ПЕРВЫЕ 10 ВАКАНСИЙ:');
                 console.log('-'.repeat(60));
                 
@@ -207,15 +368,12 @@ async function main() {
                     continue;
                 }
                 
-                // Загружаем резюме
                 console.log('\n📤 Загрузка резюме...');
                 const resumeText = await loadResumeFromPdf(pdfPath);
                 console.log(`✅ Резюме загружено (${resumeText.length} символов)`);
                 
-                // 2. Дополнительные пожелания
                 const userPrompt = await ask('\n📝 Дополнительные пожелания к письму (Enter - пропустить): ');
                 
-                // 3. Поисковый запрос
                 const query = await ask('\n🔍 Поисковый запрос для вакансий: ');
                 
                 if (!query) {
@@ -223,7 +381,6 @@ async function main() {
                     continue;
                 }
                 
-                // 4. Параметры поиска
                 const maxPages = await ask('📄 Количество страниц для поиска (по умолчанию 3): ');
                 
                 console.log('\n' + '='.repeat(60));
@@ -242,7 +399,6 @@ async function main() {
                 
                 console.log(`✅ Найдено ${vacancies.length} вакансий`);
                 
-                // 5. Фильтрация
                 const excludeInput = await ask('\n🚫 Исключить слова (через запятую): ');
                 const excludeWords = excludeInput ? excludeInput.split(',').map(w => w.trim()) : [];
                 
@@ -254,7 +410,6 @@ async function main() {
                     continue;
                 }
                 
-                // 6. Счётчик откликов
                 const counter = new DailyCounter(80);
                 const status = counter.getStatus();
                 
@@ -267,7 +422,6 @@ async function main() {
                     continue;
                 }
                 
-                // 7. Настройки откликов
                 console.log('\n⚙️  НАСТРОЙКИ ОТКЛИКОВ:');
                 const delayInput = await ask('⏱️  Задержка между откликами в секундах (по умолчанию 30): ');
                 const delay = (parseInt(delayInput) || 30) * 1000;
@@ -284,10 +438,14 @@ async function main() {
                     continue;
                 }
                 
-                // 8. ЗАПУСК ОТКЛИКОВ
                 console.log('\n' + '='.repeat(60));
                 console.log('🚀 ЗАПУСК АВТОМАТИЧЕСКИХ ОТКЛИКОВ');
                 console.log('='.repeat(60));
+                
+                // Сохраняем вакансии в лист ожидания
+                filtered.slice(0, maxResponses).forEach(v => {
+                    addToPending(v);
+                });
                 
                 const results = await batchRespond(page, filtered.slice(0, maxResponses), resumeText, userPrompt, {
                     delay: delay,
@@ -295,22 +453,37 @@ async function main() {
                     maxResponses: maxResponses,
                     useGemini: true,
                     forceResponse: false,
-                    debug: false
+                    debug: false,
+                    onSuccess: (result, vacancy) => {
+                        // Сохраняем успешный отклик
+                        addCompletedResponse({
+                            id: result.data?.id || Date.now().toString(),
+                            title: result.data?.title || vacancy.title,
+                            company: result.data?.company || vacancy.company,
+                            url: vacancy.url,
+                            timestamp: new Date().toISOString(),
+                            coverLetter: result.data?.coverLetter || '',
+                            status: 'completed'
+                        });
+                        // Удаляем из листа ожидания
+                        removeFromPending(vacancy.url);
+                    },
+                    onError: (error, vacancy) => {
+                        // Сохраняем ошибку
+                        addError(error, {
+                            title: vacancy.title,
+                            company: vacancy.company,
+                            url: vacancy.url
+                        });
+                        // Удаляем из листа ожидания
+                        removeFromPending(vacancy.url);
+                    }
                 });
                 
-                // 9. Обновляем счётчик
                 for (let i = 0; i < results.success; i++) {
                     counter.increment();
                 }
                 
-                // 10. Сохраняем результаты
-                if (results.details && results.details.length > 0) {
-                    const filename = `responses-${Date.now()}.json`;
-                    fs.writeFileSync(filename, JSON.stringify(results.details, null, 2));
-                    console.log(`💾 Детали откликов сохранены в ${filename}`);
-                }
-                
-                // 11. ИТОГИ
                 console.log('\n' + '📊'.repeat(15));
                 console.log('📊 ИТОГИ ОТКЛИКОВ');
                 console.log('📊'.repeat(15));
@@ -324,6 +497,7 @@ async function main() {
         
     } catch (error) {
         console.error('❌ Критическая ошибка:', error);
+        addError(error, { title: 'Критическая ошибка', company: 'System', url: '' });
     } finally {
         rl.close();
         await browser.close();

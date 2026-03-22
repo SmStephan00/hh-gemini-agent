@@ -1,0 +1,35 @@
+.header{
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1d1d1b;
+    color:#cdc6be;
+    border-radius: 0 0 10px 10px;
+}
+
+.nav__list{
+    display: flex;
+    column-gap: 12px;
+    font-size: 20px;
+}
+
+.nav__item a{
+    color:#cdc6be;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.nav__item:hover,.nav__item a:hover{
+    background-color: #cdc6be;
+    color: #1d1d1b;
+}
+
+.user__box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 12px;
+}
+
