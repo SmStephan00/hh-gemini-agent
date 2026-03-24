@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-03-24T10:38:09.375Z",
+  "lastUpdated": "2026-03-24T11:14:35.231Z",
   "stats": {
-    "totalResponses": 161,
-    "successful": 78,
-    "failed": 83,
+    "totalResponses": 163,
+    "successful": 79,
+    "failed": 84,
     "skipped": 0,
     "byDate": {
       "2026-03-22": {
@@ -12,8 +12,8 @@
         "skipped": 0
       },
       "2026-03-24": {
-        "success": 45,
-        "failed": 17,
+        "success": 46,
+        "failed": 18,
         "skipped": 0
       }
     }
@@ -226,9 +226,274 @@
       "url": "https://karakan.hh.ru/vacancy/130926456?query=frontend&hhtmFrom=vacancy_search_list",
       "addedAt": "2026-03-24T06:31:32.509Z",
       "status": "pending"
+    },
+    {
+      "id": "131491503",
+      "title": "Junior/Middle Frontend Developer",
+      "company": "ООО NOMADIAN",
+      "url": "https://karakan.hh.ru/vacancy/131491503?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.877Z",
+      "status": "pending"
+    },
+    {
+      "id": "131501605",
+      "title": "Руководитель группы frontend разработки",
+      "company": "ООО ИндаСофт",
+      "url": "https://karakan.hh.ru/vacancy/131501605?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.886Z",
+      "status": "pending"
+    },
+    {
+      "id": "131422253",
+      "title": "Middle Frontend-разработчик Angular (в офис г. Казань)",
+      "company": "Teyca",
+      "url": "https://karakan.hh.ru/vacancy/131422253?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.889Z",
+      "status": "pending"
+    },
+    {
+      "id": "131296016",
+      "title": "Frontend JS / React Developer",
+      "company": "ООО Единая Информационная Система ЖКХ",
+      "url": "https://karakan.hh.ru/vacancy/131296016?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.893Z",
+      "status": "pending"
+    },
+    {
+      "id": "131290450",
+      "title": "Frontend-разработчик",
+      "company": "Филиал в г. Санкт-Петербург АО Концерн Радиостроения Вега",
+      "url": "https://karakan.hh.ru/vacancy/131290450?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.897Z",
+      "status": "pending"
+    },
+    {
+      "id": "131494941",
+      "title": "Senior Frontend Engineer (React/TypeScript)",
+      "company": "ООО UCMG",
+      "url": "https://karakan.hh.ru/vacancy/131494941?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.902Z",
+      "status": "pending"
+    },
+    {
+      "id": "131396858",
+      "title": "Frontend-разработчик (Vue.js)",
+      "company": "Russian Robotics",
+      "url": "https://karakan.hh.ru/vacancy/131396858?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.907Z",
+      "status": "pending"
+    },
+    {
+      "id": "131449859",
+      "title": "Frontend-разработчик (Junior, Vue)",
+      "company": "ВитаСофт",
+      "url": "https://karakan.hh.ru/vacancy/131449859?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.911Z",
+      "status": "pending"
+    },
+    {
+      "id": "130987066",
+      "title": "Front-end VueJS разработчик",
+      "company": "ООО Бизнес Интеллект",
+      "url": "https://karakan.hh.ru/vacancy/130987066?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.915Z",
+      "status": "pending"
+    },
+    {
+      "id": "131027750",
+      "title": "Frontend-разработчик (React TS)",
+      "company": "ТОО Smart International Business Online",
+      "url": "https://karakan.hh.ru/vacancy/131027750?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.919Z",
+      "status": "pending"
+    },
+    {
+      "id": "131504202",
+      "title": "Frontend Developer Vue",
+      "company": "ОАО Телеком-Сервис",
+      "url": "https://karakan.hh.ru/vacancy/131504202?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.923Z",
+      "status": "pending"
+    },
+    {
+      "id": "131205778",
+      "title": "Frontend-разработчик на JavaScript",
+      "company": "IT-парк Питерский мостик",
+      "url": "https://karakan.hh.ru/vacancy/131205778?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.927Z",
+      "status": "pending"
+    },
+    {
+      "id": "130642137",
+      "title": "Angular Frontend-разработчик",
+      "company": "ООО INNASOFT DIGITAL SERVICE",
+      "url": "https://karakan.hh.ru/vacancy/130642137?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.930Z",
+      "status": "pending"
+    },
+    {
+      "id": "131402827",
+      "title": "Junior Frontend-разработчик",
+      "company": "Энергомашкомплект",
+      "url": "https://karakan.hh.ru/vacancy/131402827?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.934Z",
+      "status": "pending"
+    },
+    {
+      "id": "131504765",
+      "title": "Trainee Frontend Developer (JavaScript)",
+      "company": "ООО ФП ТРЭЙД",
+      "url": "https://karakan.hh.ru/vacancy/131504765?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.938Z",
+      "status": "pending"
+    },
+    {
+      "id": "131506834",
+      "title": "Frontend-разработчик Vue (цифровизация геологии и добычи) (неоплачиваемая практика)",
+      "company": "ООО Газпром ЦПС",
+      "url": "https://karakan.hh.ru/vacancy/131506834?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.943Z",
+      "status": "pending"
+    },
+    {
+      "id": "131467742",
+      "title": "Frontend-разработчик Angular",
+      "company": "Т-Банк. ИТ. Разработка",
+      "url": "https://karakan.hh.ru/vacancy/131467742?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.947Z",
+      "status": "pending"
+    },
+    {
+      "id": "131467743",
+      "title": "Frontend-разработчик Angular",
+      "company": "Т-Банк. ИТ. Разработка",
+      "url": "https://karakan.hh.ru/vacancy/131467743?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.951Z",
+      "status": "pending"
+    },
+    {
+      "id": "130884345",
+      "title": "Frontend Developer (Vue3) — офис, Краснодар",
+      "company": "ООО Виалина Эстейт",
+      "url": "https://karakan.hh.ru/vacancy/130884345?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.956Z",
+      "status": "pending"
+    },
+    {
+      "id": "131234053",
+      "title": "Middle frontend-разработчик (Vue.js, в Астане)",
+      "company": "ТОО Simourg (Симург)",
+      "url": "https://karakan.hh.ru/vacancy/131234053?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.960Z",
+      "status": "pending"
+    },
+    {
+      "id": "131037093",
+      "title": "Frontend разработчик ( Vue3/ Alpine.js / Talwind / Laravel Blade)",
+      "company": "ООО Невасофт",
+      "url": "https://karakan.hh.ru/vacancy/131037093?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.965Z",
+      "status": "pending"
+    },
+    {
+      "id": "131368002",
+      "title": "Frontend Angular developer",
+      "company": "Spectr",
+      "url": "https://karakan.hh.ru/vacancy/131368002?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.969Z",
+      "status": "pending"
+    },
+    {
+      "id": "129591877",
+      "title": "Frontend Developer (Vue)",
+      "company": "STARTRIBE LTD. Разработка",
+      "url": "https://karakan.hh.ru/vacancy/129591877?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.974Z",
+      "status": "pending"
+    },
+    {
+      "id": "131327482",
+      "title": "Frontend-разработчик (Angular)",
+      "company": "True Engineering",
+      "url": "https://karakan.hh.ru/vacancy/131327482?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.977Z",
+      "status": "pending"
+    },
+    {
+      "id": "131083627",
+      "title": "Frontend-разработчик",
+      "company": "АО Монитор Электрик",
+      "url": "https://karakan.hh.ru/vacancy/131083627?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.981Z",
+      "status": "pending"
+    },
+    {
+      "id": "131396125",
+      "title": "Middle Frontend разработчик (Angular)",
+      "company": "ООО Модульные строительные системы",
+      "url": "https://karakan.hh.ru/vacancy/131396125?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.987Z",
+      "status": "pending"
+    },
+    {
+      "id": "131337829",
+      "title": "Frontend-разработчик Vue",
+      "company": "Центр финансовых технологий",
+      "url": "https://karakan.hh.ru/vacancy/131337829?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.991Z",
+      "status": "pending"
+    },
+    {
+      "id": "131337830",
+      "title": "Frontend-разработчик Vue",
+      "company": "Центр финансовых технологий",
+      "url": "https://karakan.hh.ru/vacancy/131337830?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:35.995Z",
+      "status": "pending"
+    },
+    {
+      "id": "130922984",
+      "title": "Angular Frontend-разработчик (Middle)",
+      "company": "OOO Litez Services",
+      "url": "https://karakan.hh.ru/vacancy/130922984?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:36.000Z",
+      "status": "pending"
+    },
+    {
+      "id": "126073843",
+      "title": "Senior frontend developer (vue.js)",
+      "company": "ООО МАКСБИТСОЛЮШЕН",
+      "url": "https://karakan.hh.ru/vacancy/126073843?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:36.006Z",
+      "status": "pending"
+    },
+    {
+      "id": "108747455",
+      "title": "Инженер - программист 2 категории Frontend (Vue) (01050-1)",
+      "company": "АО Моринформсистема-Агат, Концерн",
+      "url": "https://karakan.hh.ru/vacancy/108747455?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:36.011Z",
+      "status": "pending"
+    },
+    {
+      "id": "131354304",
+      "title": "Ученик Frontend разработчик",
+      "company": "ООО Дунайс",
+      "url": "https://karakan.hh.ru/vacancy/131354304?query=frontend&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:10:36.016Z",
+      "status": "pending"
     }
   ],
   "completed": [
+    {
+      "id": "1774350710108",
+      "title": "Senior Frontend Developer (React, Next.js)",
+      "company": "SkillStaff",
+      "url": "https://karakan.hh.ru/vacancy/131504333?query=frontend&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-24T11:11:50.108Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
     {
       "id": "1774348689365",
       "title": "Middle+/Senior Frontend Developer",
@@ -933,6 +1198,20 @@
     }
   ],
   "errors": [
+    {
+      "id": "1774350875225",
+      "timestamp": "2026-03-24T11:14:35.225Z",
+      "vacancy": {
+        "title": "Frontend-разработчик (Angular)",
+        "company": "ФБУЗ ИМЦ Роспотребнадзора",
+        "url": "https://karakan.hh.ru/vacancy/131500160?query=frontend&hhtmFrom=vacancy_search_list"
+      },
+      "error": {
+        "type": "response_error"
+      },
+      "type": "response_error",
+      "htmlFile": null
+    },
     {
       "id": "1774348547895",
       "timestamp": "2026-03-24T10:35:47.895Z",

@@ -91,7 +91,7 @@ function buildPrompt(vacancy, resumeText, userPrompt) {
 
 3. Дополнительная информация о компании:
    ${vacancy.description?.substring(0, 500) || ''}
-
+4.заполняй поля все сам что бы мне не приходилось что то менять в тексте
 ${userPrompt ? `\nДОПОЛНИТЕЛЬНЫЕ УКАЗАНИЯ:\n${userPrompt}` : ''}
 `;
 }
