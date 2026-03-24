@@ -4,7 +4,6 @@
 }
 
 .box__statistic, .box__activity__to__week, .box__status__ai{
-    max-height: 20vh;
     margin-top: 1.5vh;
     padding: 2.7vh 8px 1.5vh 8px;
     border-radius: 5px;
@@ -115,6 +114,17 @@
     padding: 9px 25px;
     text-align: center;
     background-color: #1d1d1b;
+    color: #cdc6be;
+    transition: 0.8s;
+    border:3px solid #1d1d1b;
+}
+
+.button__fonctional.disabled{
+    border-radius: 5px;
+    font-size: 24px;
+    padding: 9px 25px;
+    text-align: center;
+    background-color: #a8a88a;
     color: #cdc6be;
     transition: 0.8s;
     border:3px solid #1d1d1b;
