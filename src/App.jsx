@@ -7,6 +7,8 @@ import Header from './assets/components/Header/Header'
 import DashBoard from './assets/pages/Dashboard/DashBoard'
 import Setting from './assets/pages/Setting/Setting'
 import Search from './assets/pages/Search/Serch'
+import History from './assets/pages/History/History'
+
 
 
 function App() {
@@ -21,7 +23,7 @@ function App() {
             <Route path='/' element={<DashBoard />} />
             <Route path="/search" element={<Search />} />
             <Route path="/setting" element={<Setting />} />
-            <Route path="/history" element={<Setting />} />
+            <Route path="/history" element={<History />} />
           </Routes>
         </div>
       </div>

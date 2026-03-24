@@ -19,7 +19,7 @@ const Header = ()=> {
                 </div>
                 <div className="user__box">
                     <div className="user__item">
-                        <img src="" alt="" />
+                        
                     </div>
                     <div className="user__item">
                         Тестовый текст

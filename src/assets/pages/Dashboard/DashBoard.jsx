@@ -3,11 +3,44 @@
 import Header from '../../components/Header/Header'
 import './Dashboard.css'
 import botInfo from '../../../../bot/bot-data.json'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import StatisticBar from './compnents/StatisticBar'
 const DashBoard = () => {
 
-    const {loadSearch,setLoadSearch} = useState(false)
+    const [loadSearch, setLoadSearch] = useState(false)
+    const [setings, setSetings] = useState({
+        jobTitle: '',
+        city: '',
+        salaryFrom: '',
+        salaryTo: '',
+        experience: '',
+        schedule: [],
+        employment: [],
+        exception: '',
+        creativity: 0.5,
+        letterStyle: [],
+        responseDelay: '',
+        resumeFile: null,
+        autoStart: false,
+        weekDays: [],
+        startTime: '',
+        endTime: '',
+        name: '',
+        email: '',
+        telegram: '',
+        notifications: []
+    })
+
+    
+
+
+
+    useEffect(()=>{
+        const saved = localStorage.getItem('botSettings')
+        if(saved){
+            setSetings(JSON.parse(saved))
+        }
+    },[])
     
     const company = new Set (botInfo.completed.map((item)=>{
         return item.company
@@ -32,13 +65,29 @@ const DashBoard = () => {
         return {dateWeek, weekProgressbar}
     },[botInfo.completed])
 
+    const handlerSerch = async () =>{
+        setLoadSearch(true)
 
-    
+        const response = await fetch('/api/search',{
+            method:POST,
+            headers:{ 'Content-Type': 'application/json' },
+            body:JSON.stringify({
+                jobTitle: settings.jobTitle,
+                city: settings.city,
+                salaryFrom: settings.salaryFrom,
+                salaryTo: settings.salaryTo,
+                experience: settings.experience,
+                schedule: settings.schedule,
+                employment: settings.employment
+            })
+        })
 
+        const results = await response.json
 
-
-    return(
-        
+        setSerchResults(results)
+        setLoadSearch(false)
+    }
+    return(  
         <>
             <div className="block__dashboard">
                 <StatisticBar title={`Статистика за ${date.toISOString().split('T')[0]}`} value={weekProgressbar}>
@@ -80,21 +129,21 @@ const DashBoard = () => {
                     <div className='content__activity'>
                         <div className='col__name__item'>
                             {dateWeek.map((item)=>{
-                                 return <p className='name__item'>{`${item}`}</p>
+                                return <p key={item} className='name__item'>{`${item}`}</p>
                             })}    
                         </div>
                         <div className='col__progressbar'>
-                            {weekProgressbar.map((item)=>{
+                            {weekProgressbar.map((item,index)=>{
                                  return (
-                                    <div className='progressbar'>
+                                    <div key={index} className='progressbar'>
                                         <span style={{ width: `${item.length/80*100}%`}} className='progresbar__item'></span>
                                     </div>
                                  )
                             })}
                         </div>
                         <div className='col__procent'>
-                        {weekProgressbar.map((item)=>{
-                            return <p className='procent__item'>{`${Math.round(item.length/80*100)}%`}</p>
+                        {weekProgressbar.map((item, index)=>{
+                            return <p key={index} className='procent__item'>{`${Math.round(item.length/80*100)}%`}</p>
                         })}
                             
                         </div>
@@ -131,7 +180,13 @@ const DashBoard = () => {
                     </div>
                 </StatisticBar>
                 <div className='box__button'>
-                    <button className='button__fonctional'>Поиск</button>
+                    <button 
+                        className='button__fonctional' 
+                        onClick={() => handlerSerch()}
+                        disabled={loadSearch}
+                    >
+                        {loadSearch ? 'Поиск...' : 'Поиск'}
+                    </button>
                     <button className='button__fonctional'>Отклик</button>
                     <button className='button__fonctional'>Настройки</button>
                 </div>

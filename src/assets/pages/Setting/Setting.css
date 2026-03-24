@@ -1,0 +1,73 @@
+.block__setings{
+    margin: 2vh 0;
+    
+}
+
+.box__show{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1vh;
+}
+
+
+
+.form__box{
+    margin-top: 1.5vh;
+    padding: 2.7vh 8px 1.5vh 8px;
+    border-radius: 5px;
+    background-color:#1d1d1b;
+    font-size: 1.4vh;
+}
+
+
+.form__setings{
+    background-color: #cdc6be;
+}
+
+.input__line{
+    display: flex;
+    column-gap: 12px;
+    padding: 1VH 0;
+}
+
+.input__line label{
+    width: 20%;
+    padding: 0.4vh 2vw;
+}
+
+.input__container input{
+    padding: 0.3vh 0;
+    background-color: #1d1d1b1a;
+    border-radius: 5px;
+    border: 3px solid #1d1d1b; 
+}
+
+.input__container{
+    display: flex;
+    column-gap: 12px;
+}
+
+
+
+.input__line.salary input{
+    width: 100px;
+}
+
+.checkbox__line{
+    display: flex;
+    column-gap: 12px;
+}
+
+.checkbox__line input{
+    width: 1.4vh;
+    height: 1.4vh;
+}
+
+.input__line.creative input{
+    padding: 0;
+    border: 0;
+}
+
+
+
