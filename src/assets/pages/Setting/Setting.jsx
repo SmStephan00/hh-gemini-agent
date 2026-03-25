@@ -84,7 +84,6 @@ function Settings() {
  return (
   <>
     <div className="block__setings">
-      {/* ОСНОВНЫЕ НАСТРОЙКИ */}
       <FormBox title={'ОСНОВНЫЕ НАСТРОЙКИ'}>
         <form className="form__setings" action="">
           <div className="input__line">
@@ -223,8 +222,6 @@ function Settings() {
           </div>
         </form>
       </FormBox>
-
-      {/* НАСТРОЙКА ПИСЬМА */}
       <FormBox title={'НАСТРОЙКА ПИСЬМА'}>
         <form className="form__setings" action="">
           <div className="input__line creative">
@@ -273,8 +270,6 @@ function Settings() {
           </div>
         </form>
       </FormBox>
-
-      {/* НАСТРОЙКИ ОТКЛИКА */}
       <FormBox title={'НАСТРОЙКИ ОТКЛИКА'}>
         <form className="form__setings" action="">
           <div className="input__line creative">
@@ -307,8 +302,6 @@ function Settings() {
           </div>
         </form>
       </FormBox>
-
-      {/* РАСПИСАНИЕ */}
       <FormBox title={'РАСПИСАНИЕ'}>
         <form className="form__setings" action="">
           <div className="input__line">
@@ -404,8 +397,6 @@ function Settings() {
           </div>
         </form>
       </FormBox>
-
-      {/* ПРОФИЛЬ */}
       <FormBox title={'ПРОФИЛЬ'}>
         <form className="form__setings" action="">
           <div className="input__line">
@@ -477,7 +468,7 @@ function Settings() {
       </FormBox>
 
       <div className='box__button'>
-           <button onClick={handleSave} className='button__fonctional'>Сохранить настройки</button>
+          <button onClick={handleSave} className='button__fonctional'>Сохранить настройки</button>
           <button onClick={handleReset} className='button__fonctional'>Сбросить</button>
       </div>
 

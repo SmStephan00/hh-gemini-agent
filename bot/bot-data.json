@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-03-24T11:14:35.231Z",
+  "lastUpdated": "2026-03-25T10:18:22.402Z",
   "stats": {
-    "totalResponses": 163,
-    "successful": 79,
-    "failed": 84,
+    "totalResponses": 215,
+    "successful": 105,
+    "failed": 110,
     "skipped": 0,
     "byDate": {
       "2026-03-22": {
@@ -12,7 +12,12 @@
         "skipped": 0
       },
       "2026-03-24": {
-        "success": 46,
+        "success": 50,
+        "failed": 26,
+        "skipped": 0
+      },
+      "2026-03-25": {
+        "success": 22,
         "failed": 18,
         "skipped": 0
       }
@@ -482,9 +487,299 @@
       "url": "https://karakan.hh.ru/vacancy/131354304?query=frontend&hhtmFrom=vacancy_search_list",
       "addedAt": "2026-03-24T11:10:36.016Z",
       "status": "pending"
+    },
+    {
+      "id": "128622591",
+      "title": "Front Office attendant (English and Kazakh speaking) / Сотрудник Фронт Офиса (английский/казахский)",
+      "company": "ТОО Sheraton Astana Hotel",
+      "url": "https://karakan.hh.ru/vacancy/128622591?query=front&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:43:38.322Z",
+      "status": "pending"
+    },
+    {
+      "id": "128622782",
+      "title": "Guest Experience Supervisor (Front Office)/Супервайзер по обслуживанию гостей (Фронт Офис)",
+      "company": "ТОО Sheraton Astana Hotel",
+      "url": "https://karakan.hh.ru/vacancy/128622782?query=front&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:43:38.328Z",
+      "status": "pending"
+    },
+    {
+      "id": "131118787",
+      "title": "Front Office Manager (Local Students)",
+      "company": "ООО CENTRAL ASIAN UNIVERSITY",
+      "url": "https://karakan.hh.ru/vacancy/131118787?query=front&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:43:38.334Z",
+      "status": "pending"
+    },
+    {
+      "id": "131186975",
+      "title": "Front Desk Agent (Ресепшен)",
+      "company": "ТОО Азия-Лайн",
+      "url": "https://karakan.hh.ru/vacancy/131186975?query=front&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:43:38.338Z",
+      "status": "pending"
+    },
+    {
+      "id": "131110738",
+      "title": "Front Office Manager",
+      "company": "SO/St. Petersburg",
+      "url": "https://karakan.hh.ru/vacancy/131110738?query=front&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:43:38.343Z",
+      "status": "pending"
+    },
+    {
+      "id": "130595528",
+      "title": "Front Office Supervisor",
+      "company": "ООО BELDERSOY RESORT",
+      "url": "https://karakan.hh.ru/vacancy/130595528?query=front&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:43:38.349Z",
+      "status": "pending"
+    },
+    {
+      "id": "131038536",
+      "title": "Специалист Front Office-а в Батуми",
+      "company": "IE Giorgi Bezhitashvili",
+      "url": "https://karakan.hh.ru/vacancy/131038536?query=front&hhtmFrom=vacancy_search_list",
+      "addedAt": "2026-03-24T11:43:38.353Z",
+      "status": "pending"
     }
   ],
   "completed": [
+    {
+      "id": "1774433902393",
+      "title": "Frontend developer (React, middle+/senior)",
+      "company": "Т-Банк. ИТ. Разработка",
+      "url": "https://myski.hh.ru/vacancy/131465426?query=front-end&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T10:18:22.393Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774433625482",
+      "title": "Middle/Senior frontend developer (react)",
+      "company": "X5 Tech",
+      "url": "https://myski.hh.ru/vacancy/131505989?query=front-end&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T10:13:45.482Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774433421740",
+      "title": "Senior Frontend (React) Developer",
+      "company": "InOut Games",
+      "url": "https://myski.hh.ru/vacancy/131514247?query=front-end&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T10:10:21.740Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774433219669",
+      "title": "Frontend Developer",
+      "company": "Lincoln Labs",
+      "url": "https://myski.hh.ru/vacancy/131520554?query=front-end&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T10:06:59.669Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774433040356",
+      "title": "Front-end Developer / Front-end разработчик (middle)",
+      "company": "Производственная компания MOON",
+      "url": "https://myski.hh.ru/vacancy/131510515?query=front-end&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T10:04:00.356Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774432557558",
+      "title": "Старший тестировщик QA manual (frontend/backend)",
+      "company": "БФТ-Холдинг",
+      "url": "https://myski.hh.ru/vacancy/131400806?query=front-end&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T09:55:57.558Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774431865987",
+      "title": "Tech Lead Frontend",
+      "company": "RWB (Wildberries & Russ)",
+      "url": "https://myski.hh.ru/vacancy/130973063?query=front-end&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T09:44:25.987Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774431687520",
+      "title": "Frontend developer (Middle/Middle+)",
+      "company": "ООО Gems development (Джемс Девелопмент)",
+      "url": "https://myski.hh.ru/vacancy/130908977?query=front-end&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T09:41:27.520Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774431510090",
+      "title": "Frontend разработчик",
+      "company": "ООО ДевСпаркКлаб",
+      "url": "https://myski.hh.ru/vacancy/130926456?query=front-end&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T09:38:30.090Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774430913309",
+      "title": "Trainee Frontend Developer (JavaScript)",
+      "company": "ООО ФП ТРЭЙД",
+      "url": "https://myski.hh.ru/vacancy/131504765?query=front-end&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T09:28:33.309Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774430592664",
+      "title": "Младший фронтенд разработчик",
+      "company": "ООО ВЕЛЕС РИСЕРЧ",
+      "url": "https://myski.hh.ru/vacancy/131120495?query=front-end&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T09:23:12.664Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774430440499",
+      "title": "Frontend-разработчик на React",
+      "company": "NeuroCity™",
+      "url": "https://myski.hh.ru/vacancy/131536021?query=front-end&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T09:20:40.499Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774430237830",
+      "title": "Junior\\Middle Frontend Developer",
+      "company": "ООО БЭТНЭТИКС",
+      "url": "https://myski.hh.ru/vacancy/131518341?query=front-end&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T09:17:17.830Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774430027524",
+      "title": "Frontend developer (Middle/Middle+)",
+      "company": "ООО Gems development (Джемс Девелопмент)",
+      "url": "https://myski.hh.ru/vacancy/130908977?query=frontend&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T09:13:47.524Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774429526531",
+      "title": "Старший тестировщик QA manual (frontend/backend)",
+      "company": "БФТ-Холдинг",
+      "url": "https://myski.hh.ru/vacancy/131400806?query=frontend&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T09:05:26.531Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774429360189",
+      "title": "Frontend Software Engineer with React",
+      "company": "ООО ACCESA. Frontend",
+      "url": "https://myski.hh.ru/vacancy/131086433?query=frontend&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T09:02:40.189Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774428940268",
+      "title": "Frontend-разработчик/Веб-разработчик",
+      "company": "ООО Авиор Медиа",
+      "url": "https://myski.hh.ru/vacancy/131524395?query=frontend&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T08:55:40.268Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774428543877",
+      "title": "Frontend-разработчик (React TS)",
+      "company": "ТОО Smart International Business Online",
+      "url": "https://myski.hh.ru/vacancy/131027750?query=frontend&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T08:49:03.877Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774428209733",
+      "title": "Senior Frontend Engineer (React / TypeScript)",
+      "company": "ООО UCMG",
+      "url": "https://myski.hh.ru/vacancy/131494941?query=frontend&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T08:43:29.733Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774428065176",
+      "title": "Frontend-разработчик (Кемерово)",
+      "company": "ООО НПО АРМА",
+      "url": "https://myski.hh.ru/vacancy/131503642?query=frontend&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T08:41:05.176Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774427899787",
+      "title": "Frontend developer (HR платформа, Новосибирск)",
+      "company": "Сбер. IT",
+      "url": "https://myski.hh.ru/vacancy/131518707?query=frontend&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T08:38:19.787Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774427712915",
+      "title": "Frontend-разработчик (React)",
+      "company": "R-Style Softlab (Эр-Стайл Софтлаб)",
+      "url": "https://myski.hh.ru/vacancy/131534174?query=frontend&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-25T08:35:12.915Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774353736341",
+      "title": "Front Desk Agent",
+      "company": "ОсОО Бай Таш Отель Менеджмент",
+      "url": "https://karakan.hh.ru/vacancy/130667604?query=front&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-24T12:02:16.342Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774353356826",
+      "title": "Front office agent",
+      "company": "Novotel Bishkek City Center",
+      "url": "https://karakan.hh.ru/vacancy/131278207?query=front&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-24T11:55:56.826Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774353168554",
+      "title": "Front Office Manager",
+      "company": "ТОО Хили Пропертис",
+      "url": "https://karakan.hh.ru/vacancy/130905248?query=front&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-24T11:52:48.554Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
+    {
+      "id": "1774352983121",
+      "title": "Администратор гостиницы (Front Desk Agent)",
+      "company": "Самаркандский туристический центр",
+      "url": "https://karakan.hh.ru/vacancy/131468191?query=front&hhtmFrom=vacancy_search_list",
+      "timestamp": "2026-03-24T11:49:43.121Z",
+      "coverLetter": "",
+      "status": "completed"
+    },
     {
       "id": "1774350710108",
       "title": "Senior Frontend Developer (React, Next.js)",
@@ -1198,6 +1493,324 @@
     }
   ],
   "errors": [
+    {
+      "id": "1774433735204",
+      "timestamp": "2026-03-25T10:15:35.204Z",
+      "vacancy": {
+        "title": "Frontend-разработчик",
+        "company": "ООО Инспирэйшн Пойнт",
+        "url": "https://myski.hh.ru/vacancy/131430511?query=front-end&hhtmFrom=vacancy_search_list"
+      },
+      "error": "test_task",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774432847883",
+      "timestamp": "2026-03-25T10:00:47.884Z",
+      "vacancy": {
+        "title": "Frontend-разработчик",
+        "company": "ООО Градус",
+        "url": "https://myski.hh.ru/vacancy/131503381?query=front-end&hhtmFrom=vacancy_search_list"
+      },
+      "error": {
+        "type": "response_error"
+      },
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774432649130",
+      "timestamp": "2026-03-25T09:57:29.130Z",
+      "vacancy": {
+        "title": "Frontend-разработчик (web-разработчик, по работе с CMS)",
+        "company": "ООО Калининградские информационные технологии",
+        "url": "https://myski.hh.ru/vacancy/131396562?query=front-end&hhtmFrom=vacancy_search_list"
+      },
+      "error": "test_task",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774432414289",
+      "timestamp": "2026-03-25T09:53:34.289Z",
+      "vacancy": {
+        "title": "Веб-разработчик/Web-программист/Front End developer",
+        "company": "ТОО ABC Design",
+        "url": "https://myski.hh.ru/vacancy/131233492?query=front-end&hhtmFrom=vacancy_search_list"
+      },
+      "error": {
+        "type": "response_error"
+      },
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774432256548",
+      "timestamp": "2026-03-25T09:50:56.548Z",
+      "vacancy": {
+        "title": "Senior Front-end Developer",
+        "company": "ТОО 5 LAB(ФАЙВ ЛАБ)",
+        "url": "https://myski.hh.ru/vacancy/131200935?query=front-end&hhtmFrom=vacancy_search_list"
+      },
+      "error": "no_confirmation",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774432115095",
+      "timestamp": "2026-03-25T09:48:35.095Z",
+      "vacancy": {
+        "title": "Senior Frontend Developer (разработка игр)",
+        "company": "ITea RS d.o.o.",
+        "url": "https://myski.hh.ru/vacancy/128173642?query=front-end&hhtmFrom=vacancy_search_list"
+      },
+      "error": "no_elements_after_relocation",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774431996341",
+      "timestamp": "2026-03-25T09:46:36.341Z",
+      "vacancy": {
+        "title": "Senior Frontend Developer (разработка игр)",
+        "company": "ITea RS d.o.o.",
+        "url": "https://myski.hh.ru/vacancy/129973491?query=front-end&hhtmFrom=vacancy_search_list"
+      },
+      "error": "no_elements_after_relocation",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774431354729",
+      "timestamp": "2026-03-25T09:35:54.729Z",
+      "vacancy": {
+        "title": "Middle frontend/backend разработчик",
+        "company": "ООО АПИСЕРВИС",
+        "url": "https://myski.hh.ru/vacancy/130693392?query=front-end&hhtmFrom=vacancy_search_list"
+      },
+      "error": "test_task",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774431224423",
+      "timestamp": "2026-03-25T09:33:44.423Z",
+      "vacancy": {
+        "title": "Стажер-разработчик фронтенда",
+        "company": "Яндекс",
+        "url": "https://myski.hh.ru/vacancy/131260986?query=front-end&hhtmFrom=vacancy_search_list"
+      },
+      "error": "external_response",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774431068519",
+      "timestamp": "2026-03-25T09:31:08.519Z",
+      "vacancy": {
+        "title": "Junior Front-end Software Engineer (DaVinci)",
+        "company": "Syberry CIS",
+        "url": "https://myski.hh.ru/vacancy/131057271?query=front-end&hhtmFrom=vacancy_search_list"
+      },
+      "error": "no_elements_after_relocation",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774430719875",
+      "timestamp": "2026-03-25T09:25:19.875Z",
+      "vacancy": {
+        "title": "Frontend-разработчик",
+        "company": "ТОО Documentolog",
+        "url": "https://myski.hh.ru/vacancy/129871774?query=front-end&hhtmFrom=vacancy_search_list"
+      },
+      "error": "no_elements_after_relocation",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774429896677",
+      "timestamp": "2026-03-25T09:11:36.677Z",
+      "vacancy": {
+        "title": "Frontend разработчик",
+        "company": "ООО ДевСпаркКлаб",
+        "url": "https://myski.hh.ru/vacancy/130926456?query=frontend&hhtmFrom=vacancy_search_list"
+      },
+      "error": "no_confirmation",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774429720439",
+      "timestamp": "2026-03-25T09:08:40.439Z",
+      "vacancy": {
+        "title": "Frontend-разработчик (web-разработчик, по работе с CMS)",
+        "company": "ООО Калининградские информационные технологии",
+        "url": "https://myski.hh.ru/vacancy/131396562?query=frontend&hhtmFrom=vacancy_search_list"
+      },
+      "error": "test_task",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774429204274",
+      "timestamp": "2026-03-25T09:00:04.274Z",
+      "vacancy": {
+        "title": "Стажер-разработчик фронтенда",
+        "company": "Яндекс",
+        "url": "https://myski.hh.ru/vacancy/131260986?query=frontend&hhtmFrom=vacancy_search_list"
+      },
+      "error": "external_response",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774429090532",
+      "timestamp": "2026-03-25T08:58:10.532Z",
+      "vacancy": {
+        "title": "Junior Front-end Software Engineer (DaVinci)",
+        "company": "Syberry CIS",
+        "url": "https://myski.hh.ru/vacancy/131057271?query=frontend&hhtmFrom=vacancy_search_list"
+      },
+      "error": "no_elements_after_relocation",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774428759214",
+      "timestamp": "2026-03-25T08:52:39.214Z",
+      "vacancy": {
+        "title": "Frontend-разработчик",
+        "company": "ТОО Documentolog",
+        "url": "https://myski.hh.ru/vacancy/129871774?query=frontend&hhtmFrom=vacancy_search_list"
+      },
+      "error": "no_elements_after_relocation",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774428379298",
+      "timestamp": "2026-03-25T08:46:19.298Z",
+      "vacancy": {
+        "title": "Junior\\Middle Frontend Developer",
+        "company": "ООО БЭТНЭТИКС",
+        "url": "https://myski.hh.ru/vacancy/131518341?query=frontend&hhtmFrom=vacancy_search_list"
+      },
+      "error": "no_confirmation",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774427433510",
+      "timestamp": "2026-03-25T08:30:33.511Z",
+      "vacancy": {
+        "title": "Критическая ошибка",
+        "company": "System",
+        "url": ""
+      },
+      "error": "page.goto: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://hh.ru/\", waiting until \"networkidle\"\u001b[22m\n",
+      "type": "unknown",
+      "htmlFile": null
+    },
+    {
+      "id": "1774353908692",
+      "timestamp": "2026-03-24T12:05:08.692Z",
+      "vacancy": {
+        "title": "Front Office Supervisor",
+        "company": "ООО HITC",
+        "url": "https://karakan.hh.ru/vacancy/131087517?query=front&hhtmFrom=vacancy_search_list"
+      },
+      "error": {
+        "type": "response_error"
+      },
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774353543789",
+      "timestamp": "2026-03-24T11:59:03.789Z",
+      "vacancy": {
+        "title": "Заместитель Front Office Директора",
+        "company": "ТОО Лечебно-оздоровительный комплекс Алатау",
+        "url": "https://karakan.hh.ru/vacancy/130114482?query=front&hhtmFrom=vacancy_search_list"
+      },
+      "error": "no_confirmation",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774352813742",
+      "timestamp": "2026-03-24T11:46:53.742Z",
+      "vacancy": {
+        "title": "Junior Front-end Software Engineer (DaVinci)",
+        "company": "Syberry CIS",
+        "url": "https://karakan.hh.ru/vacancy/131057271?query=front&hhtmFrom=vacancy_search_list"
+      },
+      "error": "no_elements_after_relocation",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774352659421",
+      "timestamp": "2026-03-24T11:44:19.421Z",
+      "vacancy": {
+        "title": "Fronted разработчик React",
+        "company": "Aiti Guru",
+        "url": "https://karakan.hh.ru/vacancy/130143323?query=front&hhtmFrom=vacancy_search_list"
+      },
+      "error": "test_task",
+      "type": "response_error",
+      "htmlFile": null
+    },
+    {
+      "id": "1774351934239",
+      "timestamp": "2026-03-24T11:32:14.239Z",
+      "vacancy": {
+        "title": "Критическая ошибка",
+        "company": "System",
+        "url": ""
+      },
+      "error": "page.goto: Target page, context or browser has been closed",
+      "type": "unknown",
+      "htmlFile": null
+    },
+    {
+      "id": "1774351926411",
+      "timestamp": "2026-03-24T11:32:06.411Z",
+      "vacancy": {
+        "title": "Критическая ошибка",
+        "company": "System",
+        "url": ""
+      },
+      "error": "page.goto: Target page, context or browser has been closed",
+      "type": "unknown",
+      "htmlFile": null
+    },
+    {
+      "id": "1774351571138",
+      "timestamp": "2026-03-24T11:26:11.138Z",
+      "vacancy": {
+        "title": "Критическая ошибка",
+        "company": "System",
+        "url": ""
+      },
+      "error": "page.goto: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://hh.ru/\", waiting until \"networkidle\"\u001b[22m\n",
+      "type": "unknown",
+      "htmlFile": null
+    },
+    {
+      "id": "1774351413046",
+      "timestamp": "2026-03-24T11:23:33.046Z",
+      "vacancy": {
+        "title": "Критическая ошибка",
+        "company": "System",
+        "url": ""
+      },
+      "error": "page.goto: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://hh.ru/\", waiting until \"networkidle\"\u001b[22m\n",
+      "type": "unknown",
+      "htmlFile": null
+    },
     {
       "id": "1774350875225",
       "timestamp": "2026-03-24T11:14:35.225Z",

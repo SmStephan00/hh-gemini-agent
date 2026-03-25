@@ -502,5 +502,239 @@
     "timestamp": "2026-03-24T11:11:50.105Z",
     "coverLetter": "",
     "status": "completed"
+  },
+  {
+    "id": "131468191",
+    "title": "Администратор гостиницы (Front Desk Agent)",
+    "company": "Самаркандский туристический центр",
+    "url": "https://karakan.hh.ru/vacancy/131468191?query=front&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-24T11:49:43.119Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "130905248",
+    "title": "Front Office Manager",
+    "company": "ТОО Хили Пропертис",
+    "url": "https://karakan.hh.ru/vacancy/130905248?query=front&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-24T11:52:48.551Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131278207",
+    "title": "Front office agent",
+    "company": "Novotel Bishkek City Center",
+    "url": "https://karakan.hh.ru/vacancy/131278207?query=front&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-24T11:55:56.822Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "130667604",
+    "title": "Front Desk Agent",
+    "company": "ОсОО Бай Таш Отель Менеджмент",
+    "url": "https://karakan.hh.ru/vacancy/130667604?query=front&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-24T12:02:16.339Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131534174",
+    "title": "Frontend-разработчик (React)",
+    "company": "R-Style Softlab (Эр-Стайл Софтлаб)",
+    "url": "https://myski.hh.ru/vacancy/131534174?query=frontend&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T08:35:12.911Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131518707",
+    "title": "Frontend developer (HR платформа, Новосибирск)",
+    "company": "Сбер. IT",
+    "url": "https://myski.hh.ru/vacancy/131518707?query=frontend&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T08:38:19.784Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131503642",
+    "title": "Frontend-разработчик (Кемерово)",
+    "company": "ООО НПО АРМА",
+    "url": "https://myski.hh.ru/vacancy/131503642?query=frontend&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T08:41:05.173Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131494941",
+    "title": "Senior Frontend Engineer (React / TypeScript)",
+    "company": "ООО UCMG",
+    "url": "https://myski.hh.ru/vacancy/131494941?query=frontend&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T08:43:29.729Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131027750",
+    "title": "Frontend-разработчик (React TS)",
+    "company": "ТОО Smart International Business Online",
+    "url": "https://myski.hh.ru/vacancy/131027750?query=frontend&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T08:49:03.875Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131524395",
+    "title": "Frontend-разработчик/Веб-разработчик",
+    "company": "ООО Авиор Медиа",
+    "url": "https://myski.hh.ru/vacancy/131524395?query=frontend&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T08:55:40.266Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131086433",
+    "title": "Frontend Software Engineer with React",
+    "company": "ООО ACCESA. Frontend",
+    "url": "https://myski.hh.ru/vacancy/131086433?query=frontend&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T09:02:40.186Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131400806",
+    "title": "Старший тестировщик QA manual (frontend/backend)",
+    "company": "БФТ-Холдинг",
+    "url": "https://myski.hh.ru/vacancy/131400806?query=frontend&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T09:05:26.528Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "130908977",
+    "title": "Frontend developer (Middle/Middle+)",
+    "company": "ООО Gems development (Джемс Девелопмент)",
+    "url": "https://myski.hh.ru/vacancy/130908977?query=frontend&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T09:13:47.520Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131518341",
+    "title": "Junior\\Middle Frontend Developer",
+    "company": "ООО БЭТНЭТИКС",
+    "url": "https://myski.hh.ru/vacancy/131518341?query=front-end&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T09:17:17.827Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131536021",
+    "title": "Frontend-разработчик на React",
+    "company": "NeuroCity™",
+    "url": "https://myski.hh.ru/vacancy/131536021?query=front-end&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T09:20:40.495Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131120495",
+    "title": "Младший фронтенд разработчик",
+    "company": "ООО ВЕЛЕС РИСЕРЧ",
+    "url": "https://myski.hh.ru/vacancy/131120495?query=front-end&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T09:23:12.661Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131504765",
+    "title": "Trainee Frontend Developer (JavaScript)",
+    "company": "ООО ФП ТРЭЙД",
+    "url": "https://myski.hh.ru/vacancy/131504765?query=front-end&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T09:28:33.305Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "130926456",
+    "title": "Frontend разработчик",
+    "company": "ООО ДевСпаркКлаб",
+    "url": "https://myski.hh.ru/vacancy/130926456?query=front-end&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T09:38:30.087Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "130908977",
+    "title": "Frontend developer (Middle/Middle+)",
+    "company": "ООО Gems development (Джемс Девелопмент)",
+    "url": "https://myski.hh.ru/vacancy/130908977?query=front-end&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T09:41:27.517Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "130973063",
+    "title": "Tech Lead Frontend",
+    "company": "RWB (Wildberries & Russ)",
+    "url": "https://myski.hh.ru/vacancy/130973063?query=front-end&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T09:44:25.984Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131400806",
+    "title": "Старший тестировщик QA manual (frontend/backend)",
+    "company": "БФТ-Холдинг",
+    "url": "https://myski.hh.ru/vacancy/131400806?query=front-end&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T09:55:57.554Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131510515",
+    "title": "Front-end Developer / Front-end разработчик (middle)",
+    "company": "Производственная компания MOON",
+    "url": "https://myski.hh.ru/vacancy/131510515?query=front-end&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T10:04:00.353Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131520554",
+    "title": "Frontend Developer",
+    "company": "Lincoln Labs",
+    "url": "https://myski.hh.ru/vacancy/131520554?query=front-end&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T10:06:59.666Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131514247",
+    "title": "Senior Frontend (React) Developer",
+    "company": "InOut Games",
+    "url": "https://myski.hh.ru/vacancy/131514247?query=front-end&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T10:10:21.738Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131505989",
+    "title": "Middle/Senior frontend developer (react)",
+    "company": "X5 Tech",
+    "url": "https://myski.hh.ru/vacancy/131505989?query=front-end&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T10:13:45.478Z",
+    "coverLetter": "",
+    "status": "completed"
+  },
+  {
+    "id": "131465426",
+    "title": "Frontend developer (React, middle+/senior)",
+    "company": "Т-Банк. ИТ. Разработка",
+    "url": "https://myski.hh.ru/vacancy/131465426?query=front-end&hhtmFrom=vacancy_search_list",
+    "timestamp": "2026-03-25T10:18:22.391Z",
+    "coverLetter": "",
+    "status": "completed"
   }
 ]
