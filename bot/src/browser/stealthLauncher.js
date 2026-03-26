@@ -1,6 +1,13 @@
 import { chromium } from "playwright-extra";
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import { generateFingerprint } from "./fingerprint.js";
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const COOKIES_PATH = path.join(__dirname, '..', '..', 'hh_cookies.json');
 
 chromium.use(StealthPlugin())
 
@@ -24,7 +31,7 @@ export async function launchStealthBrowser() {
             '--disable-features=BlockInsecurePrivateNetworkRequests',
             '--no-sandbox',
             '--disable-setuid-sandbox',
-            '--force-device-scale-factor=1',  // Принудительный масштаб
+            '--force-device-scale-factor=1',
             '--disable-features=TranslateUI',
             '--disable-features=BlinkGenPropertyTrees',
             '--disable-accelerated-2d-canvas',
@@ -40,10 +47,21 @@ export async function launchStealthBrowser() {
         userAgent: fingerprint.navigator.userAgent,
         locale: 'ru-RU',
         timezoneId: 'Europe/Moscow',
-        deviceScaleFactor: 1,  // Фиксируем масштаб
+        deviceScaleFactor: 1,
         hasTouch: false,
         isMobile: false
     })
+
+    // 🔥 ЗАГРУЖАЕМ СОХРАНЁННЫЕ КУКИ
+    if (fs.existsSync(COOKIES_PATH)) {
+        try {
+            const cookies = JSON.parse(fs.readFileSync(COOKIES_PATH, 'utf8'))
+            await context.addCookies(cookies)
+            console.log('🍪 Загружена сохранённая сессия')
+        } catch (err) {
+            console.log('⚠️ Ошибка загрузки кук:', err.message)
+        }
+    }
 
     const page = await context.newPage()
 
@@ -57,4 +75,17 @@ export async function launchStealthBrowser() {
     console.log('✅ Невидимый браузер запущен')
     
     return { browser, context, page };
+}
+
+// 🔥 ФУНКЦИЯ ДЛЯ СОХРАНЕНИЯ КУК
+export async function saveCookies(context) {
+    try {
+        const cookies = await context.cookies()
+        fs.writeFileSync(COOKIES_PATH, JSON.stringify(cookies, null, 2))
+        console.log('🍪 Куки сохранены')
+        return true
+    } catch (err) {
+        console.log('⚠️ Ошибка сохранения кук:', err.message)
+        return false
+    }
 }

@@ -1,8 +1,7 @@
-import { launchStealthBrowser } from '../bot/src/browser/stealthLauncher.js'
 import { filterVacancies, searchVacancies } from '../bot/src/search/vacancySearch.js'
 import { loadResumeFromPdf } from '../bot/src/resume/pdfLoader.js'
 import { autoRespond } from '../bot/src/responder/autoResponder.js'
-
+import { launchStealthBrowser, saveCookies } from '../bot/src/browser/stealthLauncher.js'
 import puppeteer  from 'puppeteer'
 
 export class BotRunner {
@@ -22,45 +21,50 @@ export class BotRunner {
     }
 
     runSearch = async (settings) => {
-        await this.init()
+    await this.init()
 
-
-
-        const query = `${settings?.jobTitle} ${settings?.city}`
-
-        if(!query.trim()){
-            throw new Error('Поисковый запрос пуст. Укажите должность или город')
-        }
-        const experienceMap = {
-            'без опыта': 'noExperience',
-            '1–3': 'between1And3',
-            '3–6': 'between3And6',
-            'более 6': 'moreThan6'
-        }
-        const options = {
-            salary: settings?.salaryFrom ? parseInt(settings.salaryFrom):null,
-            experience: experienceMap[settings?.experience] || null,
-            employment: settings?.employment?.length > 0 ? settings.employment.join(',') : null,
-            schedule: settings?.schedule?.length > 0 ? settings.schedule.join(',') : null,
-            maxPages: 8,
-            delay: 2000,
-        }
-
-        Object.keys(options).forEach(key => {
-            if (options[key] === null || options[key] === undefined){
-                delete options[key]
-            }
-        })
-
-        let  vacancies = await searchVacancies(this.page, query, options)
-
-        if(settings?.exception){
-            const excludeWords = settings.exception.split(',').map(w=>w.trim())
-            vacancies = filterVacancies(vacancies, excludeWords)
-        }
-
-        return vacancies
+    // Формируем query правильно
+    let query = settings?.jobTitle || ''
+    if (settings?.city && settings.city.trim() !== '') {
+        query += ` ${settings.city}`
     }
+    query = query.trim()
+
+    if (!query) {
+        throw new Error('Поисковый запрос пуст. Укажите должность или город')
+    }
+    
+    const experienceMap = {
+        'без опыта': 'noExperience',
+        '1–3': 'between1And3',
+        '3–6': 'between3And6',
+        'более 6': 'moreThan6'
+    }
+    
+    const options = {
+        salary: settings?.salaryFrom ? parseInt(settings.salaryFrom) : null,
+        experience: experienceMap[settings?.experience] || null,
+        employment: settings?.employment?.length > 0 ? settings.employment.join(',') : null,
+        schedule: settings?.schedule?.length > 0 ? settings.schedule.join(',') : null,
+        maxPages: 8,
+        delay: 2000,
+    }
+
+    Object.keys(options).forEach(key => {
+        if (options[key] === null || options[key] === undefined) {
+            delete options[key]
+        }
+    })
+
+    let vacancies = await searchVacancies(this.page, query, options)
+
+    if (settings?.exception) {
+        const excludeWords = settings.exception.split(',').map(w => w.trim())
+        vacancies = filterVacancies(vacancies, excludeWords)
+    }
+
+    return vacancies
+}
 
     async respond(vacancyUrl, resumePath, userPrompt = '', options = {}) {
         await this.init()
@@ -142,12 +146,18 @@ export class BotRunner {
 
     
 
-    closeBrowser = async() =>{
-        if(this.browser !== null){
+    closeBrowser = async () => {
+        if (this.browser !== null) {
+            // Сохраняем куки перед закрытием
+            if (this.context) {
+                await saveCookies(this.context)
+            }
+
             await this.browser.close()
             this.browser = null
             this.context = null
             this.page = null
+            console.log('✅ Браузер закрыт, куки сохранены')
         }
     }
 }

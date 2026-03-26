@@ -1,4 +1,15 @@
 export async function searchVacancies(page, query, options = {}) {
+    try {
+        // Пробуем найти кнопку согласия
+        const cookieButton = await page.$('button[data-qa="cookies-policy-informer-accept"]')
+        if (cookieButton && await cookieButton.isVisible()) {
+            await cookieButton.click()
+            console.log('🍪 Куки приняты')
+            await page.waitForTimeout(1000) // Ждём, пока баннер исчезнет
+        }
+    } catch (err) {
+        console.log('⚠️ Баннер кук не найден или уже принят')
+    }
     try{
         console.log(`\n🔍 ПОИСК ВАКАНСИЙ: "${query}"`);
         const {
@@ -97,51 +108,104 @@ export async function searchVacancies(page, query, options = {}) {
             console.log(`   ✅ Найдено ${pageVacancies.length} вакансий`)
             allVacancies.push(...pageVacancies)
 
-            if(pageNum<maxPages){
-                const nextButton = await page.$('a[data-qa="pager-next"]');
-                if(!nextButton){
-                    console.log('   ⏹️ Дальше страниц нет');
-                    break;
-                }
-
-                await nextButton.click()
-                await page.waitForTimeout(delay)
-                await page.waitForSelector('[data-qa="vacancy-serp__vacancy"]')
+            if (pageNum < maxPages) {
+                try {
+        // Ждём, пока появится пагинация
+        await page.waitForSelector('a[data-qa="pager-page"]', { timeout: 10000 })
+        
+        // Находим все ссылки на страницы
+        const pageLinks = await page.$$('a[data-qa="pager-page"]')
+        
+        // Ищем ссылку на следующую страницу
+        let nextPageLink = null
+        for (const link of pageLinks) {
+            const href = await link.getAttribute('href')
+            if (href && href.includes(`page=${pageNum}`)) {
+                nextPageLink = link
+                break
             }
         }
-        console.log(`\n✅ ВСЕГО НАЙДЕНО: ${allVacancies.length} вакансий`);
-
-        const uniqueVacancies = allVacancies.filter((v, i, a) => 
-            a.findIndex(t => t.id === v.id) === i
-        );
-
-        if(uniqueVacancies.length < allVacancies.length){
-            console.log(`   (удалено ${allVacancies.length - uniqueVacancies.length} дубликатов)`);
-        }
-
-        return uniqueVacancies
         
-    }catch(err){
-        console.error('❌ Ошибка поиска вакансий:', err.message);
-        throw err;
-    }
-    
-    
-}
+        if (nextPageLink) {
+            // Проверяем, что элемент видим (через evaluate, а не waitForSelector)
+            const isVisible = await nextPageLink.isVisible()
+            if (!isVisible) {
+                console.log('   ⏹️ Кнопка не видима')
+                break
+            }
+            
+            // Прокручиваем к элементу
+            await nextPageLink.scrollIntoViewIfNeeded()
+            
+            // Ждём небольшую задержку
+            await page.waitForTimeout(500)
+            
+            // Кликаем
+            await nextPageLink.click()
+            
+            // Ждём загрузки новой страницы
+            await page.waitForTimeout(delay)
+            
+            // Ждём появления вакансий на новой странице
+            await page.waitForSelector('[data-qa="vacancy-serp__vacancy"]', { timeout: 15000 })
+            
+        } else {
+            console.log('   ⏹️ Дальше страниц нет')
+            break
+        }
+                } catch (navError) {
+                    console.log(`   ⚠️ Ошибка перехода на страницу ${pageNum + 1}:`, navError.message)
 
-export function filterVacancies(vacancies, excludeWords = []) {
-    if (excludeWords.length === 0) return vacancies;
-    
-    const filtered = vacancies.filter(vacancy => {
-        const text = vacancy.fullText.toLowerCase();
-        return !excludeWords.some(word => 
-            text.includes(word.toLowerCase())
-        );
-    });
-    
-    console.log(`🔍 После фильтрации: ${filtered.length} вакансий`);
-    return filtered;
-}
+                    // Альтернативный способ: ищем кнопку "Дальше"
+                    try {
+                        const nextButton = await page.$('a[data-qa="pager-next"]')
+                        if (nextButton && await nextButton.isVisible()) {
+                            await nextButton.click()
+                            await page.waitForTimeout(delay)
+                            await page.waitForSelector('[data-qa="vacancy-serp__vacancy"]', { timeout: 10000 })
+                        } else {
+                            break
+                        }
+                    } catch (fallbackError) {
+                        console.log('   ⏹️ Не удалось перейти на следующую страницу')
+                        break
+                    }
+                }
+            }
+                    }
+                    console.log(`\n✅ ВСЕГО НАЙДЕНО: ${allVacancies.length} вакансий`);
+                
+                    const uniqueVacancies = allVacancies.filter((v, i, a) => 
+                        a.findIndex(t => t.id === v.id) === i
+                    );
+                
+                    if(uniqueVacancies.length < allVacancies.length){
+                        console.log(`   (удалено ${allVacancies.length - uniqueVacancies.length} дубликатов)`);
+                    }
+                
+                    return uniqueVacancies
+
+                }catch(err){
+                    console.error('❌ Ошибка поиска вакансий:', err.message);
+                    throw err;
+                }
+
+
+            }
+
+            export function filterVacancies(vacancies, excludeWords = []) {
+                if (excludeWords.length === 0) return vacancies;
+
+                const filtered = vacancies.filter(vacancy => {
+                    const text = vacancy.fullText.toLowerCase();
+                    return !excludeWords.some(word => 
+                        text.includes(word.toLowerCase())
+                    );
+                });
+
+                console.log(`🔍 После фильтрации: ${filtered.length} вакансий`);
+                return filtered;
+            }
 
 export function sortVacancies(vacancies, sortBy = 'relevance'){
     const sorted = [...vacancies];

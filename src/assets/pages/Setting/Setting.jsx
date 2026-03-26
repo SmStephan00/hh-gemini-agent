@@ -1,11 +1,13 @@
-import { useEffect, useReducer } from "react"
+import { useEffect, useReducer, useState } from "react"
 import FormBox from "./components/FormBox"
 import './Setting.css'
 
 
 
+
 function Settings() {
-  
+  const API_URL = 'http://localhost:3001/api'
+  const [uploading, setUploading] = useState(false)
 
   const initialState = {
     jobTitle: '',
@@ -70,6 +72,41 @@ function Settings() {
 
   const handleReset = ()=>{
     dispatch({type:'RESET'})
+  }
+
+  const handleFileUpload = async (e) =>{
+    const file = e.target.files[0]
+    if(!file) return
+
+    if(file.type !== 'application/pdf'){
+        alert('Пожалуйста, выберите PDF файл')
+        return
+    }
+    setUploading(true)
+
+    try{
+      const formData = new FormData()
+      formData.append('resume' , file)
+
+      const response = await fetch(`${API_URL}/upload/resume`, {
+        method: 'POST',
+        body: formData
+      })
+
+      const data = await response.json()
+
+      if(data.success){
+        handlerChange('resumePath', data.filePath)
+        console.log('✅ Резюме загружено:', data.fileName)
+      }else{
+        alert('Ошибка загрузки: ' + data.error)
+      }
+    }catch(error){
+      console.error('Ошибка:', error)
+      alert('Не удалось загрузить файл')
+    }finally {
+      setUploading(false)
+    }
   }
 
   useEffect(() => {
@@ -296,8 +333,16 @@ function Settings() {
               <input 
                 id='Resume'
                 type="file"
-                onChange={(e) => handlerChange('resumeFile', e.target.files[0])}
+                accept=".pdf"
+                onChange={handleFileUpload}
+                disabled={uploading}
               />
+              {settings.resumePath && (
+                <p style={{ fontSize: '12px', marginTop: '5px', color: '#27ae60' }}>
+                  ✅ Файл: {settings.resumePath.split('/').pop()}
+                </p>
+              )}
+              {uploading && <p>⏳ Загрузка...</p>}
             </div>
           </div>
         </form>

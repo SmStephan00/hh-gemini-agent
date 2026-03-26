@@ -6,9 +6,16 @@ import botInfo from '../../../../bot/bot-data.json'
 import { useEffect, useMemo, useState } from 'react'
 import StatisticBar from './compnents/StatisticBar'
 const DashBoard = () => {
+    const API_URL = 'http://localhost:3001/api'
+
 
     const [loadSearch, setLoadSearch] = useState(false)
-    const [setings, setSetings] = useState({
+    const [searchResults, setSearchResults] = useState([])
+
+    const [loadResponse, setLoadResponse] = useState(false)
+    const [responseProgress, setResponseProgress] = useState(false)
+
+    const [settings, setSettings] = useState({
         jobTitle: '',
         city: '',
         salaryFrom: '',
@@ -31,16 +38,16 @@ const DashBoard = () => {
         notifications: []
     })
 
-    
-
-
-
-    useEffect(()=>{
+    useEffect(() => {
         const saved = localStorage.getItem('botSettings')
-        if(saved){
-            setSetings(JSON.parse(saved))
+        if (saved) {
+            setSettings(JSON.parse(saved))
+            console.log('📦 Загружено из localStorage')
+        } else {
+            console.log('⚠️ Нет сохранённых настроек')
         }
-    },[])
+    }, [])
+
     
     const company = new Set (botInfo.completed.map((item)=>{
         return item.company
@@ -65,27 +72,125 @@ const DashBoard = () => {
         return {dateWeek, weekProgressbar}
     },[botInfo.completed])
 
-    const handlerSerch = async () =>{
+    const handlerSearch = async () => {
         setLoadSearch(true)
 
-        const response = await fetch('/api/search',{
-            method:POST,
-            headers:{ 'Content-Type': 'application/json' },
-            body:JSON.stringify({
-                jobTitle: settings.jobTitle,
-                city: settings.city,
-                salaryFrom: settings.salaryFrom,
-                salaryTo: settings.salaryTo,
-                experience: settings.experience,
-                schedule: settings.schedule,
-                employment: settings.employment
-            })
+        
+        const searchParams = {
+            jobTitle: settings.jobTitle,
+            city: settings.city,
+            salaryFrom: settings.salaryFrom,
+            salaryTo: settings.salaryTo,
+            experience: settings.experience,
+            schedule: settings.schedule,
+            employment: settings.employment,
+            exception: settings.exception
+        }
+
+        Object.keys(searchParams).forEach(key => {
+            const value = searchParams[key]
+
+            if (value === undefined || 
+                value === null || 
+                value === '' || 
+                (Array.isArray(value) && value.length === 0)) {
+                delete searchParams[key]
+            }
         })
 
-        const results = await response.json
+        console.log('🔍 Отправляю поиск:', searchParams)
 
-        setSerchResults(results)
-        setLoadSearch(false)
+        try {
+            const response = await fetch(`${API_URL}/search/start`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ settings: searchParams })
+            })
+
+            const results = await response.json()
+            console.log('Текущие настройки в state:', settings)
+
+            if (results.success) {
+                console.log(`✅ Найдено ${results.count} вакансий`)
+                setSearchResults(results.vacancies)
+            } else {
+                console.error('❌ Ошибка поиска:', results.error)
+            }
+        } catch (err) {
+            console.error('❌ Ошибка сети:', err)
+        } finally {
+            setLoadSearch(false)
+        }
+    }
+
+    const handleResponse = async () =>{
+        if (searchResults.length === 0) {
+            alert('Сначала найдите вакансии')
+            return
+        }
+        if (!settings.resumePath) {
+            alert('Укажите путь к файлу резюме в настройках')
+            return
+        }
+
+        setLoadResponse(true)
+        setResponseProgress({status: 'starting', message: 'Запуск откликов...' })
+
+        try{
+            const response = await fetch(`${API_URL}/response/batch`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    vacancies: searchResults,
+                    resumePath: settings.resumePath,
+                    userPrompt: '',
+                    options: {
+                        delay: 30000,
+                        randomDelay: true,
+                        maxResponses: 80,
+                        useGemini: true
+                    }
+                })
+
+                
+            })
+
+            console.log('📤 Отправляю запрос:', {
+                vacancies: searchResults.length,
+                resumePath: settings.resumePath,
+                userPrompt: '',
+                options: {
+                    delay: 30000,
+                    randomDelay: true,
+                    maxResponses: 80,
+                    useGemini: true
+                }
+            })            
+
+            const data = await response.json()
+            if (data.success) {
+                setResponseProgress({
+                    status: 'success',
+                    message: `✅ Успешно: ${data.results.success}, Ошибок: ${data.results.failed}`,
+                    details: data.results.details
+                })
+            } else {
+                setResponseProgress({
+                    status: 'error',
+                    message: `❌ Ошибка: ${data.error}`
+                })
+            }
+
+
+            
+        }catch (err) {
+            setResponseProgress({
+                status: 'error',
+                message: `❌ Ошибка сети: ${err.message}`
+            })
+        } finally {
+            setLoadResponse(false)
+        }
     }
     return(  
         <>
@@ -182,14 +287,38 @@ const DashBoard = () => {
                 <div className='box__button'>
                     <button 
                         className='button__fonctional' 
-                        onClick={() => handlerSerch()}
+                        onClick={() => handlerSearch()}
                         disabled={loadSearch}
                     >
                         {loadSearch ? 'Поиск...' : 'Поиск'}
                     </button>
-                    <button className='button__fonctional'>Отклик</button>
+                    <button 
+                        className='button__fonctional' 
+                        onClick={handleResponse}
+                        disabled={loadResponse || searchResults.length === 0}
+                    >
+                        {loadResponse ? 'Отклик...' : 'Отклик'}
+                    </button>
                     <button className='button__fonctional'>Настройки</button>
                 </div>
+                {searchResults.length > 0 && (
+                    <div className="search-results">
+                        <h3>Найденные вакансии:</h3>
+                        <div className='vacancy-contant'>
+                            {searchResults.map((vacancy, index) => (
+                            <div key={vacancy.id || index} className="vacancy-card">
+                                <h4>{vacancy.title}</h4>
+                                <p>Компания: {vacancy.company}</p>
+                                <p>Город: {vacancy.city}</p>
+                                <p>Зарплата: {vacancy.salary || 'не указана'}</p>
+                                <a href={vacancy.url} target="_blank" rel="noopener noreferrer">
+                                    Перейти к вакансии
+                                </a>
+                            </div>
+                        ))}
+                        </div>
+                    </div>
+                )}
             </div>
         </>
     )
