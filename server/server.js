@@ -3,23 +3,35 @@ import dotenv from 'dotenv';
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import cors from 'cors'
+
+import { BotRunner } from './botRunner.js'
 
 
-const PORT = process.env.PORT || 3001
+
 
 dotenv.config()
-
 const app = express()
+app.use(cors())
 app.use(express.json())
+const PORT = process.env.PORT || 3001
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const DATA_PATH = path.join(__dirname, 'data')
 
+
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`)
+    next()
+})
+
 if (!fs.existsSync(DATA_PATH)) {
     fs.mkdirSync(DATA_PATH)
     console.log('📁 Создана папка data')
 }
+
+const bot = new BotRunner()
 
 const DEFAULT_SETTINGS = {
     jobTitle: '',
@@ -71,14 +83,24 @@ app.get('/api/settings', (req,res) =>{
         const settings = readJSON('settings.json', DEFAULT_SETTINGS)
         res.json(settings)
     }catch(err){
-        console.log('❌ Ошибка чтения настроек:', err, err)
+        console.log('❌ Ошибка чтения настроек:', err)
+        res.status(500).json({
+            success: false,
+            error: 'Внутренняя ошибка сервера'
+        })
     }
 })
 
 app.post('/api/settings', (req,res) =>{
     const newSettings = req.body
+     if (!newSettings || typeof newSettings !== 'object' || Array.isArray(newSettings)) {
+        return res.status(400).json({ 
+            success: false, 
+            error: 'Неверный формат данных. Ожидается объект с настройками' 
+        })
+    }
+
     const success = writeJSON('settings.json', newSettings)
-    
     if(success){
         res.json({success:true,message:'Настройки сохранены'})
     }else {
@@ -103,6 +125,49 @@ app.post('/api/settings/reset', (req,res)=>{
         console.error('❌ Ошибка сброса настроек:', error)
         res.status(500).json({ success: false, error: 'Ошибка сброса' })
     }
+})
+
+app.post('/api/search/start', async (req,res)=>{
+    try{
+        const settings = req.body.settings || readJSON('settings.json',DEFAULT_SETTINGS)
+        console.log('\n🔍 ЗАПУСК ПОИСКА')
+        console.log('   Должность:', settings.jobTitle)
+        console.log('   Город:', settings.city)
+
+        const vacancies = await bot.runSearch(settings)
+        writeJSON('vacancies.json',vacancies)
+
+        res.json({
+            success:true,
+            count: vacancies.length,
+            vacancies: vacancies
+        })
+    }catch(err){
+        console.log('❌ Ошибка поиска:', err.message)
+        res.status(500).json({ success: false, error: err.message})
+    }
+})
+
+process.on('SIGINT', async () => {
+    console.log('\n\n🛑 Получен сигнал завершения...')
+    await bot.closeBrowser()
+    console.log('👋 Сервер остановлен')
+    process.exit(0)
+})
+
+app.use((err, req, res, next) => {
+    console.error('❌ Ошибка сервера:', err)
+    res.status(500).json({
+        success: false,
+        error: 'Внутренняя ошибка сервера'
+    })
+})
+
+app.use((req, res) =>{
+    res.status(404).json({
+        success:false,
+        error: 'Маршрут не найден'
+    })
 })
 
 app.listen(PORT, ()=>{

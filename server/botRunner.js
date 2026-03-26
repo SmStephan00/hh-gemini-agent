@@ -3,9 +3,9 @@ import { filterVacancies, searchVacancies } from '../bot/src/search/vacancySearc
 import { loadResumeFromPdf } from '../bot/src/resume/pdfLoader.js'
 import { autoRespond } from '../bot/src/responder/autoResponder.js'
 
-const puppeteer = require('puppeteer')
+import puppeteer  from 'puppeteer'
 
-class BotRunner {
+export class BotRunner {
     constructor(){
         this.browser = null
         this.page = null
@@ -24,8 +24,13 @@ class BotRunner {
     runSearch = async (settings) => {
         await this.init()
 
+
+
         const query = `${settings?.jobTitle} ${settings?.city}`
 
+        if(!query.trim()){
+            throw new Error('Поисковый запрос пуст. Укажите должность или город')
+        }
         const experienceMap = {
             'без опыта': 'noExperience',
             '1–3': 'between1And3',
