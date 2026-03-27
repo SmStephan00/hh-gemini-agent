@@ -2,18 +2,16 @@
 
 import { useState } from 'react'
 
-import './Search.css'
+import './Logs.css'
 
 
-
-
-const Search = () => {
+const Logs = () => {
     return(
         <div className="box__search">
-            <h1>Поиск вакансий</h1>
             
         </div>
     )
 }
 
-export default Search
+
+export default Logs

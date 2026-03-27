@@ -2,18 +2,17 @@ import { filterVacancies, searchVacancies } from '../bot/src/search/vacancySearc
 import { loadResumeFromPdf } from '../bot/src/resume/pdfLoader.js'
 import { autoRespond } from '../bot/src/responder/autoResponder.js'
 import { launchStealthBrowser, saveCookies } from '../bot/src/browser/stealthLauncher.js'
-import puppeteer  from 'puppeteer'
 
 export class BotRunner {
-    constructor(){
+    constructor() {
         this.browser = null
+        this.context = null
         this.page = null
     }
 
     init = async () => {
-        if(this.browser === null){
+        if (this.browser === null) {
             const { browser, context, page } = await launchStealthBrowser()
-
             this.browser = browser
             this.context = context
             this.page = page
@@ -21,64 +20,54 @@ export class BotRunner {
     }
 
     runSearch = async (settings) => {
-    await this.init()
+        await this.init()
 
-    // Формируем query правильно
-    let query = settings?.jobTitle || ''
-    if (settings?.city && settings.city.trim() !== '') {
-        query += ` ${settings.city}`
-    }
-    query = query.trim()
-
-    if (!query) {
-        throw new Error('Поисковый запрос пуст. Укажите должность или город')
-    }
-    
-    const experienceMap = {
-        'без опыта': 'noExperience',
-        '1–3': 'between1And3',
-        '3–6': 'between3And6',
-        'более 6': 'moreThan6'
-    }
-    
-    const options = {
-        salary: settings?.salaryFrom ? parseInt(settings.salaryFrom) : null,
-        experience: experienceMap[settings?.experience] || null,
-        employment: settings?.employment?.length > 0 ? settings.employment.join(',') : null,
-        schedule: settings?.schedule?.length > 0 ? settings.schedule.join(',') : null,
-        maxPages: 8,
-        delay: 2000,
-    }
-
-    Object.keys(options).forEach(key => {
-        if (options[key] === null || options[key] === undefined) {
-            delete options[key]
+        let query = settings?.jobTitle || ''
+        if (settings?.city && settings.city.trim() !== '') {
+            query += ` ${settings.city}`
         }
-    })
+        query = query.trim()
 
-    let vacancies = await searchVacancies(this.page, query, options)
+        if (!query) {
+            throw new Error('Поисковый запрос пуст. Укажите должность или город')
+        }
 
-    if (settings?.exception) {
-        const excludeWords = settings.exception.split(',').map(w => w.trim())
-        vacancies = filterVacancies(vacancies, excludeWords)
+        const experienceMap = {
+            'без опыта': 'noExperience',
+            '1–3': 'between1And3',
+            '3–6': 'between3And6',
+            'более 6': 'moreThan6'
+        }
+
+        const options = {
+            salary: settings?.salaryFrom ? parseInt(settings.salaryFrom) : null,
+            experience: experienceMap[settings?.experience] || null,
+            employment: settings?.employment?.length > 0 ? settings.employment.join(',') : null,
+            schedule: settings?.schedule?.length > 0 ? settings.schedule.join(',') : null,
+            maxPages: 8,
+            delay: 2000,
+        }
+
+        Object.keys(options).forEach(key => {
+            if (options[key] === null || options[key] === undefined) {
+                delete options[key]
+            }
+        })
+
+        let vacancies = await searchVacancies(this.page, query, options)
+
+        if (settings?.exception) {
+            const excludeWords = settings.exception.split(',').map(w => w.trim())
+            vacancies = filterVacancies(vacancies, excludeWords)
+        }
+
+        return vacancies
     }
-
-    return vacancies
-}
 
     async respond(vacancyUrl, resumePath, userPrompt = '', options = {}) {
         await this.init()
-
         const resumeText = await loadResumeFromPdf(resumePath)
-        
-        const result = await autoRespond(
-            this.page,
-            vacancyUrl,
-            resumeText,
-            userPrompt,
-            options
-        )
-
+        const result = await autoRespond(this.page, vacancyUrl, resumeText, userPrompt, options)
         return result
     }
 
@@ -87,52 +76,94 @@ export class BotRunner {
             delay = 30000,
             randomDelay = true,
             maxResponses = 80,
-            useGemini = true
+            useGemini = true,
+            onResponse = null
         } = options
 
-        const results ={
+        const results = {
             total: vacancies.length,
             success: 0,
-            failed : 0,
-            details : [],
+            failed: 0,
+            details: [],
         }
 
         console.log(`\n🚀 ЗАПУСК ПАКЕТНОГО ОТКЛИКА`)
         console.log(`📊 Всего вакансий: ${results.total}`)
 
-        for(let i = 0; i < vacancies.length; i++){
-            if(results.success >= maxResponses){
+        for (let i = 0; i < vacancies.length; i++) {
+            if (results.success >= maxResponses) {
                 console.log(`\n⚠️ Достигнут лимит откликов (${maxResponses})`)
                 break
             }
 
-            console.log(`\n--- [${i+1}/${results.total}] ${vacancies[i].title} ---`)
+            console.log(`\n--- [${i + 1}/${results.total}] ${vacancies[i].title} ---`)
 
-            const responseResult = await this.respond(
-                vacancies[i].url,
-                resumePath,
-                userPrompt,
-                { useGemini }
-            )
-            
-            if(responseResult.success){
-                results.success +=1
-                results.details.push({title: vacancies[i].title, company: vacancies[i].company, status: 'success'})
-                console.log(`✅ Отклик успешен!`)
-            }else{
-                results.failed +=1 
-                results.details.push({title: vacancies[i].title, company: vacancies[i].company, status: 'failed' ,reason: responseResult.reason || responseResult.error})
-                console.log(`❌ Ошибка: ${responseResult.reason || responseResult.error}`)
+            try {
+                const responseResult = await this.respond(
+                    vacancies[i].url,
+                    resumePath,
+                    userPrompt,
+                    { useGemini }
+                )
+
+                if (responseResult.success) {
+                    results.success += 1
+                    const detail = {
+                        title: vacancies[i].title,
+                        company: vacancies[i].company,
+                        status: 'success',
+                        coverLetter: responseResult.data?.coverLetter || null
+                    }
+                    results.details.push(detail)
+                    console.log(`✅ Отклик успешен!`)
+
+                    // Вызываем колбэк для сохранения в реальном времени
+                    if (onResponse) {
+                        await onResponse(vacancies[i], 'success', detail)
+                    }
+                } else {
+                    results.failed += 1
+                    const detail = {
+                        title: vacancies[i].title,
+                        company: vacancies[i].company,
+                        status: 'failed',
+                        reason: responseResult.reason || responseResult.error,
+                        coverLetter: null
+                    }
+                    results.details.push(detail)
+                    console.log(`❌ Ошибка: ${responseResult.reason || responseResult.error}`)
+
+                    // Вызываем колбэк для сохранения в реальном времени
+                    if (onResponse) {
+                        await onResponse(vacancies[i], 'failed', detail)
+                    }
+                }
+            } catch (err) {
+                results.failed += 1
+                const detail = {
+                    title: vacancies[i].title,
+                    company: vacancies[i].company,
+                    status: 'failed',
+                    reason: err.message,
+                    coverLetter: null
+                }
+                results.details.push(detail)
+                console.log(`❌ Критическая ошибка: ${err.message}`)
+
+                // Вызываем колбэк для сохранения в реальном времени
+                if (onResponse) {
+                    await onResponse(vacancies[i], 'failed', detail)
+                }
             }
 
-            if(i !== vacancies.length-1 && results.success !== maxResponses){
+            if (i !== vacancies.length - 1 && results.success !== maxResponses) {
                 let timeDelay = delay
-                if(randomDelay){
-                    timeDelay = delay + Math.floor(Math.random()*30001)   
+                if (randomDelay) {
+                    timeDelay = delay + Math.floor(Math.random() * 30001)
                 }
+                console.log(`⏳ Пауза ${Math.round(timeDelay / 1000)} сек...`)
                 await new Promise(resolve => setTimeout(resolve, timeDelay))
             }
-            
         }
 
         console.log('\n' + '='.repeat(50))
@@ -140,19 +171,17 @@ export class BotRunner {
         console.log('='.repeat(50))
         console.log(`✅ Успешно: ${results.success}`)
         console.log(`❌ Ошибок: ${results.failed}`)
+        console.log(`📋 Детали: ${results.details.length} записей`)
+        console.log('🔥🔥🔥 batchRespond завершён 🔥🔥🔥')
 
         return results
     }
 
-    
-
     closeBrowser = async () => {
         if (this.browser !== null) {
-            // Сохраняем куки перед закрытием
             if (this.context) {
                 await saveCookies(this.context)
             }
-
             await this.browser.close()
             this.browser = null
             this.context = null

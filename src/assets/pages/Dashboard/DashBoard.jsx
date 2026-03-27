@@ -1,20 +1,22 @@
-
-
 import Header from '../../components/Header/Header'
 import './Dashboard.css'
-import botInfo from '../../../../bot/bot-data.json'
 import { useEffect, useMemo, useState } from 'react'
 import StatisticBar from './compnents/StatisticBar'
+
 const DashBoard = () => {
     const API_URL = 'http://localhost:3001/api'
 
-
     const [loadSearch, setLoadSearch] = useState(false)
     const [searchResults, setSearchResults] = useState([])
-
     const [loadResponse, setLoadResponse] = useState(false)
-    const [responseProgress, setResponseProgress] = useState(false)
-
+    const [responseProgress, setResponseProgress] = useState(null)
+    const [stats, setStats] = useState({
+        totalResponses: 0,
+        successful: 0,
+        failed: 0,
+        companies: []
+    })
+    const [dailyStats, setDailyStats] = useState([])
     const [settings, setSettings] = useState({
         jobTitle: '',
         city: '',
@@ -27,7 +29,7 @@ const DashBoard = () => {
         creativity: 0.5,
         letterStyle: [],
         responseDelay: '',
-        resumeFile: null,
+        resumePath: '',  // ← исправлено
         autoStart: false,
         weekDays: [],
         startTime: '',
@@ -38,44 +40,70 @@ const DashBoard = () => {
         notifications: []
     })
 
+    // Загрузка настроек
     useEffect(() => {
         const saved = localStorage.getItem('botSettings')
         if (saved) {
             setSettings(JSON.parse(saved))
             console.log('📦 Загружено из localStorage')
-        } else {
-            console.log('⚠️ Нет сохранённых настроек')
         }
     }, [])
 
-    
-    const company = new Set (botInfo.completed.map((item)=>{
-        return item.company
-    }))
+    // Загрузка статистики с сервера
+    useEffect(() => {
+        const loadStats = async () => {
+            try {
+                const response = await fetch(`${API_URL}/stats`)
+                const data = await response.json()
+                setStats(data)
+            } catch (err) {
+                console.error('Ошибка загрузки статистики:', err)
+            }
+        }
+        loadStats()
+    }, [])
+
+    // Загрузка дневной статистики
+    useEffect(() => {
+        const loadDailyStats = async () => {
+            try {
+                const response = await fetch(`${API_URL}/stats/daily`)
+                const data = await response.json()
+                if (data.success) {
+                    setDailyStats(data.daily.slice(-7))
+                }
+            } catch (err) {
+                console.error('Ошибка загрузки дневной статистики:', err)
+            }
+        }
+        loadDailyStats()
+    }, [])
 
     const date = new Date()
 
-    const {dateWeek, weekProgressbar} = useMemo(()=>{
-        const date = new Date()
-        const dateWeek = []
-        const weekProgressbar = []
-        const statDay = [...botInfo.completed]
-
-        for(let i=0; i<7; i++){
-            dateWeek[i] = `${new Date(date.setDate(new Date().getDate() - i)).toISOString().slice(5, 10)}`
-
-            weekProgressbar[i] = statDay.filter((item)=>{
-                return item.timestamp.slice(0,10) == new Date(new Date().setDate(new Date().getDate() - i)).toISOString().slice(0, 10)
+    // Активность за неделю из дневной статистики
+    const weekActivity = useMemo(() => {
+        const last7Days = []
+        const today = new Date()
+        
+        for (let i = 6; i >= 0; i--) {
+            const date = new Date()
+            date.setDate(today.getDate() - i)
+            const dateStr = date.toISOString().split('T')[0]
+            const dayStat = dailyStats.find(d => d.date === dateStr)
+            last7Days.push({
+                date: dateStr.slice(5),
+                count: dayStat ? dayStat.total : 0,
+                success: dayStat ? dayStat.success : 0,
+                failed: dayStat ? dayStat.failed : 0
             })
-             
         }
-        return {dateWeek, weekProgressbar}
-    },[botInfo.completed])
+        return last7Days
+    }, [dailyStats])
 
     const handlerSearch = async () => {
         setLoadSearch(true)
 
-        
         const searchParams = {
             jobTitle: settings.jobTitle,
             city: settings.city,
@@ -89,16 +117,11 @@ const DashBoard = () => {
 
         Object.keys(searchParams).forEach(key => {
             const value = searchParams[key]
-
-            if (value === undefined || 
-                value === null || 
-                value === '' || 
+            if (value === undefined || value === null || value === '' || 
                 (Array.isArray(value) && value.length === 0)) {
                 delete searchParams[key]
             }
         })
-
-        console.log('🔍 Отправляю поиск:', searchParams)
 
         try {
             const response = await fetch(`${API_URL}/search/start`, {
@@ -108,7 +131,6 @@ const DashBoard = () => {
             })
 
             const results = await response.json()
-            console.log('Текущие настройки в state:', settings)
 
             if (results.success) {
                 console.log(`✅ Найдено ${results.count} вакансий`)
@@ -123,7 +145,7 @@ const DashBoard = () => {
         }
     }
 
-    const handleResponse = async () =>{
+    const handleResponse = async () => {
         if (searchResults.length === 0) {
             alert('Сначала найдите вакансии')
             return
@@ -134,9 +156,9 @@ const DashBoard = () => {
         }
 
         setLoadResponse(true)
-        setResponseProgress({status: 'starting', message: 'Запуск откликов...' })
+        setResponseProgress({ status: 'starting', message: 'Запуск откликов...' })
 
-        try{
+        try {
             const response = await fetch(`${API_URL}/response/batch`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -151,39 +173,27 @@ const DashBoard = () => {
                         useGemini: true
                     }
                 })
-
-                
             })
 
-            console.log('📤 Отправляю запрос:', {
-                vacancies: searchResults.length,
-                resumePath: settings.resumePath,
-                userPrompt: '',
-                options: {
-                    delay: 30000,
-                    randomDelay: true,
-                    maxResponses: 80,
-                    useGemini: true
-                }
-            })            
-
             const data = await response.json()
+            
             if (data.success) {
                 setResponseProgress({
                     status: 'success',
                     message: `✅ Успешно: ${data.results.success}, Ошибок: ${data.results.failed}`,
                     details: data.results.details
                 })
+                // Обновляем статистику после откликов
+                const statsResponse = await fetch(`${API_URL}/stats`)
+                const newStats = await statsResponse.json()
+                setStats(newStats)
             } else {
                 setResponseProgress({
                     status: 'error',
                     message: `❌ Ошибка: ${data.error}`
                 })
             }
-
-
-            
-        }catch (err) {
+        } catch (err) {
             setResponseProgress({
                 status: 'error',
                 message: `❌ Ошибка сети: ${err.message}`
@@ -192,69 +202,68 @@ const DashBoard = () => {
             setLoadResponse(false)
         }
     }
-    return(  
+
+    return (
         <>
             <div className="block__dashboard">
-                <StatisticBar title={`Статистика за ${date.toISOString().split('T')[0]}`} value={weekProgressbar}>
+                <StatisticBar title={`Статистика за ${date.toISOString().split('T')[0]}`}>
                     <ul className='list__response'>
                         <li className='item__response'>
                             <p className='title__col'>Откликов</p>
-                            <p>{`${botInfo.stats.totalResponses}`}</p>
-                             
+                            <p>{stats.totalResponses}</p>
                         </li>
                         <li className='item__response'>
                             <p className='title__col'>Успешные</p>
-                            <p>{`${botInfo.stats.successful}`}</p>
+                            <p>{stats.successful}</p>
                             <p>
-                                {
-                                    `${botInfo.stats.successful!==0
-                                    ?Math.round(botInfo.stats.successful/botInfo.stats.totalResponses*100)
-                                    :0}%`
-                                }
-                            </p>   
+                                {stats.totalResponses !== 0
+                                    ? `${Math.round(stats.successful / stats.totalResponses * 100)}%`
+                                    : '0%'}
+                            </p>
                         </li>
                         <li className='item__response'>
                             <p className='title__col'>Ошибки</p>
-                            <p>{`${botInfo.stats.failed}`}</p>
+                            <p>{stats.failed}</p>
                             <p>
-                                {
-                                    `${botInfo.stats.failed!==0?
-                                    Math.round(botInfo.stats.failed/botInfo.stats.totalResponses*100)
-                                    :0}%`
-                                }
-                            </p>   
+                                {stats.totalResponses !== 0
+                                    ? `${Math.round(stats.failed / stats.totalResponses * 100)}%`
+                                    : '0%'}
+                            </p>
                         </li>
                         <li className='item__response'>
                             <p className='title__col'>Компаний</p>
-                            <p>{`${company.size}`}</p> 
+                            <p>{stats.companies.length}</p>
                         </li>
                     </ul>
                 </StatisticBar>
-                <StatisticBar title={`активность за неделю`}>
+                
+                <StatisticBar title={'Активность за неделю'}>
                     <div className='content__activity'>
                         <div className='col__name__item'>
-                            {dateWeek.map((item)=>{
-                                return <p key={item} className='name__item'>{`${item}`}</p>
-                            })}    
+                            {weekActivity.map((item, i) => (
+                                <p key={i} className='name__item'>{item.date}</p>
+                            ))}
                         </div>
                         <div className='col__progressbar'>
-                            {weekProgressbar.map((item,index)=>{
-                                 return (
-                                    <div key={index} className='progressbar'>
-                                        <span style={{ width: `${item.length/80*100}%`}} className='progresbar__item'></span>
+                            {weekActivity.map((item, i) => {
+                                const maxCount = Math.max(...weekActivity.map(w => w.count), 1)
+                                const width = (item.count / maxCount) * 100
+                                return (
+                                    <div key={i} className='progressbar'>
+                                        <span style={{ width: `${width}%` }} className='progresbar__item'></span>
                                     </div>
-                                 )
+                                )
                             })}
                         </div>
                         <div className='col__procent'>
-                        {weekProgressbar.map((item, index)=>{
-                            return <p key={index} className='procent__item'>{`${Math.round(item.length/80*100)}%`}</p>
-                        })}
-                            
+                            {weekActivity.map((item, i) => (
+                                <p key={i} className='procent__item'>{item.count}</p>
+                            ))}
                         </div>
                     </div>
                 </StatisticBar>
-                <StatisticBar title={`Лимиты AI`} >
+                
+                <StatisticBar title={'Лимиты AI'}>
                     <div className='content__status__ai'>
                         <div className='col__name__item'>
                             <p className='name__item'>Gemini</p>
@@ -263,31 +272,24 @@ const DashBoard = () => {
                             <p className='name__item'>OpenRouter</p>
                         </div>
                         <div className='col__progressbar'>
-                            <div className='progressbar'>
-                                <span style={{ width: `${12}%` }} className='progresbar__item'></span>
-                            </div>
-                            <div className='progressbar'>
-                                <span style={{ width: `${12}%` }} className='progresbar__item'></span>
-                            </div>
-                            <div className='progressbar'>
-                                <span style={{ width: `${12}%` }} className='progresbar__item'></span>
-                            </div>
-                            <div className='progressbar'>
-                                <span style={{ width: `${12}%` }} className='progresbar__item'></span>
-                            </div>
+                            <div className='progressbar'><span style={{ width: '45%' }} className='progresbar__item'></span></div>
+                            <div className='progressbar'><span style={{ width: '78%' }} className='progresbar__item'></span></div>
+                            <div className='progressbar'><span style={{ width: '23%' }} className='progresbar__item'></span></div>
+                            <div className='progressbar'><span style={{ width: '12%' }} className='progresbar__item'></span></div>
                         </div>
                         <div className='col__procent'>
-                            <p className='procent__item'>{`${12}%`}</p>
-                            <p className='procent__item'>{`${12}%`}</p>
-                            <p className='procent__item'>{`${12}%`}</p>
-                            <p className='procent__item'>{`${12}%`}</p>
+                            <p className='procent__item'>45%</p>
+                            <p className='procent__item'>78%</p>
+                            <p className='procent__item'>23%</p>
+                            <p className='procent__item'>12%</p>
                         </div>
                     </div>
                 </StatisticBar>
+                
                 <div className='box__button'>
                     <button 
                         className='button__fonctional' 
-                        onClick={() => handlerSearch()}
+                        onClick={handlerSearch}
                         disabled={loadSearch}
                     >
                         {loadSearch ? 'Поиск...' : 'Поиск'}
@@ -301,21 +303,41 @@ const DashBoard = () => {
                     </button>
                     <button className='button__fonctional'>Настройки</button>
                 </div>
+                
+                {responseProgress && (
+                    <div className={`response-progress ${responseProgress.status}`}>
+                        <p>{responseProgress.message}</p>
+                        {responseProgress.details && (
+                            <details>
+                                <summary>Подробнее</summary>
+                                <ul>
+                                    {responseProgress.details.map((item, i) => (
+                                        <li key={i}>
+                                            {item.title} — {item.company} — 
+                                            {item.status === 'success' ? '✅' : '❌'} {item.reason || ''}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </details>
+                        )}
+                    </div>
+                )}
+                
                 {searchResults.length > 0 && (
                     <div className="search-results">
                         <h3>Найденные вакансии:</h3>
-                        <div className='vacancy-contant'>
+                        <div className='vacancy-content'>
                             {searchResults.map((vacancy, index) => (
-                            <div key={vacancy.id || index} className="vacancy-card">
-                                <h4>{vacancy.title}</h4>
-                                <p>Компания: {vacancy.company}</p>
-                                <p>Город: {vacancy.city}</p>
-                                <p>Зарплата: {vacancy.salary || 'не указана'}</p>
-                                <a href={vacancy.url} target="_blank" rel="noopener noreferrer">
-                                    Перейти к вакансии
-                                </a>
-                            </div>
-                        ))}
+                                <div key={vacancy.id || index} className="vacancy-card">
+                                    <h4>{vacancy.title}</h4>
+                                    <p>Компания: {vacancy.company}</p>
+                                    <p>Город: {vacancy.city}</p>
+                                    <p>Зарплата: {vacancy.salary || 'не указана'}</p>
+                                    <a href={vacancy.url} target="_blank" rel="noopener noreferrer">
+                                        Перейти к вакансии
+                                    </a>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 )}

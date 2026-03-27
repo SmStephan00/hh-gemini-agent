@@ -31,7 +31,7 @@ const History = () => {
         try {
             const response = await fetch(`${API_URL}/history`)
             const data = await response.json()
-            setHistory(data.completed || [])
+            setHistory(data.all || [])
         } catch (err) {
             console.error('Ошибка:', err)
         } finally {
@@ -54,11 +54,12 @@ const History = () => {
             )
         }
 
+        // 🔥 ИСПРАВЛЕНО: status 'success' вместо 'completed'
         if (filters.status) {
             filtered = filtered.filter(item => {
-                if (filters.status === 'Успешно') return item?.status === 'completed'
+                if (filters.status === 'Успешно') return item?.status === 'success'
                 if (filters.status === 'Ошибка') return item?.status === 'failed'
-                if (filters.status === 'Пропущено') return item?.skipped === true
+                if (filters.status === 'Пропущено') return item?.status === 'skipped'
                 return true
             })
         }
@@ -91,8 +92,9 @@ const History = () => {
         setPagination(prev => ({ ...prev, currentPage: page }))
     }
 
+    // 🔥 ИСПРАВЛЕНО: status 'success' вместо 'completed'
     const getStatusBadge = (item) => {
-        if (item.status === 'completed') return { text: '✅ Успешно', class: 'success' }
+        if (item.status === 'success') return { text: '✅ Успешно', class: 'success' }
         if (item.status === 'failed') return { text: '❌ Ошибка', class: 'failed' }
         return { text: '⏭️ Пропущено', class: 'skipped' }
     }
@@ -192,6 +194,9 @@ const History = () => {
                                         {item.company}
                                     </div>
                                     <div className="text__card">
+                                        {item.salary && <span className="salary">{item.salary}</span>}
+                                    </div>
+                                    <div className="text__card">
                                         <span className={`status-badge ${status.class}`}>
                                             {status.text}
                                         </span>
@@ -259,7 +264,6 @@ const History = () => {
                 )}
             </div>
 
-            
             {selectedVacancy && (
                 <div className="modal-overlay" onClick={closeModal}>
                     <div className="modal-container" onClick={(e) => e.stopPropagation()}>
@@ -269,16 +273,18 @@ const History = () => {
                         </div>
                         
                         <div className="modal-content">
-                           
                             <div className="info-section">
                                 <h3>Вакансия</h3>
                                 <p><strong>Название:</strong> {selectedVacancy.title}</p>
                                 <p><strong>Компания:</strong> {selectedVacancy.company}</p>
                                 <p><strong>Ссылка:</strong> <a href={selectedVacancy.url} target="_blank" rel="noopener noreferrer">Перейти к вакансии</a></p>
                                 <p><strong>Дата отклика:</strong> {new Date(selectedVacancy.timestamp).toLocaleString()}</p>
-                                <p><strong>Статус:</strong> <span className={`status-badge ${selectedVacancy.status === 'completed' ? 'success' : 'failed'}`}>
-                                    {selectedVacancy.status === 'completed' ? '✅ Успешно' : '❌ Ошибка'}
-                                </span></p>
+                                <p><strong>Статус:</strong> 
+                                    <span className={`status-badge ${selectedVacancy.status === 'success' ? 'success' : selectedVacancy.status === 'failed' ? 'failed' : 'skipped'}`}>
+                                        {selectedVacancy.status === 'success' ? '✅ Успешно' : 
+                                         selectedVacancy.status === 'failed' ? '❌ Ошибка' : '⏭️ Пропущено'}
+                                    </span>
+                                </p>
                             </div>
 
                             {selectedVacancy.salary && (
@@ -305,23 +311,11 @@ const History = () => {
                                     </div>
                                 </div>
                             )}
-                            {selectedVacancy.requirements && selectedVacancy.requirements.length > 0 && (
-                                <div className="info-section">
-                                    <h3>Требования</h3>
-                                    <ul>
-                                        {selectedVacancy.requirements.map((req, i) => (
-                                            <li key={i}>{req}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-
-                        
+                            
                             <div className="info-section">
                                 <h3>Сопроводительное письмо</h3>
                                 <pre className="cover-letter">{selectedVacancy.coverLetter || 'Письмо не сохранено'}</pre>
                             </div>
-
 
                             <div className="info-section">
                                 <h3>Дополнительно</h3>
