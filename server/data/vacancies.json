@@ -1,104 +1,5 @@
 [
   {
-    "id": "131610302",
-    "title": "Frontend-разработчик",
-    "url": "https://myski.hh.ru/vacancy/131610302?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "Сбер. IT",
-    "salary": "",
-    "city": "Москва",
-    "snippet": "Анализ потребностей внешних и внутренних пользователей, выявление возможных вариантов развития систем продукта. Участие в плановом развитии систем и и формирование...",
-    "requirement": "Уверенное знание TypeScript, JavaScript (ES 6), HTML5, CSS. Хорошее знание библиотек React, React Query, MobX и опыт их использования.",
-    "fullText": "Frontend-разработчик Сбер. IT  Анализ потребностей внешних и внутренних пользователей, выявление возможных вариантов развития систем продукта. Участие в плановом развитии систем и и формирование... Уверенное знание TypeScript, JavaScript (ES 6), HTML5, CSS. Хорошее знание библиотек React, React Query, MobX и опыт их использования."
-  },
-  {
-    "id": "131568721",
-    "title": "Frontend-разработчик",
-    "url": "https://myski.hh.ru/vacancy/131568721?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО Специализированный Застройщик Железно",
-    "salary": "",
-    "city": "Киров, р-н Первомайский",
-    "snippet": "Проектировать и развивать переиспользуемые React-компоненты с масштабируемым API. Поддерживать и развивать архитектуру дизайн-токенов (CSS Variables, SCSS, CSS Layers).",
-    "requirement": "React (глубокое понимание хуков, композиции, оптимизации рендеринга, React 19). TypeScript (строгая типизация, дженерики, utility types). SCSS / CSS Modules (архитектура UI...",
-    "fullText": "Frontend-разработчик ООО Специализированный Застройщик Железно  Проектировать и развивать переиспользуемые React-компоненты с масштабируемым API. Поддерживать и развивать архитектуру дизайн-токенов (CSS Variables, SCSS, CSS Layers). React (глубокое понимание хуков, композиции, оптимизации рендеринга, React 19). TypeScript (строгая типизация, дженерики, utility types). SCSS / CSS Modules (архитектура UI..."
-  },
-  {
-    "id": "131612074",
-    "title": "Frontend Developer Финтех",
-    "url": "https://myski.hh.ru/vacancy/131612074?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО ИЦ АЙ-ТЕКО",
-    "salary": "",
-    "city": "Москва",
-    "snippet": "Занимались разработкой сложных форм с использованием валидации (Formik, RRF).",
-    "requirement": "Имеете опыт работы от 5 лет. Владеете JavaScript/ES6. Имеете опыт работы с React (v17+)/Redux или...",
-    "fullText": "Frontend Developer Финтех ООО ИЦ АЙ-ТЕКО  Занимались разработкой сложных форм с использованием валидации (Formik, RRF). Имеете опыт работы от 5 лет. Владеете JavaScript/ES6. Имеете опыт работы с React (v17+)/Redux или..."
-  },
-  {
-    "id": "131557034",
-    "title": "Frontend-разработчик (React)",
-    "url": "https://myski.hh.ru/vacancy/131557034?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "Т-Банк. ИТ. Разработка",
-    "salary": "",
-    "city": "Красноярск, р-н Советский",
-    "snippet": "Разрабатывать клиентские и внутренние интерфейсы и сопутствующие инструменты. Ревьюить код сторонних разработчиков и коллег.",
-    "requirement": "Непрерывно обучаться, совершенствовать свои знания и навыки. Отлично знаете JavaScript, есть опыт коммерческой разработки от 5 лет. Есть опыт работы...",
-    "fullText": "Frontend-разработчик (React) Т-Банк. ИТ. Разработка  Разрабатывать клиентские и внутренние интерфейсы и сопутствующие инструменты. Ревьюить код сторонних разработчиков и коллег. Непрерывно обучаться, совершенствовать свои знания и навыки. Отлично знаете JavaScript, есть опыт коммерческой разработки от 5 лет. Есть опыт работы..."
-  },
-  {
-    "id": "131591210",
-    "title": "Фронтенд-разработчик в Финтех",
-    "url": "https://myski.hh.ru/vacancy/131591210?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "Финтех",
-    "salary": "",
-    "city": "Москва",
-    "snippet": "Проектировать клиентское веб-приложение с нуля. Разрабатывать клиентскую бизнес-логику. Анализировать производительность и оптимизировать клиентское приложение. Заниматься адаптивной и кросс...",
-    "requirement": "Разрабатывали фронтенд не меньше двух лет. Отлично знаете TypeScript или JavaScript. Уверенно владеете CSS. Использовали Git или другие VCS.",
-    "fullText": "Фронтенд-разработчик в Финтех Финтех  Проектировать клиентское веб-приложение с нуля. Разрабатывать клиентскую бизнес-логику. Анализировать производительность и оптимизировать клиентское приложение. Заниматься адаптивной и кросс... Разрабатывали фронтенд не меньше двух лет. Отлично знаете TypeScript или JavaScript. Уверенно владеете CSS. Использовали Git или другие VCS."
-  },
-  {
-    "id": "131600507",
-    "title": "Middle-разработчик (Middle Frontend Developer (React / React Native)",
-    "url": "https://myski.hh.ru/vacancy/131600507?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО Арктик Катеринг Сервис",
-    "salary": "",
-    "city": "Тверь, р-н Центральный",
-    "snippet": "Медиа/утилиты: image picker, SVG/transformer, QR, HTML-render. Полное ведение фронтенда: разработка новых фич, поддержка, рефакторинг, снижение техдолга.",
-    "requirement": "Коммерческий опыт React Native от 2 лет (уровень Middle). Уверенный JavaScript/TypeScript, понимание ООП и функционального подхода. Практический опыт с...",
-    "fullText": "Middle-разработчик (Middle Frontend Developer (React / React Native) ООО Арктик Катеринг Сервис  Медиа/утилиты: image picker, SVG/transformer, QR, HTML-render. Полное ведение фронтенда: разработка новых фич, поддержка, рефакторинг, снижение техдолга. Коммерческий опыт React Native от 2 лет (уровень Middle). Уверенный JavaScript/TypeScript, понимание ООП и функционального подхода. Практический опыт с..."
-  },
-  {
-    "id": "131491503",
-    "title": "Junior/Middle Frontend Developer",
-    "url": "https://myski.hh.ru/vacancy/131491503?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО NOMADIAN",
-    "salary": "",
-    "city": "Ташкент, Мирзо-Улугбекский район, улица Аккурган, 31/1",
-    "snippet": "Develop modern, responsive web applications using React. Collaborate with backend, UI/UX, and product teams to build high-quality solutions.",
-    "requirement": "Junior: 1–2+ years, Middle: 3+ years of professional frontend development experience. Strong knowledge of JavaScript/TypeScript and...",
-    "fullText": "Junior/Middle Frontend Developer ООО NOMADIAN  Develop modern, responsive web applications using React. Collaborate with backend, UI/UX, and product teams to build high-quality solutions. Junior: 1–2+ years, Middle: 3+ years of professional frontend development experience. Strong knowledge of JavaScript/TypeScript and..."
-  },
-  {
-    "id": "131607279",
-    "title": "Программист JavaScript / Frontend – разработчик, офисный формат работы – Мытищи, р-н м. Медведково",
-    "url": "https://myski.hh.ru/vacancy/131607279?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "Мера",
-    "salary": "",
-    "city": "Мытищи, улица Колпакова, 2к13",
-    "snippet": "Участие в разработке распределённой высоконагруженной системы. Разработка интерфейса и логики работы системы на стороне браузера. Разработка и отладка высокопроизводительных элементов...",
-    "requirement": "Высшее техническое/профильное образование. Подтвержденный опыт работы от 5 лет Frontend/Fullstack - разработчиком, наличие завершенных проектов. Отличное знание и уверенное...",
-    "fullText": "Программист JavaScript / Frontend – разработчик, офисный формат работы – Мытищи, р-н м. Медведково Мера  Участие в разработке распределённой высоконагруженной системы. Разработка интерфейса и логики работы системы на стороне браузера. Разработка и отладка высокопроизводительных элементов... Высшее техническое/профильное образование. Подтвержденный опыт работы от 5 лет Frontend/Fullstack - разработчиком, наличие завершенных проектов. Отличное знание и уверенное..."
-  },
-  {
-    "id": "131605986",
-    "title": "Архитектор фронтенд-систем / Архитектор инженерных решений",
-    "url": "https://myski.hh.ru/vacancy/131605986?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО Инфолоджистикс",
-    "salary": "",
-    "city": "Москва, р-н Черёмушки",
-    "snippet": "...развивать архитектуру фронтенд-приложений компании. Принимать решения по структуре приложений, модульности, масштабированию и переиспользованию. Формировать техническое видение развития фронтенд-стека.",
-    "requirement": "Опыт коммерческой фронтенд-разработки от 5 лет. Опыт проектирования архитектуры фронтенд-систем и принятия технических решений. Очень глубокое знание JavaScript...",
-    "fullText": "Архитектор фронтенд-систем / Архитектор инженерных решений ООО Инфолоджистикс  ...развивать архитектуру фронтенд-приложений компании. Принимать решения по структуре приложений, модульности, масштабированию и переиспользованию. Формировать техническое видение развития фронтенд-стека. Опыт коммерческой фронтенд-разработки от 5 лет. Опыт проектирования архитектуры фронтенд-систем и принятия технических решений. Очень глубокое знание JavaScript..."
-  },
-  {
     "id": "131260986",
     "title": "Стажер-разработчик фронтенда",
     "url": "https://myski.hh.ru/vacancy/131260986?query=frontend&hhtmFrom=vacancy_search_list",
@@ -110,26 +11,15 @@
     "fullText": "Стажер-разработчик фронтенда Яндекс  Развивают проект «AI‑ассистент» в партнерском интерфейсе Маркета. — Работают над личным кабинетом пользователя в Яндекс ID. — Участвуют в создании интерфейсов... Уверенно знает HTML, CSS и основы JavaScript: асинхронность, типы данных, функции, контекст вызова, область видимости, замыкания, прототипы. — Имеет опыт взаимодействия..."
   },
   {
-    "id": "131400806",
-    "title": "Старший тестировщик QA manual (frontend/backend)",
-    "url": "https://myski.hh.ru/vacancy/131400806?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "БФТ-Холдинг",
+    "id": "131057271",
+    "title": "Junior Front-end Software Engineer (DaVinci)",
+    "url": "https://myski.hh.ru/vacancy/131057271?query=frontend&hhtmFrom=vacancy_search_list",
+    "company": "Syberry CIS",
     "salary": "",
-    "city": "Москва",
-    "snippet": "Анализ требований. Разработка ручных тестов. Создание коллекций автоматизированных тестов API в Postman. Создание тестовых артефактов в Jira, Zephyr. Проведение тестирования.",
-    "requirement": "Опыт работы на позиции тестировщика от 3 лет. Понимание методов и методик тестирования. Опыт ручного тестирования web-приложений (back/front).",
-    "fullText": "Старший тестировщик QA manual (frontend/backend) БФТ-Холдинг  Анализ требований. Разработка ручных тестов. Создание коллекций автоматизированных тестов API в Postman. Создание тестовых артефактов в Jira, Zephyr. Проведение тестирования. Опыт работы на позиции тестировщика от 3 лет. Понимание методов и методик тестирования. Опыт ручного тестирования web-приложений (back/front)."
-  },
-  {
-    "id": "131396562",
-    "title": "Frontend-разработчик (web-разработчик, по работе с CMS)",
-    "url": "https://myski.hh.ru/vacancy/131396562?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО Калининградские информационные технологии",
-    "salary": "",
-    "city": "Калининград, р-н Ленинградский",
-    "snippet": "Модификация существующих сайтов под разными CMS (формы, слайдеры, адаптив). Для ряда заказчиков верстаем в \"чистом\" HTML (без натяжки).",
-    "requirement": "Исполнительность, ответственность, стрессоустойчивость, обучаемость и чувство юмора. Человека ищем в офис, не удалёнка.",
-    "fullText": "Frontend-разработчик (web-разработчик, по работе с CMS) ООО Калининградские информационные технологии  Модификация существующих сайтов под разными CMS (формы, слайдеры, адаптив). Для ряда заказчиков верстаем в \"чистом\" HTML (без натяжки). Исполнительность, ответственность, стрессоустойчивость, обучаемость и чувство юмора. Человека ищем в офис, не удалёнка."
+    "city": "Минск",
+    "snippet": "Build and maintain high-quality, responsive, and user-centric frontend applications. Create high-quality code using CI/CD and TDD...",
+    "requirement": "You have 6+ months of commercial experience as a Frontend Software Engineer working with React and TypeScript.",
+    "fullText": "Junior Front-end Software Engineer (DaVinci) Syberry CIS  Build and maintain high-quality, responsive, and user-centric frontend applications. Create high-quality code using CI/CD and TDD... You have 6+ months of commercial experience as a Frontend Software Engineer working with React and TypeScript."
   },
   {
     "id": "130908977",
@@ -143,39 +33,6 @@
     "fullText": "Frontend developer (Middle/Middle+) ООО Gems development (Джемс Девелопмент)  Сборка и разработка с использованием Vite. Контейнеризация приложений (Docker). Системы контроля версий Git, командная работа по Git-flow. Вам предстоит работать с такими технологиями, как: Работа с DOM и браузерными API. Быть успешным в этой роли вам поможет..."
   },
   {
-    "id": "130994298",
-    "title": "Senior Frontend Engineer",
-    "url": "https://myski.hh.ru/vacancy/130994298?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ТРТ",
-    "salary": "",
-    "city": "Тбилиси",
-    "snippet": "Currently around 150 people.  Google Maps Platform expertise: JS API, Places, Directions/Distance Matrix; custom overlays, clustering, heatmaps; performance tuning...",
-    "requirement": "As a company, they’re obsessed with the quality of their products. They always have to be faster, easier, and...",
-    "fullText": "Senior Frontend Engineer ТРТ  Currently around 150 people.  Google Maps Platform expertise: JS API, Places, Directions/Distance Matrix; custom overlays, clustering, heatmaps; performance tuning... As a company, they’re obsessed with the quality of their products. They always have to be faster, easier, and..."
-  },
-  {
-    "id": "131041819",
-    "title": "Senior Frontend | FullStack Developer (Blockchain / Crypto)",
-    "url": "https://myski.hh.ru/vacancy/131041819?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "VELARIS MARKETING SERVICES VIA SOCIAL MEDIA L.L.C",
-    "salary": "",
-    "city": "Алматы",
-    "snippet": "Мультистековый разработчик с использованием AI-инструментов. Доработка и развитие существующих продуктов на разных стеках. Работа с криптовалютными интеграциями: блокчейн-ноды...",
-    "requirement": "О роли. Мы развиваем несколько продуктов в криптовалютной сфере — у каждого свой стек и своя специфика. Ищем опытного разработчика, на...",
-    "fullText": "Senior Frontend | FullStack Developer (Blockchain / Crypto) VELARIS MARKETING SERVICES VIA SOCIAL MEDIA L.L.C  Мультистековый разработчик с использованием AI-инструментов. Доработка и развитие существующих продуктов на разных стеках. Работа с криптовалютными интеграциями: блокчейн-ноды... О роли. Мы развиваем несколько продуктов в криптовалютной сфере — у каждого свой стек и своя специфика. Ищем опытного разработчика, на..."
-  },
-  {
-    "id": "131041820",
-    "title": "Senior Frontend | FullStack Developer (Blockchain / Crypto)",
-    "url": "https://myski.hh.ru/vacancy/131041820?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "VELARIS MARKETING SERVICES VIA SOCIAL MEDIA L.L.C",
-    "salary": "",
-    "city": "Минск",
-    "snippet": "Мультистековый разработчик с использованием AI-инструментов. Доработка и развитие существующих продуктов на разных стеках. Работа с криптовалютными интеграциями: блокчейн-ноды...",
-    "requirement": "О роли. Мы развиваем несколько продуктов в криптовалютной сфере — у каждого свой стек и своя специфика. Ищем опытного разработчика, на...",
-    "fullText": "Senior Frontend | FullStack Developer (Blockchain / Crypto) VELARIS MARKETING SERVICES VIA SOCIAL MEDIA L.L.C  Мультистековый разработчик с использованием AI-инструментов. Доработка и развитие существующих продуктов на разных стеках. Работа с криптовалютными интеграциями: блокчейн-ноды... О роли. Мы развиваем несколько продуктов в криптовалютной сфере — у каждого свой стек и своя специфика. Ищем опытного разработчика, на..."
-  },
-  {
     "id": "129973491",
     "title": "Senior Frontend Developer (разработка игр)",
     "url": "https://myski.hh.ru/vacancy/129973491?query=frontend&hhtmFrom=vacancy_search_list",
@@ -187,37 +44,15 @@
     "fullText": "Senior Frontend Developer (разработка игр) ITea RS d.o.o.  Разрабатывать архитектуру и инфраструктуру для игровых проектов — общее ядро, модули и сервисы, на которых строятся все игровые проекты. Обязательно — от 4 лет опыта в разработке интерактивных игр с элементами случайных событий. Уверенное владение TypeScript и JavaScript."
   },
   {
-    "id": "128173642",
-    "title": "Senior Frontend Developer (разработка игр)",
-    "url": "https://myski.hh.ru/vacancy/128173642?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ITea RS d.o.o.",
+    "id": "131612074",
+    "title": "Frontend Developer Финтех",
+    "url": "https://myski.hh.ru/vacancy/131612074?query=frontend&hhtmFrom=vacancy_search_list",
+    "company": "ООО ИЦ АЙ-ТЕКО",
     "salary": "",
-    "city": "Нови-Сад, бульвар Освобождения, 60А",
-    "snippet": "Разрабатывать архитектуру и инфраструктуру для игровых проектов — общее ядро, модули и сервисы, на которых строятся все игровые проекты.",
-    "requirement": "Обязательно — от 4 лет опыта в разработке интерактивных игр с элементами случайных событий. Уверенное владение TypeScript и JavaScript.",
-    "fullText": "Senior Frontend Developer (разработка игр) ITea RS d.o.o.  Разрабатывать архитектуру и инфраструктуру для игровых проектов — общее ядро, модули и сервисы, на которых строятся все игровые проекты. Обязательно — от 4 лет опыта в разработке интерактивных игр с элементами случайных событий. Уверенное владение TypeScript и JavaScript."
-  },
-  {
-    "id": "131200935",
-    "title": "Senior Front-end Developer",
-    "url": "https://myski.hh.ru/vacancy/131200935?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ТОО 5 LAB(ФАЙВ ЛАБ)",
-    "salary": "",
-    "city": "Алматы",
-    "snippet": "A rich, configurable user interface supporting industrial plant layouts and interactive charts. Development of front-end and client-server communication...",
-    "requirement": "Familiar with frontend build tools and module bundlers like Webpack. Experience with API integration and asynchronous programming. Knowledge of frontend...",
-    "fullText": "Senior Front-end Developer ТОО 5 LAB(ФАЙВ ЛАБ)  A rich, configurable user interface supporting industrial plant layouts and interactive charts. Development of front-end and client-server communication... Familiar with frontend build tools and module bundlers like Webpack. Experience with API integration and asynchronous programming. Knowledge of frontend..."
-  },
-  {
-    "id": "131554685",
-    "title": "Senior/middle frontend разработчик в компанию",
-    "url": "https://myski.hh.ru/vacancy/131554685?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО TESTBOR",
-    "salary": "",
-    "city": "Ташкент, Алмазарский район, Малая кольцевая дорога, 17",
-    "snippet": "",
-    "requirement": "Опыт работы не менее 4 лет (Reactjs).",
-    "fullText": "Senior/middle frontend разработчик в компанию ООО TESTBOR   Опыт работы не менее 4 лет (Reactjs)."
+    "city": "Москва",
+    "snippet": "Занимались разработкой сложных форм с использованием валидации (Formik, RRF).",
+    "requirement": "Имеете опыт работы от 5 лет. Владеете JavaScript/ES6. Имеете опыт работы с React (v17+)/Redux или...",
+    "fullText": "Frontend Developer Финтех ООО ИЦ АЙ-ТЕКО  Занимались разработкой сложных форм с использованием валидации (Formik, RRF). Имеете опыт работы от 5 лет. Владеете JavaScript/ES6. Имеете опыт работы с React (v17+)/Redux или..."
   },
   {
     "id": "131430511",
@@ -231,72 +66,6 @@
     "fullText": "Frontend-разработчик ООО Инспирэйшн Пойнт  Разрабатывать фронтенд для новых модулей системы. Реализовывать интерфейсы по готовому дизайну в Figma. Интегрироваться с REST API (всё задокументировано). Опыт разработки интерфейсов для спорта, соревнований, аналитики. Понимание принципов оптимизации производительности фронтенда. Опыт работы в небольших продуктовых командах."
   },
   {
-    "id": "131599829",
-    "title": "Frontend-разработчик (React)",
-    "url": "https://myski.hh.ru/vacancy/131599829?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "Стратосфера",
-    "salary": "",
-    "city": "Санкт-Петербург",
-    "snippet": "Анализ данных проекта для определения спецификаций и требований. Документирование процедур проектирования и разработки. Написание программного кода. Обеспечение качества разрабатываемого программного...",
-    "requirement": "Профильный опыт от 3–5 лет. Высшее образование (техническая специализация). Уверенные знания: JavaScript, TypeScript, React, Node.js, HTML5, CSS, Sass...",
-    "fullText": "Frontend-разработчик (React) Стратосфера  Анализ данных проекта для определения спецификаций и требований. Документирование процедур проектирования и разработки. Написание программного кода. Обеспечение качества разрабатываемого программного... Профильный опыт от 3–5 лет. Высшее образование (техническая специализация). Уверенные знания: JavaScript, TypeScript, React, Node.js, HTML5, CSS, Sass..."
-  },
-  {
-    "id": "131589242",
-    "title": "Middle React Frontend Разработчик",
-    "url": "https://myski.hh.ru/vacancy/131589242?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО Твоё Лайв",
-    "salary": "",
-    "city": "Москва",
-    "snippet": "Разработка новых и поддержка существующих пользовательских интерфейсов на сайте. Оптимизация производительности и скорости загрузки веб-приложения. Внимательная верстка с соблюдением...",
-    "requirement": "Опыт коммерческой разработки на React/Next.js от 3 лет. Глубокое понимание TypeScript. Опыт работы с Redux Toolkit (RTK) и RTK...",
-    "fullText": "Middle React Frontend Разработчик ООО Твоё Лайв  Разработка новых и поддержка существующих пользовательских интерфейсов на сайте. Оптимизация производительности и скорости загрузки веб-приложения. Внимательная верстка с соблюдением... Опыт коммерческой разработки на React/Next.js от 3 лет. Глубокое понимание TypeScript. Опыт работы с Redux Toolkit (RTK) и RTK..."
-  },
-  {
-    "id": "131572681",
-    "title": "Frontend Engineer",
-    "url": "https://myski.hh.ru/vacancy/131572681?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО Серверные Технологии",
-    "salary": "",
-    "city": "Москва",
-    "snippet": "Разрабатывать и поддерживать качественные UI‑компоненты. Разрабатывать AI‑интерфейсы. Интегрировать AI‑API (OpenAI, Claude, Codex и др.) в продукт, обеспечивая...",
-    "requirement": "Отличное знание JavaScript (ES6+). Подтверждённый опыт работы с React (опыт работы с Next.js будет преимуществом). Опыт интеграции API...",
-    "fullText": "Frontend Engineer ООО Серверные Технологии  Разрабатывать и поддерживать качественные UI‑компоненты. Разрабатывать AI‑интерфейсы. Интегрировать AI‑API (OpenAI, Claude, Codex и др.) в продукт, обеспечивая... Отличное знание JavaScript (ES6+). Подтверждённый опыт работы с React (опыт работы с Next.js будет преимуществом). Опыт интеграции API..."
-  },
-  {
-    "id": "131558606",
-    "title": "Frontend Developer (Middle)",
-    "url": "https://myski.hh.ru/vacancy/131558606?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "АО Банк ЦентрКредит",
-    "salary": "",
-    "city": "Алматы",
-    "snippet": "Создавать и поддерживать UI-компоненты и дизайн-системы с учётом адаптивности и accessibility. Интегрировать фронтенд с backend (REST API, управление...",
-    "requirement": "Опыт во фронтенде от 2-х лет (желательно FinTech/банки). Уверенные знания JavaScript (ES6+) и TypeScript.",
-    "fullText": "Frontend Developer (Middle) АО Банк ЦентрКредит  Создавать и поддерживать UI-компоненты и дизайн-системы с учётом адаптивности и accessibility. Интегрировать фронтенд с backend (REST API, управление... Опыт во фронтенде от 2-х лет (желательно FinTech/банки). Уверенные знания JavaScript (ES6+) и TypeScript."
-  },
-  {
-    "id": "131520574",
-    "title": "Frontend-разработчик",
-    "url": "https://myski.hh.ru/vacancy/131520574?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "StudyWorld",
-    "salary": "",
-    "city": "Санкт-Петербург",
-    "snippet": "Разработка и поддержка сайта одного из ключевых проектов компании. Оптимизация производительности и загрузки (lazy loading, code splitting, анализ Lighthouse/PageSpeed...",
-    "requirement": "Опыт работы с gRPC / Connect Protocol / protobuf на фронтенде. Навыки написания тестов (unit, integration — Vitest). Опыт работы с SSE-протоколом...",
-    "fullText": "Frontend-разработчик StudyWorld  Разработка и поддержка сайта одного из ключевых проектов компании. Оптимизация производительности и загрузки (lazy loading, code splitting, анализ Lighthouse/PageSpeed... Опыт работы с gRPC / Connect Protocol / protobuf на фронтенде. Навыки написания тестов (unit, integration — Vitest). Опыт работы с SSE-протоколом..."
-  },
-  {
-    "id": "131563486",
-    "title": "Frontend React разработчик",
-    "url": "https://myski.hh.ru/vacancy/131563486?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ФинГрад",
-    "salary": "",
-    "city": "Москва",
-    "snippet": "Разработка frontend'а веб-приложения. Оптимизация производительности приложения. Тестирование, отладка и исправление багов. Взаимодействие с backend разработчиками.",
-    "requirement": "Опыт разработки на React и TypeScript от 3 лет. Навыки оптимизации производительности фронтенда веб-приложений. Опыт написания спецификаций на API...",
-    "fullText": "Frontend React разработчик ФинГрад  Разработка frontend'а веб-приложения. Оптимизация производительности приложения. Тестирование, отладка и исправление багов. Взаимодействие с backend разработчиками. Опыт разработки на React и TypeScript от 3 лет. Навыки оптимизации производительности фронтенда веб-приложений. Опыт написания спецификаций на API..."
-  },
-  {
     "id": "131550089",
     "title": "Frontend-разработчик React middle",
     "url": "https://myski.hh.ru/vacancy/131550089?query=frontend&hhtmFrom=vacancy_search_list",
@@ -306,50 +75,6 @@
     "snippet": "Создание веб-приложений и поддержка компонентной базы, обмен данными с серверной частью с помощью REST API/GraphQL. Создание новых функций...",
     "requirement": "Знание JavaScript/React. Опыт от 2 лет. HTML/CSS. NextJS/React/React-Native/MobХ. HTML/CSS (PostCSS).",
     "fullText": "Frontend-разработчик React middle А-Я Академия  Создание веб-приложений и поддержка компонентной базы, обмен данными с серверной частью с помощью REST API/GraphQL. Создание новых функций... Знание JavaScript/React. Опыт от 2 лет. HTML/CSS. NextJS/React/React-Native/MobХ. HTML/CSS (PostCSS)."
-  },
-  {
-    "id": "131547219",
-    "title": "Frontend разработчик",
-    "url": "https://myski.hh.ru/vacancy/131547219?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО Моторика",
-    "salary": "",
-    "city": "Москва, р-н Можайский",
-    "snippet": "Разработка клиентской части на React+TypeScript. Интеграция с бэкендом по REST API. Написание тестов на разработанный код.",
-    "requirement": "Опыт разработки от 2 лет. Уверенный TypeScript. Redux Toolkit + RTK Query. Опыт с Ant Design или любой другой UI...",
-    "fullText": "Frontend разработчик ООО Моторика  Разработка клиентской части на React+TypeScript. Интеграция с бэкендом по REST API. Написание тестов на разработанный код. Опыт разработки от 2 лет. Уверенный TypeScript. Redux Toolkit + RTK Query. Опыт с Ant Design или любой другой UI..."
-  },
-  {
-    "id": "131564995",
-    "title": "Senior Frontend-разработчик (React)",
-    "url": "https://myski.hh.ru/vacancy/131564995?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО ОТР",
-    "salary": "",
-    "city": "Москва",
-    "snippet": "Проектирование и разработка фронтенд-архитектуры с нуля. Создание библиотеки компонентов на основе Web Components + React. Интеграция с Java-бэкендом...",
-    "requirement": "Архитектурное мышление и способность принимать технические решения. Проактивность и ответственность за результат. Лидерский потенциал и готовность развивать команду.",
-    "fullText": "Senior Frontend-разработчик (React) ООО ОТР  Проектирование и разработка фронтенд-архитектуры с нуля. Создание библиотеки компонентов на основе Web Components + React. Интеграция с Java-бэкендом... Архитектурное мышление и способность принимать технические решения. Проактивность и ответственность за результат. Лидерский потенциал и готовность развивать команду."
-  },
-  {
-    "id": "131580078",
-    "title": "Frontend-разработчик",
-    "url": "https://myski.hh.ru/vacancy/131580078?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО ИЦ АЙ-ТЕКО",
-    "salary": "",
-    "city": "Москва",
-    "snippet": "Разработка с нуля и поддержка высоконагруженных frontend-приложений для внутренних цифровых продуктов банка. Интеграция с микросервисной архитектурой бэкенда: работа с...",
-    "requirement": "5+ лет коммерческой разработки фронтенда. TypeScript: уверенное владение (типизация сложных сущностей, generic-ы, утилитарные типы). Мы не пишем на...",
-    "fullText": "Frontend-разработчик ООО ИЦ АЙ-ТЕКО  Разработка с нуля и поддержка высоконагруженных frontend-приложений для внутренних цифровых продуктов банка. Интеграция с микросервисной архитектурой бэкенда: работа с... 5+ лет коммерческой разработки фронтенда. TypeScript: уверенное владение (типизация сложных сущностей, generic-ы, утилитарные типы). Мы не пишем на..."
-  },
-  {
-    "id": "131556609",
-    "title": "Frontend-разработчик",
-    "url": "https://myski.hh.ru/vacancy/131556609?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО ИЦ АЙ-ТЕКО",
-    "salary": "",
-    "city": "Москва",
-    "snippet": "Создание и поддержка фронтэнд-приложений для цифровых продуктов банка (внутренние сервисы). Интеграция фронтенда с микросервисами на бэкенде. Реализация UI-компонентов...",
-    "requirement": "Архитектурные подходы: знакомство с паттернами проектирования для фронтенда (MVVM, MVC, Flux); применение композиционной модели компонента. UI-фреймворки: обширный опыт работы...",
-    "fullText": "Frontend-разработчик ООО ИЦ АЙ-ТЕКО  Создание и поддержка фронтэнд-приложений для цифровых продуктов банка (внутренние сервисы). Интеграция фронтенда с микросервисами на бэкенде. Реализация UI-компонентов... Архитектурные подходы: знакомство с паттернами проектирования для фронтенда (MVVM, MVC, Flux); применение композиционной модели компонента. UI-фреймворки: обширный опыт работы..."
   },
   {
     "id": "131468442",
@@ -363,39 +88,6 @@
     "fullText": "Frontend-разработчик, Маркетплейс, WebCRM Ozon Tech  А именно: автоматизируем стратегии взаимодействия с клиентами. Улучшаем обслуживание, сохраняем историю взаимоотношений с клиентами, улучшаем бизнес-процессы, анализируем результаты. Опыт разработки на JavaScript от 3х лет. Знание JavaScript/TypeScript/HTML/CSS/Git. Опыт разработки на React от года."
   },
   {
-    "id": "131591464",
-    "title": "Frontend-разработчик (React / Canvas2D) — Delta Plus (Fintech Startup)",
-    "url": "https://myski.hh.ru/vacancy/131591464?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "Delta Plus",
-    "salary": "",
-    "city": "Астана",
-    "snippet": "Ключевой критерий отбора: - Полный фокус на фронтенде — бэкенд развивается отдельно, переключений контекста нет. - Команда 5 человек, русско- и англоязычная среда.",
-    "requirement": "Чем будешь заниматься: Обязательно: - Уверенный React + TypeScript — хуки, оптимизация производительности, memo/callback дисциплина. - Опыт с data-heavy интерфейсами — финансовые...",
-    "fullText": "Frontend-разработчик (React / Canvas2D) — Delta Plus (Fintech Startup) Delta Plus  Ключевой критерий отбора: - Полный фокус на фронтенде — бэкенд развивается отдельно, переключений контекста нет. - Команда 5 человек, русско- и англоязычная среда. Чем будешь заниматься: Обязательно: - Уверенный React + TypeScript — хуки, оптимизация производительности, memo/callback дисциплина. - Опыт с data-heavy интерфейсами — финансовые..."
-  },
-  {
-    "id": "131568002",
-    "title": "Senior Frontend Developer (React, AI-driven)/ part-time",
-    "url": "https://myski.hh.ru/vacancy/131568002?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "Netwrk",
-    "salary": "",
-    "city": "Москва",
-    "snippet": "Качество кода. 5+ лет коммерческой frontend-разработки. Ключевой стек. Frontend: Проектировать архитектуру frontend-приложений. Разделять слои: domain / UI / infrastructure.",
-    "requirement": "Ускоряет разработку за счёт AI. Скорость delivery. 3+ года с React в production. Опыт работы с реальными пользователями, а...",
-    "fullText": "Senior Frontend Developer (React, AI-driven)/ part-time Netwrk  Качество кода. 5+ лет коммерческой frontend-разработки. Ключевой стек. Frontend: Проектировать архитектуру frontend-приложений. Разделять слои: domain / UI / infrastructure. Ускоряет разработку за счёт AI. Скорость delivery. 3+ года с React в production. Опыт работы с реальными пользователями, а..."
-  },
-  {
-    "id": "130830307",
-    "title": "Ведущий Frontend разработчик (направление АСУ ТП)",
-    "url": "https://myski.hh.ru/vacancy/130830307?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО Транснефть-Технологии",
-    "salary": "",
-    "city": "Москва",
-    "snippet": "Разработка и сопровождение множества UI-систем. Командное планирование с лидом (спринт, среднесрочные задачи). Исправление дефектов. Устранение замечаний от заказчика и...",
-    "requirement": "Опыт работы с React, Typescript. Опыт работы с библиотеками для интерактивных графиков и визуализаций (D3.js, Three.js, Pixi.js, Konva.js).",
-    "fullText": "Ведущий Frontend разработчик (направление АСУ ТП) ООО Транснефть-Технологии  Разработка и сопровождение множества UI-систем. Командное планирование с лидом (спринт, среднесрочные задачи). Исправление дефектов. Устранение замечаний от заказчика и... Опыт работы с React, Typescript. Опыт работы с библиотеками для интерактивных графиков и визуализаций (D3.js, Three.js, Pixi.js, Konva.js)."
-  },
-  {
     "id": "131027419",
     "title": "Frontend-разработчик для 3D-конструктора мебели",
     "url": "https://myski.hh.ru/vacancy/131027419?query=frontend&hhtmFrom=vacancy_search_list",
@@ -407,190 +99,69 @@
     "fullText": "Frontend-разработчик для 3D-конструктора мебели Привет макет  дорабатывать интерфейс и взаимодействие элементов. — работать с API бэкенда (PHP). — иногда помогать с интеграцией фронта и бэка. Взаимодействие с ИИ. разбираться в существующем JavaScript-коде конструктора. — находить и исправлять баги. Уверенный JavaScript. Умение разбираться в чужом коде. Аккуратность и внимательность."
   },
   {
-    "id": "131202035",
-    "title": "Frontend разработчик (Middle)",
-    "url": "https://myski.hh.ru/vacancy/131202035?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ТОО Small, ТМ (Скиф Трейд, ТОО)",
+    "id": "129269453",
+    "title": "Senior/Middle Frontend Developer (Native JavaScript)",
+    "url": "https://myski.hh.ru/vacancy/129269453?query=frontend&hhtmFrom=vacancy_search_list",
+    "company": "Битрикс24",
     "salary": "",
-    "city": "Алматы",
-    "snippet": "Оптимизировать сборочные процессы и ускорять CI/CD для фронтенда. Постоянно улучшать качество кода: тестировать, рефакторить, внедрять best practices и современные...",
-    "requirement": "Хорошее знание архитектуры современных браузеров и принципов рендеринга. Навыки профилирования и оптимизации производительности фронтенда на уровне приложения и инструментов сборки.",
-    "fullText": "Frontend разработчик (Middle) ТОО Small, ТМ (Скиф Трейд, ТОО)  Оптимизировать сборочные процессы и ускорять CI/CD для фронтенда. Постоянно улучшать качество кода: тестировать, рефакторить, внедрять best practices и современные... Хорошее знание архитектуры современных браузеров и принципов рендеринга. Навыки профилирования и оптимизации производительности фронтенда на уровне приложения и инструментов сборки."
+    "city": "Москва, р-н Таганский",
+    "snippet": "Разрабатывать пользовательские интерфейсы приложений и сервисов. Писать безопасный, производительный и архитектурный код на нашем стеке технологий. Улучшать существующие интерфейсы, оптимизировать...",
+    "requirement": "Стремились учиться и развиваться. Интересуетесь новыми технологиями во фронтенде. Представляете, как устроены современные фреймворки и библиотеки изнутри. Знакомы с инструментами...",
+    "fullText": "Senior/Middle Frontend Developer (Native JavaScript) Битрикс24  Разрабатывать пользовательские интерфейсы приложений и сервисов. Писать безопасный, производительный и архитектурный код на нашем стеке технологий. Улучшать существующие интерфейсы, оптимизировать... Стремились учиться и развиваться. Интересуетесь новыми технологиями во фронтенде. Представляете, как устроены современные фреймворки и библиотеки изнутри. Знакомы с инструментами..."
   },
   {
-    "id": "131147204",
+    "id": "130895722",
     "title": "Frontend-разработчик",
-    "url": "https://myski.hh.ru/vacancy/131147204?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО DATA EXCELLENCE GROUP",
+    "url": "https://myski.hh.ru/vacancy/130895722?query=frontend&hhtmFrom=vacancy_search_list",
+    "company": "ИП Веб-студия Dancecolor (Макаренков Д. А.)",
     "salary": "",
-    "city": "Ташкент, улица Тараса Шевченко, 21А",
-    "snippet": "Участвовать в проектировании архитектуры и принятии технических решений. Frontend-разработкой интерфейсов проектов (ERP система, веб и мобильные приложения).",
-    "requirement": "От 4 лет профессионального опыта в разработке frontend. Углубленная экспертиза в React и Next.js для веб-приложений. Базовый опыт или...",
-    "fullText": "Frontend-разработчик ООО DATA EXCELLENCE GROUP  Участвовать в проектировании архитектуры и принятии технических решений. Frontend-разработкой интерфейсов проектов (ERP система, веб и мобильные приложения). От 4 лет профессионального опыта в разработке frontend. Углубленная экспертиза в React и Next.js для веб-приложений. Базовый опыт или..."
+    "city": "Смоленск, р-н Ленинский",
+    "snippet": "Программирование клиентской логики на JavaScript/TypeScript. — Участие в разработке и поддержке проектов с использованием современных фреймворков. — Тесная работа в команде...",
+    "requirement": "Хорошо понимает JavaScript и имеет практический опыт. — Стремится развиваться в области фронтенд-разработки, изучать новые технологии. — Умеет работать в команде...",
+    "fullText": "Frontend-разработчик ИП Веб-студия Dancecolor (Макаренков Д. А.)  Программирование клиентской логики на JavaScript/TypeScript. — Участие в разработке и поддержке проектов с использованием современных фреймворков. — Тесная работа в команде... Хорошо понимает JavaScript и имеет практический опыт. — Стремится развиваться в области фронтенд-разработки, изучать новые технологии. — Умеет работать в команде..."
   },
   {
-    "id": "131122938",
-    "title": "Frontend Developer (React)",
-    "url": "https://myski.hh.ru/vacancy/131122938?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО «Баланс-Платформа»",
-    "salary": "",
-    "city": "Москва, р-н Тверской",
-    "snippet": "Разработка интерфейсов на React/TypeScript с использованием MUI, Redux Toolkit, React Hook Form, React-Query. Написание unit-тестов (Jest, React...",
-    "requirement": "Законченное высшее образование. Знание Git (GitFlow), опыт код-ревью. Опыт с React от 2+ лет и TypeScript от 2...",
-    "fullText": "Frontend Developer (React) ООО «Баланс-Платформа»  Разработка интерфейсов на React/TypeScript с использованием MUI, Redux Toolkit, React Hook Form, React-Query. Написание unit-тестов (Jest, React... Законченное высшее образование. Знание Git (GitFlow), опыт код-ревью. Опыт с React от 2+ лет и TypeScript от 2..."
-  },
-  {
-    "id": "131099111",
-    "title": "Middle Frontend Developer",
-    "url": "https://myski.hh.ru/vacancy/131099111?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО ДжазТим",
-    "salary": "",
-    "city": "Минск",
-    "snippet": "UI компонент (фронтенд часть (React)). BFF компонент (Backend For Frontend (Spring)). RPA Hub (Spring). Hub (Spring). Стабилизация. Текущая версия UI...",
-    "requirement": "Английский язык не ниже Intermediate. Опыт работы с современными сборщиками и инструментами фронтенда (например Vite, Webpack и др.).",
-    "fullText": "Middle Frontend Developer ООО ДжазТим  UI компонент (фронтенд часть (React)). BFF компонент (Backend For Frontend (Spring)). RPA Hub (Spring). Hub (Spring). Стабилизация. Текущая версия UI... Английский язык не ниже Intermediate. Опыт работы с современными сборщиками и инструментами фронтенда (например Vite, Webpack и др.)."
-  },
-  {
-    "id": "115794035",
-    "title": "Senior frontend-разработчик",
-    "url": "https://myski.hh.ru/vacancy/115794035?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО Бизнес Технологии",
-    "salary": "",
-    "city": "Санкт-Петербург, р-н Приморский",
-    "snippet": "Сервер приложений Global ERP является средой выполнения логики бизнес-приложений, написанных на языке Scala. Сервер написан на языке Java, JS...",
-    "requirement": "Значительный опыт работы (более 6 лет) в области frontend или fullstack разработки с решением обширных задач. — Уверенное владение основными веб...",
-    "fullText": "Senior frontend-разработчик ООО Бизнес Технологии  Сервер приложений Global ERP является средой выполнения логики бизнес-приложений, написанных на языке Scala. Сервер написан на языке Java, JS... Значительный опыт работы (более 6 лет) в области frontend или fullstack разработки с решением обширных задач. — Уверенное владение основными веб..."
-  },
-  {
-    "id": "131081682",
-    "title": "Frontend-разработчик (React / Next.js)",
-    "url": "https://myski.hh.ru/vacancy/131081682?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "Digital-агентство Very-Good.ru",
-    "salary": "",
-    "city": "Краснодар, р-н Прикубанский",
-    "snippet": "Участвовать в проектировании архитектуры фронтенда и выборе инструментов. Работать над новым функционалом и рефакторингом существующего кода. Интегрировать REST API, которые...",
-    "requirement": "Уверенно работаете с React. Имеете коммерческий опыт с Next.js. Пишете чистый код на TypeScript. Работали с RTK Query (или другим...",
-    "fullText": "Frontend-разработчик (React / Next.js) Digital-агентство Very-Good.ru  Участвовать в проектировании архитектуры фронтенда и выборе инструментов. Работать над новым функционалом и рефакторингом существующего кода. Интегрировать REST API, которые... Уверенно работаете с React. Имеете коммерческий опыт с Next.js. Пишете чистый код на TypeScript. Работали с RTK Query (или другим..."
-  },
-  {
-    "id": "130536829",
-    "title": "Middle+/Senior Frontend-разработчик (GigaChat Enterprise)",
-    "url": "https://myski.hh.ru/vacancy/130536829?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО Салют для Бизнеса",
+    "id": "130885789",
+    "title": "Ведущий фронтенд-разработчик (React)",
+    "url": "https://myski.hh.ru/vacancy/130885789?query=frontend&hhtmFrom=vacancy_search_list",
+    "company": "AWX Solutions FZ-LLC",
     "salary": "",
     "city": "Москва",
-    "snippet": "Разработка: от исследования до прода, включая совместную с командой проработку архитектуры, выбор подходов и библиотек, декомпозицию задач. Поддержка и развитие...",
-    "requirement": "Понимание паттернов проектирования (композиция, HOC, render props, compound components). CI/CD — понимание пайплайнов, деплоя фронтенда. Знание основ Docker/Docker Compose...",
-    "fullText": "Middle+/Senior Frontend-разработчик (GigaChat Enterprise) ООО Салют для Бизнеса  Разработка: от исследования до прода, включая совместную с командой проработку архитектуры, выбор подходов и библиотек, декомпозицию задач. Поддержка и развитие... Понимание паттернов проектирования (композиция, HOC, render props, compound components). CI/CD — понимание пайплайнов, деплоя фронтенда. Знание основ Docker/Docker Compose..."
+    "snippet": "Выстраивание культуры качества кода, стандартов разработки и процессов на фронтенде. Формирование и развитие кросс-функциональной команды: участие в активном найме...",
+    "requirement": "...или проектах с высокими требованиями к безопасности. Понимаешь, как устроен бэкенд, умеешь читать чужой код. Настраивал CI/CD для фронтенда.",
+    "fullText": "Ведущий фронтенд-разработчик (React) AWX Solutions FZ-LLC  Выстраивание культуры качества кода, стандартов разработки и процессов на фронтенде. Формирование и развитие кросс-функциональной команды: участие в активном найме... ...или проектах с высокими требованиями к безопасности. Понимаешь, как устроен бэкенд, умеешь читать чужой код. Настраивал CI/CD для фронтенда."
   },
   {
-    "id": "130011937",
-    "title": "Fullstack/Frontend-разработчик",
-    "url": "https://myski.hh.ru/vacancy/130011937?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "Mediascope",
+    "id": "128393742",
+    "title": "Team lead команды frontend разработчиков (направление \"игры\")",
+    "url": "https://myski.hh.ru/vacancy/128393742?query=frontend&hhtmFrom=vacancy_search_list",
+    "company": "Okko",
     "salary": "",
     "city": "Москва",
-    "snippet": "Работа над конкретным продуктом. Разработка и развитие пользовательского интерфейса, основное направление. Интеграция с backend-сервисами. Доработка существующих Java-сервисов.",
-    "requirement": "ReactJS — уверенная разработка SPA. TypeScript — занание и умение писать строго типизированный код, понимание generics, utility types. MobX — управление состоянием, архитектура...",
-    "fullText": "Fullstack/Frontend-разработчик Mediascope  Работа над конкретным продуктом. Разработка и развитие пользовательского интерфейса, основное направление. Интеграция с backend-сервисами. Доработка существующих Java-сервисов. ReactJS — уверенная разработка SPA. TypeScript — занание и умение писать строго типизированный код, понимание generics, utility types. MobX — управление состоянием, архитектура..."
+    "snippet": "Управлять командой разработки из 2 человек, быть ответственным за работу команды (code review, декомпозиция задач, управление приоритетами). Участвовать в проектировании...",
+    "requirement": "Опыт разработки на Javascript, TypeScript уровне senior. Важен опыт разработки игр! Опыт работы в должности тимлида от 1 года.",
+    "fullText": "Team lead команды frontend разработчиков (направление \"игры\") Okko  Управлять командой разработки из 2 человек, быть ответственным за работу команды (code review, декомпозиция задач, управление приоритетами). Участвовать в проектировании... Опыт разработки на Javascript, TypeScript уровне senior. Важен опыт разработки игр! Опыт работы в должности тимлида от 1 года."
   },
   {
-    "id": "130568817",
-    "title": "Middle Frontend ReactJS Developer",
-    "url": "https://myski.hh.ru/vacancy/130568817?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО Транснефть-Технологии",
+    "id": "130329550",
+    "title": "Lead Frontend Engineer",
+    "url": "https://myski.hh.ru/vacancy/130329550?query=frontend&hhtmFrom=vacancy_search_list",
+    "company": "FIX",
     "salary": "",
     "city": "Москва",
-    "snippet": "Разработка на ReactJS фронтенда корпоративных информационных систем. Сопровождение и развитие React Native существующего корпоративного мобильного приложения (Android). Участие в выборе...",
-    "requirement": "React. JavaScript. HTML5/CSS3/SCSS. Git. Законченное высшее образование. React.js, TypeScript, понимание и умение работать с SPA, понимание...",
-    "fullText": "Middle Frontend ReactJS Developer ООО Транснефть-Технологии  Разработка на ReactJS фронтенда корпоративных информационных систем. Сопровождение и развитие React Native существующего корпоративного мобильного приложения (Android). Участие в выборе... React. JavaScript. HTML5/CSS3/SCSS. Git. Законченное высшее образование. React.js, TypeScript, понимание и умение работать с SPA, понимание..."
+    "snippet": "Участвовать в создании продукта от идеи до финальной реализации и развёртывания. Тесно взаимодействовать с продакт-менеджерами, дизайнерами, бэкенд-разработчиками, DevOps...",
+    "requirement": "Имеет опыт работы на позиции Frontend Developer не менее 6 лет и не менее 3 лет на позиции tech/team...",
+    "fullText": "Lead Frontend Engineer FIX  Участвовать в создании продукта от идеи до финальной реализации и развёртывания. Тесно взаимодействовать с продакт-менеджерами, дизайнерами, бэкенд-разработчиками, DevOps... Имеет опыт работы на позиции Frontend Developer не менее 6 лет и не менее 3 лет на позиции tech/team..."
   },
   {
-    "id": "131089275",
-    "title": "Tech Lead Frontend",
-    "url": "https://myski.hh.ru/vacancy/131089275?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "Sapiens solutions",
-    "salary": "",
-    "city": "Москва",
-    "snippet": "Управление командой из нескольких Frontend-разработчиков. Развитие команды. Обеспечение соблюдения стандартов кодирования, архитектурных паттернов и стилевых гайдов во фронтенд-части.",
-    "requirement": "Коммерческий опыт работы в роли Frontend-разработчика от 5 лет. Желание развиваться в роли Tech Lead. Опыт работы с React...",
-    "fullText": "Tech Lead Frontend Sapiens solutions  Управление командой из нескольких Frontend-разработчиков. Развитие команды. Обеспечение соблюдения стандартов кодирования, архитектурных паттернов и стилевых гайдов во фронтенд-части. Коммерческий опыт работы в роли Frontend-разработчика от 5 лет. Желание развиваться в роли Tech Lead. Опыт работы с React..."
-  },
-  {
-    "id": "131055220",
-    "title": "React-разработчик (frontend)",
-    "url": "https://myski.hh.ru/vacancy/131055220?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "OGNIVO Studio",
+    "id": "130954081",
+    "title": "Старший Frontend-разработчик в команду Сообществ",
+    "url": "https://myski.hh.ru/vacancy/130954081?query=frontend&hhtmFrom=vacancy_search_list",
+    "company": "VK, ВКонтакте",
     "salary": "",
     "city": "Санкт-Петербург",
-    "snippet": "Верстка и внедрение личного кабинета пользователя на существующем сайте по готовому дизайн-макету. Создание и интеграция форм обратной связи.",
-    "requirement": "Опыт коммерческой разработки на React от 3 лет. Отличное знание JavaScript (ES6+), понимание принципов SPA. Уверенное владение HTML...",
-    "fullText": "React-разработчик (frontend) OGNIVO Studio  Верстка и внедрение личного кабинета пользователя на существующем сайте по готовому дизайн-макету. Создание и интеграция форм обратной связи. Опыт коммерческой разработки на React от 3 лет. Отличное знание JavaScript (ES6+), понимание принципов SPA. Уверенное владение HTML..."
-  },
-  {
-    "id": "130935810",
-    "title": "Frontend developer (React)",
-    "url": "https://myski.hh.ru/vacancy/130935810?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "Decart IT-production",
-    "salary": "",
-    "city": "Санкт-Петербург",
-    "snippet": "Разработка проектов с использованием React. Доработка готовых проектов (исправление багов, расширение функциональности). Миграция функционала из старой системы в новую, при...",
-    "requirement": "Что нужно уметь, знать, какими навыками обладать: Опыт коммерческой frontend-разработки от 4 лет. Умение верстать адаптивные и кроссбраузерные интерфейсы.",
-    "fullText": "Frontend developer (React) Decart IT-production  Разработка проектов с использованием React. Доработка готовых проектов (исправление багов, расширение функциональности). Миграция функционала из старой системы в новую, при... Что нужно уметь, знать, какими навыками обладать: Опыт коммерческой frontend-разработки от 4 лет. Умение верстать адаптивные и кроссбраузерные интерфейсы."
-  },
-  {
-    "id": "130981131",
-    "title": "Frontend-разработчик (Middle, React)",
-    "url": "https://myski.hh.ru/vacancy/130981131?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "R-Style Softlab (Эр-Стайл Софтлаб)",
-    "salary": "",
-    "city": "Москва",
-    "snippet": "Разрабатывать продукт, построенный на React. Активно вовлекаться в разработку тестов и внедрение лучших практик тестирования. Проводить ревью кода.",
-    "requirement": "Хорошие знания JavaScript. Знания преимуществ TypeScript и симпатии к данной технологии. Навыки построения расширяемой архитектуры Web-приложений. Опыт работы с...",
-    "fullText": "Frontend-разработчик (Middle, React) R-Style Softlab (Эр-Стайл Софтлаб)  Разрабатывать продукт, построенный на React. Активно вовлекаться в разработку тестов и внедрение лучших практик тестирования. Проводить ревью кода. Хорошие знания JavaScript. Знания преимуществ TypeScript и симпатии к данной технологии. Навыки построения расширяемой архитектуры Web-приложений. Опыт работы с..."
-  },
-  {
-    "id": "130938005",
-    "title": "Frontend-разработчик (Basis Automation Studio)",
-    "url": "https://myski.hh.ru/vacancy/130938005?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО БАЗИС",
-    "salary": "",
-    "city": "Москва",
-    "snippet": "Разработка пользовательских интерфейсов. Интеграция с бэкендом через REST API. Поддержка и доработка существующего функционала. Взаимодействие с другими членами команды.",
-    "requirement": "Уверенное владение TypeScript и React. Опыт работы с Redux или аналогичным state manager. Опыт работы с системами контроля версий (Git).",
-    "fullText": "Frontend-разработчик (Basis Automation Studio) ООО БАЗИС  Разработка пользовательских интерфейсов. Интеграция с бэкендом через REST API. Поддержка и доработка существующего функционала. Взаимодействие с другими членами команды. Уверенное владение TypeScript и React. Опыт работы с Redux или аналогичным state manager. Опыт работы с системами контроля версий (Git)."
-  },
-  {
-    "id": "130686664",
-    "title": "Senior frontend developer React AI-native / AI-native JS React Разработчик",
-    "url": "https://myski.hh.ru/vacancy/130686664?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "Novakid Inc",
-    "salary": "",
-    "city": "Санкт-Петербург",
-    "snippet": "Разработка новых функций, ориентированных на пользователя, с использованием React и TypeScript. Преобразование дизайна и каркасов в высококачественный код.",
-    "requirement": "AI-Native Development Skills. Communication Skills. Fluent or professionally proficient in English. Более 5 лет опыта работы в качестве разработчика...",
-    "fullText": "Senior frontend developer React AI-native / AI-native JS React Разработчик Novakid Inc  Разработка новых функций, ориентированных на пользователя, с использованием React и TypeScript. Преобразование дизайна и каркасов в высококачественный код. AI-Native Development Skills. Communication Skills. Fluent or professionally proficient in English. Более 5 лет опыта работы в качестве разработчика..."
-  },
-  {
-    "id": "131159444",
-    "title": "Strong Middle/Senior Frontend-разработчик в команду MDM",
-    "url": "https://myski.hh.ru/vacancy/131159444?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ТОО Small, ТМ (Скиф Трейд, ТОО)",
-    "salary": "",
-    "city": "Алматы",
-    "snippet": "Участвовать в проектировании и поддержке API (REST, GraphQL) для работы с мастер-данными. Оптимизировать производительность фронтенда, обеспечивать быструю загрузку и...",
-    "requirement": "Понимание архитектуры современных браузеров, рендеринга и принципов оптимизации фронтенда. Знание Redux, React Query или аналогичных библиотек для управления состоянием.",
-    "fullText": "Strong Middle/Senior Frontend-разработчик в команду MDM ТОО Small, ТМ (Скиф Трейд, ТОО)  Участвовать в проектировании и поддержке API (REST, GraphQL) для работы с мастер-данными. Оптимизировать производительность фронтенда, обеспечивать быструю загрузку и... Понимание архитектуры современных браузеров, рендеринга и принципов оптимизации фронтенда. Знание Redux, React Query или аналогичных библиотек для управления состоянием."
-  },
-  {
-    "id": "130902516",
-    "title": "Разработчик FrontEnd React ( Middle+ )",
-    "url": "https://myski.hh.ru/vacancy/130902516?query=frontend&hhtmFrom=vacancy_search_list",
-    "company": "ООО Интеграционные Решения и Системы",
-    "salary": "",
-    "city": "Москва",
-    "snippet": "3. Работа с API сторонних сервисов. Оперативную помощь и содействие в решении рабочих вопросов.",
-    "requirement": "Знания и опыт работы с технологиями: Git, Gitlab. Docker. JavaScript. React. HTML. CSS. 1. Фундаментальные знания веб-разработки (HTML, CSS...",
-    "fullText": "Разработчик FrontEnd React ( Middle+ ) ООО Интеграционные Решения и Системы  3. Работа с API сторонних сервисов. Оперативную помощь и содействие в решении рабочих вопросов. Знания и опыт работы с технологиями: Git, Gitlab. Docker. JavaScript. React. HTML. CSS. 1. Фундаментальные знания веб-разработки (HTML, CSS..."
+    "snippet": "Разрабатывать и поддерживать веб‑инструменты для сообществ. Проектировать и развивать архитектуру фронтенда: качество, масштабируемость, переиспользуемость. Доводить продуктовые фичи до продакшена...",
+    "requirement": "Умеете разбираться в большом количестве чужого кода, быстро находить информацию и работать с разными источниками. Будет плюсом. Имеете опыт менторства...",
+    "fullText": "Старший Frontend-разработчик в команду Сообществ VK, ВКонтакте  Разрабатывать и поддерживать веб‑инструменты для сообществ. Проектировать и развивать архитектуру фронтенда: качество, масштабируемость, переиспользуемость. Доводить продуктовые фичи до продакшена... Умеете разбираться в большом количестве чужого кода, быстро находить информацию и работать с разными источниками. Будет плюсом. Имеете опыт менторства..."
   }
 ]

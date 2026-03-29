@@ -117,7 +117,6 @@ export class BotRunner {
                     results.details.push(detail)
                     console.log(`✅ Отклик успешен!`)
 
-                    // Вызываем колбэк для сохранения в реальном времени
                     if (onResponse) {
                         await onResponse(vacancies[i], 'success', detail)
                     }
@@ -133,7 +132,6 @@ export class BotRunner {
                     results.details.push(detail)
                     console.log(`❌ Ошибка: ${responseResult.reason || responseResult.error}`)
 
-                    // Вызываем колбэк для сохранения в реальном времени
                     if (onResponse) {
                         await onResponse(vacancies[i], 'failed', detail)
                     }
@@ -150,7 +148,6 @@ export class BotRunner {
                 results.details.push(detail)
                 console.log(`❌ Критическая ошибка: ${err.message}`)
 
-                // Вызываем колбэк для сохранения в реальном времени
                 if (onResponse) {
                     await onResponse(vacancies[i], 'failed', detail)
                 }
@@ -172,7 +169,6 @@ export class BotRunner {
         console.log(`✅ Успешно: ${results.success}`)
         console.log(`❌ Ошибок: ${results.failed}`)
         console.log(`📋 Детали: ${results.details.length} записей`)
-        console.log('🔥🔥🔥 batchRespond завершён 🔥🔥🔥')
 
         return results
     }

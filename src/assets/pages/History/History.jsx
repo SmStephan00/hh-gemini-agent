@@ -92,7 +92,7 @@ const History = () => {
         setPagination(prev => ({ ...prev, currentPage: page }))
     }
 
-    // 🔥 ИСПРАВЛЕНО: status 'success' вместо 'completed'
+    
     const getStatusBadge = (item) => {
         if (item.status === 'success') return { text: '✅ Успешно', class: 'success' }
         if (item.status === 'failed') return { text: '❌ Ошибка', class: 'failed' }

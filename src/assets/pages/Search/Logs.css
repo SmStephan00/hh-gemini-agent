@@ -1,0 +1,23 @@
+.log-box{
+    background-color:#cdc6be;
+    font-size: 1.4vh;
+    display: flex;
+    align-items: center;
+
+}
+
+.log-item{
+    padding: 8px;
+    margin: 10px;
+    border-radius: 5px;
+    background-color: #cdc6be;
+}
+
+.time-col{
+    width: 20%;
+}
+
+.general__info__log span{
+    font-weight: 700;
+    font-size: 1.6vh;
+}

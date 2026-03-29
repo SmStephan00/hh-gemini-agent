@@ -5,6 +5,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import cors from 'cors'
 import multer from 'multer'
+import { saveLog, getLogs, clearLogs } from './logger.js'
 
 import { BotRunner } from './botRunner.js'
 import { saveResponseToHistory, getHistory, getDailyStats } from './historyManager.js'
@@ -116,16 +117,19 @@ function cleanSettings(settings) {
     return cleaned
 }
 
+// ==================== ЗДОРОВЬЕ ====================
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok' })
 })
 
+// ==================== НАСТРОЙКИ ====================
 app.get('/api/settings', (req, res) => {
     try {
         const settings = readJSON('settings.json', DEFAULT_SETTINGS)
         res.json(settings)
     } catch (err) {
         console.log('❌ Ошибка чтения настроек:', err)
+        saveLog('error', 'Ошибка чтения настроек', { error: err.message })
         res.status(500).json({
             success: false,
             error: 'Внутренняя ошибка сервера'
@@ -133,6 +137,46 @@ app.get('/api/settings', (req, res) => {
     }
 })
 
+app.post('/api/settings', (req, res) => {
+    const newSettings = req.body
+    if (!newSettings || typeof newSettings !== 'object' || Array.isArray(newSettings)) {
+        return res.status(400).json({
+            success: false,
+            error: 'Неверный формат данных. Ожидается объект с настройками'
+        })
+    }
+
+    const success = writeJSON('settings.json', newSettings)
+    if (success) {
+        saveLog('info', 'Настройки сохранены', {})
+        res.json({ success: true, message: 'Настройки сохранены' })
+    } else {
+        res.status(500).json({ success: false, error: 'Ошибка сохранения' })
+    }
+})
+
+app.post('/api/settings/reset', (req, res) => {
+    try {
+        const success = writeJSON('settings.json', DEFAULT_SETTINGS)
+
+        if (success) {
+            saveLog('info', 'Настройки сброшены к значениям по умолчанию', {})
+            res.json({
+                success: true,
+                message: 'Настройки сброшены',
+                settings: DEFAULT_SETTINGS
+            })
+        } else {
+            res.status(500).json({ success: false, error: 'Ошибка сброса' })
+        }
+    } catch (error) {
+        console.error('❌ Ошибка сброса настроек:', error)
+        saveLog('error', 'Ошибка сброса настроек', { error: error.message })
+        res.status(500).json({ success: false, error: 'Ошибка сброса' })
+    }
+})
+
+// ==================== ЗАГРУЗКА ФАЙЛОВ ====================
 app.post('/api/upload/resume', upload.single('resume'), (req, res) => {
     try {
         if (!req.file) {
@@ -140,6 +184,11 @@ app.post('/api/upload/resume', upload.single('resume'), (req, res) => {
         }
 
         const absolutePath = path.join(__dirname, '..', 'bot', 'uploads', req.file.filename)
+
+        saveLog('info', `Загружено резюме: ${req.file.originalname}`, {
+            fileName: req.file.originalname,
+            fileSize: req.file.size
+        })
 
         res.json({
             success: true,
@@ -149,10 +198,48 @@ app.post('/api/upload/resume', upload.single('resume'), (req, res) => {
         })
     } catch (error) {
         console.error('Ошибка загрузки:', error)
+        saveLog('error', 'Ошибка загрузки файла резюме', { error: error.message })
         res.status(500).json({ error: 'Ошибка загрузки файла' })
     }
 })
 
+// ==================== ПОИСК ====================
+app.post('/api/search/start', async (req, res) => {
+    try {
+        let settings = req.body.settings || readJSON('settings.json', DEFAULT_SETTINGS)
+        settings = cleanSettings(settings)
+
+        console.log('\n🔍 ЗАПУСК ПОИСКА')
+        console.log('   Должность:', settings.jobTitle || 'не указана')
+        console.log('   Город:', settings.city || 'не указан')
+        console.log('   Параметры:', Object.keys(settings).filter(k =>
+            !['jobTitle', 'city'].includes(k)
+        ))
+
+        const vacancies = await bot.runSearch(settings)
+        writeJSON('vacancies.json', vacancies)
+
+        saveLog('info', `Поиск завершён: найдено ${vacancies.length} вакансий`, {
+            count: vacancies.length,
+            jobTitle: settings.jobTitle,
+            city: settings.city
+        })
+
+        res.json({
+            success: true,
+            count: vacancies.length,
+            vacancies: vacancies
+        })
+    } catch (err) {
+        console.log('❌ Ошибка поиска:', err.message)
+        saveLog('error', 'Ошибка поиска вакансий', {
+            error: { message: err.message, stack: err.stack }
+        })
+        res.status(500).json({ success: false, error: err.message })
+    }
+})
+
+// ==================== ОТКЛИК ====================
 app.post('/api/response/batch', async (req, res) => {
     try {
         const { vacancies, resumePath, userPrompt, options } = req.body
@@ -169,6 +256,10 @@ app.post('/api/response/batch', async (req, res) => {
                 error: 'Нет вакансий для отклика'
             })
         }
+
+        saveLog('info', `Запуск пакетного отклика: ${vacanciesToRespond.length} вакансий`, {
+            total: vacanciesToRespond.length
+        })
 
         // Функция для сохранения каждого отклика в реальном времени
         const onResponse = async (vacancy, status, detail) => {
@@ -215,51 +306,24 @@ app.post('/api/response/batch', async (req, res) => {
 
         writeJSON('stats.json', stats)
 
+        saveLog('info', `Пакетный отклик завершён: успешно=${results.success}, ошибок=${results.failed}`, {
+            success: results.success,
+            failed: results.failed,
+            total: vacanciesToRespond.length
+        })
+
         res.json({ success: true, results })
 
     } catch (error) {
         console.error('❌ Ошибка отклика:', error.message)
-        console.error(error.stack)
+        saveLog('error', 'Ошибка массового отклика', {
+            error: { message: error.message, stack: error.stack }
+        })
         res.status(500).json({ success: false, error: error.message })
     }
 })
 
-app.post('/api/settings', (req, res) => {
-    const newSettings = req.body
-    if (!newSettings || typeof newSettings !== 'object' || Array.isArray(newSettings)) {
-        return res.status(400).json({
-            success: false,
-            error: 'Неверный формат данных. Ожидается объект с настройками'
-        })
-    }
-
-    const success = writeJSON('settings.json', newSettings)
-    if (success) {
-        res.json({ success: true, message: 'Настройки сохранены' })
-    } else {
-        res.status(500).json({ success: false, error: 'Ошибка сохранения' })
-    }
-})
-
-app.post('/api/settings/reset', (req, res) => {
-    try {
-        const success = writeJSON('settings.json', DEFAULT_SETTINGS)
-
-        if (success) {
-            res.json({
-                success: true,
-                message: 'Настройки сброшены',
-                settings: DEFAULT_SETTINGS
-            })
-        } else {
-            res.status(500).json({ success: false, error: 'Ошибка сброса' })
-        }
-    } catch (error) {
-        console.error('❌ Ошибка сброса настроек:', error)
-        res.status(500).json({ success: false, error: 'Ошибка сброса' })
-    }
-})
-
+// ==================== ИСТОРИЯ И СТАТИСТИКА ====================
 app.get('/api/history', (req, res) => {
     const history = getHistory()
     res.json({
@@ -289,6 +353,7 @@ app.get('/api/stats', (req, res) => {
         }
     } catch (error) {
         console.error('❌ Ошибка загрузки статистики:', error)
+        saveLog('error', 'Ошибка загрузки статистики', { error: error.message })
         res.status(500).json({ error: 'Ошибка загрузки статистики' })
     }
 })
@@ -298,41 +363,46 @@ app.get('/api/stats/daily', (req, res) => {
     res.json({ success: true, daily })
 })
 
-app.post('/api/search/start', async (req, res) => {
+// ==================== ЛОГИ ====================
+app.get('/api/logs', (req, res) => {
     try {
-        let settings = req.body.settings || readJSON('settings.json', DEFAULT_SETTINGS)
-        settings = cleanSettings(settings)
-
-        console.log('\n🔍 ЗАПУСК ПОИСКА')
-        console.log('   Должность:', settings.jobTitle || 'не указана')
-        console.log('   Город:', settings.city || 'не указан')
-        console.log('   Параметры:', Object.keys(settings).filter(k =>
-            !['jobTitle', 'city'].includes(k)
-        ))
-
-        const vacancies = await bot.runSearch(settings)
-        writeJSON('vacancies.json', vacancies)
-
-        res.json({
-            success: true,
-            count: vacancies.length,
-            vacancies: vacancies
-        })
-    } catch (err) {
-        console.log('❌ Ошибка поиска:', err.message)
-        res.status(500).json({ success: false, error: err.message })
+        res.json(getLogs())
+    } catch (error) {
+        res.status(500).json({ error: 'Ошибка загрузки логов' })
     }
 })
 
+app.delete('/api/logs', (req, res) => {
+    try {
+        clearLogs()
+        saveLog('info', 'Логи очищены пользователем', {})
+        res.json({ success: true, message: 'Логи очищены' })
+    } catch (error) {
+        res.status(500).json({ error: 'Ошибка очистки логов' })
+    }
+})
+
+// ==================== ЗАВЕРШЕНИЕ ====================
 process.on('SIGINT', async () => {
     console.log('\n\n🛑 Получен сигнал завершения...')
+    saveLog('info', 'Сервер остановлен', {})
     await bot.closeBrowser()
     console.log('👋 Сервер остановлен')
     process.exit(0)
 })
 
+process.on('SIGTERM', async () => {
+    console.log('\n\n🛑 Получен сигнал завершения...')
+    saveLog('info', 'Сервер остановлен (SIGTERM)', {})
+    await bot.closeBrowser()
+    console.log('👋 Сервер остановлен')
+    process.exit(0)
+})
+
+// ==================== ОБРАБОТЧИКИ ОШИБОК ====================
 app.use((err, req, res, next) => {
     console.error('❌ Ошибка сервера:', err)
+    saveLog('error', 'Необработанная ошибка сервера', { error: err.message, stack: err.stack })
     res.status(500).json({
         success: false,
         error: 'Внутренняя ошибка сервера'
@@ -346,8 +416,10 @@ app.use((req, res) => {
     })
 })
 
+// ==================== ЗАПУСК ====================
 app.listen(PORT, () => {
     console.log(`🚀 Сервер запущен на порту ${PORT}`)
     console.log(`📁 Данные: ${DATA_PATH}`)
     console.log(`🌐 http://localhost:${PORT}/api/health`)
+    saveLog('info', `Сервер запущен на порту ${PORT}`, {})
 })
