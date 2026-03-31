@@ -1,5 +1,418 @@
 [
   {
+    "id": 1774889219748,
+    "timestamp": "2026-03-30T16:46:59.748Z",
+    "type": "info",
+    "message": "Пакетный отклик завершён: успешно=0, ошибок=28",
+    "details": {
+      "success": 0,
+      "failed": 28,
+      "total": 28
+    }
+  },
+  {
+    "id": 1774886245384,
+    "timestamp": "2026-03-30T15:57:25.384Z",
+    "type": "info",
+    "message": "Запуск пакетного отклика: 28 вакансий",
+    "details": {
+      "total": 28
+    }
+  },
+  {
+    "id": 1774886240115,
+    "timestamp": "2026-03-30T15:57:20.115Z",
+    "type": "info",
+    "message": "Поиск завершён: найдено 28 вакансий",
+    "details": {
+      "count": 28,
+      "jobTitle": "frontend разработчик react"
+    }
+  },
+  {
+    "id": 1774886168506,
+    "timestamp": "2026-03-30T15:56:08.506Z",
+    "type": "info",
+    "message": "Пакетный отклик завершён: успешно=0, ошибок=4",
+    "details": {
+      "success": 0,
+      "failed": 4,
+      "total": 4
+    }
+  },
+  {
+    "id": 1774885750397,
+    "timestamp": "2026-03-30T15:49:10.397Z",
+    "type": "info",
+    "message": "Запуск пакетного отклика: 4 вакансий",
+    "details": {
+      "total": 4
+    }
+  },
+  {
+    "id": 1774885744040,
+    "timestamp": "2026-03-30T15:49:04.040Z",
+    "type": "info",
+    "message": "Поиск завершён: найдено 4 вакансий",
+    "details": {
+      "count": 4,
+      "jobTitle": "frontend",
+      "city": "Казань"
+    }
+  },
+  {
+    "id": 1774885712727,
+    "timestamp": "2026-03-30T15:48:32.727Z",
+    "type": "info",
+    "message": "Сервер запущен на порту 3001",
+    "details": {}
+  },
+  {
+    "id": 1774885680720,
+    "timestamp": "2026-03-30T15:48:00.720Z",
+    "type": "info",
+    "message": "Сервер остановлен",
+    "details": {}
+  },
+  {
+    "id": 1774885002054,
+    "timestamp": "2026-03-30T15:36:42.054Z",
+    "type": "info",
+    "message": "Запуск пакетного отклика: 29 вакансий",
+    "details": {
+      "total": 29
+    }
+  },
+  {
+    "id": 1774884767878,
+    "timestamp": "2026-03-30T15:32:47.878Z",
+    "type": "info",
+    "message": "Поиск завершён: найдено 29 вакансий",
+    "details": {
+      "count": 29,
+      "jobTitle": "frontend",
+      "city": "москва"
+    }
+  },
+  {
+    "id": 1774884725363,
+    "timestamp": "2026-03-30T15:32:05.363Z",
+    "type": "info",
+    "message": "Сервер запущен на порту 3001",
+    "details": {}
+  },
+  {
+    "id": 1774884718085,
+    "timestamp": "2026-03-30T15:31:58.085Z",
+    "type": "info",
+    "message": "Сервер остановлен",
+    "details": {}
+  },
+  {
+    "id": 1774876681127,
+    "timestamp": "2026-03-30T13:18:01.127Z",
+    "type": "info",
+    "message": "Запуск пакетного отклика: 94 вакансий",
+    "details": {
+      "total": 94
+    }
+  },
+  {
+    "id": 1774876659703,
+    "timestamp": "2026-03-30T13:17:39.703Z",
+    "type": "info",
+    "message": "Поиск завершён: найдено 94 вакансий",
+    "details": {
+      "count": 94,
+      "jobTitle": "frontend"
+    }
+  },
+  {
+    "id": 1774857555380,
+    "timestamp": "2026-03-30T07:59:15.380Z",
+    "type": "info",
+    "message": "Пакетный отклик завершён: успешно=2, ошибок=91",
+    "details": {
+      "success": 2,
+      "failed": 91,
+      "total": 93
+    }
+  },
+  {
+    "id": 1774848855335,
+    "timestamp": "2026-03-30T05:34:15.335Z",
+    "type": "info",
+    "message": "Запуск пакетного отклика: 93 вакансий",
+    "details": {
+      "total": 93
+    }
+  },
+  {
+    "id": 1774848826138,
+    "timestamp": "2026-03-30T05:33:46.138Z",
+    "type": "info",
+    "message": "Поиск завершён: найдено 93 вакансий",
+    "details": {
+      "count": 93,
+      "jobTitle": "frontend"
+    }
+  },
+  {
+    "id": 1774848784855,
+    "timestamp": "2026-03-30T05:33:04.855Z",
+    "type": "info",
+    "message": "Сервер запущен на порту 3001",
+    "details": {}
+  },
+  {
+    "id": 1774848679066,
+    "timestamp": "2026-03-30T05:31:19.066Z",
+    "type": "info",
+    "message": "Сервер остановлен",
+    "details": {}
+  },
+  {
+    "id": 1774848627488,
+    "timestamp": "2026-03-30T05:30:27.488Z",
+    "type": "error",
+    "message": "Необработанная ошибка сервера",
+    "details": {
+      "error": "request entity too large",
+      "stack": "PayloadTooLargeError: request entity too large\n    at readStream (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\raw-body\\index.js:163:17)\n    at getRawBody (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\raw-body\\index.js:116:12)\n    at read (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\body-parser\\lib\\read.js:113:3)\n    at jsonParser (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\body-parser\\lib\\types\\json.js:88:5)\n    at Layer.handleRequest (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at trimPrefix (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:342:13)\n    at D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:297:9\n    at processParams (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:582:12)\n    at next (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:291:5)\n    at cors (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\cors\\lib\\index.js:188:7)"
+    }
+  },
+  {
+    "id": 1774848623748,
+    "timestamp": "2026-03-30T05:30:23.748Z",
+    "type": "info",
+    "message": "Поиск завершён: найдено 93 вакансий",
+    "details": {
+      "count": 93,
+      "jobTitle": "frontend"
+    }
+  },
+  {
+    "id": 1774848583331,
+    "timestamp": "2026-03-30T05:29:43.331Z",
+    "type": "info",
+    "message": "Сервер запущен на порту 3001",
+    "details": {}
+  },
+  {
+    "id": 1774848563412,
+    "timestamp": "2026-03-30T05:29:23.412Z",
+    "type": "info",
+    "message": "Сервер остановлен",
+    "details": {}
+  },
+  {
+    "id": 1774848556559,
+    "timestamp": "2026-03-30T05:29:16.559Z",
+    "type": "error",
+    "message": "Необработанная ошибка сервера",
+    "details": {
+      "error": "request entity too large",
+      "stack": "PayloadTooLargeError: request entity too large\n    at readStream (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\raw-body\\index.js:163:17)\n    at getRawBody (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\raw-body\\index.js:116:12)\n    at read (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\body-parser\\lib\\read.js:113:3)\n    at jsonParser (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\body-parser\\lib\\types\\json.js:88:5)\n    at Layer.handleRequest (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at trimPrefix (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:342:13)\n    at D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:297:9\n    at processParams (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:582:12)\n    at next (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:291:5)\n    at cors (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\cors\\lib\\index.js:188:7)"
+    }
+  },
+  {
+    "id": 1774848522725,
+    "timestamp": "2026-03-30T05:28:42.725Z",
+    "type": "error",
+    "message": "Необработанная ошибка сервера",
+    "details": {
+      "error": "request entity too large",
+      "stack": "PayloadTooLargeError: request entity too large\n    at readStream (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\raw-body\\index.js:163:17)\n    at getRawBody (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\raw-body\\index.js:116:12)\n    at read (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\body-parser\\lib\\read.js:113:3)\n    at jsonParser (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\body-parser\\lib\\types\\json.js:88:5)\n    at Layer.handleRequest (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at trimPrefix (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:342:13)\n    at D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:297:9\n    at processParams (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:582:12)\n    at next (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:291:5)\n    at cors (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\cors\\lib\\index.js:188:7)"
+    }
+  },
+  {
+    "id": 1774848513620,
+    "timestamp": "2026-03-30T05:28:33.620Z",
+    "type": "info",
+    "message": "Поиск завершён: найдено 93 вакансий",
+    "details": {
+      "count": 93,
+      "jobTitle": "frontend"
+    }
+  },
+  {
+    "id": 1774848419832,
+    "timestamp": "2026-03-30T05:26:59.832Z",
+    "type": "error",
+    "message": "Необработанная ошибка сервера",
+    "details": {
+      "error": "request entity too large",
+      "stack": "PayloadTooLargeError: request entity too large\n    at readStream (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\raw-body\\index.js:163:17)\n    at getRawBody (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\raw-body\\index.js:116:12)\n    at read (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\body-parser\\lib\\read.js:113:3)\n    at jsonParser (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\body-parser\\lib\\types\\json.js:88:5)\n    at Layer.handleRequest (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at trimPrefix (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:342:13)\n    at D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:297:9\n    at processParams (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:582:12)\n    at next (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\router\\index.js:291:5)\n    at cors (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\node_modules\\cors\\lib\\index.js:188:7)"
+    }
+  },
+  {
+    "id": 1774848411570,
+    "timestamp": "2026-03-30T05:26:51.570Z",
+    "type": "info",
+    "message": "Поиск завершён: найдено 91 вакансий",
+    "details": {
+      "count": 91,
+      "jobTitle": "frontend"
+    }
+  },
+  {
+    "id": 1774848373949,
+    "timestamp": "2026-03-30T05:26:13.949Z",
+    "type": "info",
+    "message": "Сервер запущен на порту 3001",
+    "details": {}
+  },
+  {
+    "id": 1774848370596,
+    "timestamp": "2026-03-30T05:26:10.596Z",
+    "type": "info",
+    "message": "Сервер остановлен",
+    "details": {}
+  },
+  {
+    "id": 1774848366779,
+    "timestamp": "2026-03-30T05:26:06.779Z",
+    "type": "error",
+    "message": "Ошибка поиска вакансий",
+    "details": {
+      "error": {
+        "message": "page.waitForTimeout: Target page, context or browser has been closed",
+        "stack": "page.waitForTimeout: Target page, context or browser has been closed\n    at searchVacancies (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\bot\\src\\search\\vacancySearch.js:52:45)\n    at async BotRunner.runSearch (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\botRunner.js:57:25)\n    at async file:///D:/%D0%9D%D0%BE%D0%B2%D0%B0%D1%8F%20%D0%BF%D0%B0%D0%BF%D0%BA%D0%B0%20(2)/hh__bot/hh_bot-gemini/server/server.js:219:27"
+      }
+    }
+  },
+  {
+    "id": 1774848359510,
+    "timestamp": "2026-03-30T05:25:59.510Z",
+    "type": "info",
+    "message": "Поиск завершён: найдено 4 вакансий",
+    "details": {
+      "count": 4,
+      "jobTitle": "frontend"
+    }
+  },
+  {
+    "id": 1774848322757,
+    "timestamp": "2026-03-30T05:25:22.757Z",
+    "type": "info",
+    "message": "Сервер запущен на порту 3001",
+    "details": {}
+  },
+  {
+    "id": 1774848319199,
+    "timestamp": "2026-03-30T05:25:19.199Z",
+    "type": "info",
+    "message": "Сервер остановлен",
+    "details": {}
+  },
+  {
+    "id": 1774848309888,
+    "timestamp": "2026-03-30T05:25:09.888Z",
+    "type": "info",
+    "message": "Поиск завершён: найдено 92 вакансий",
+    "details": {
+      "count": 92,
+      "jobTitle": "frontend"
+    }
+  },
+  {
+    "id": 1774848273979,
+    "timestamp": "2026-03-30T05:24:33.979Z",
+    "type": "info",
+    "message": "Сервер запущен на порту 3001",
+    "details": {}
+  },
+  {
+    "id": 1774848222834,
+    "timestamp": "2026-03-30T05:23:42.834Z",
+    "type": "info",
+    "message": "Сервер остановлен",
+    "details": {}
+  },
+  {
+    "id": 1774848201548,
+    "timestamp": "2026-03-30T05:23:21.548Z",
+    "type": "info",
+    "message": "Запуск пакетного отклика: 28 вакансий",
+    "details": {
+      "total": 28
+    }
+  },
+  {
+    "id": 1774848170610,
+    "timestamp": "2026-03-30T05:22:50.610Z",
+    "type": "info",
+    "message": "Поиск завершён: найдено 28 вакансий",
+    "details": {
+      "count": 28,
+      "jobTitle": "frontend",
+      "city": "москва"
+    }
+  },
+  {
+    "id": 1774848115333,
+    "timestamp": "2026-03-30T05:21:55.333Z",
+    "type": "info",
+    "message": "Сервер запущен на порту 3001",
+    "details": {}
+  },
+  {
+    "id": 1774848108196,
+    "timestamp": "2026-03-30T05:21:48.196Z",
+    "type": "error",
+    "message": "Ошибка поиска вакансий",
+    "details": {
+      "error": {
+        "message": "page.waitForSelector: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('[data-qa=\"vacancy-serp__vacancy\"]') to be visible\u001b[22m\n",
+        "stack": "page.waitForSelector: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('[data-qa=\"vacancy-serp__vacancy\"]') to be visible\u001b[22m\n\n    at searchVacancies (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\bot\\src\\search\\vacancySearch.js:57:20)\n    at async BotRunner.runSearch (D:\\Новая папка (2)\\hh__bot\\hh_bot-gemini\\server\\botRunner.js:57:25)\n    at async file:///D:/%D0%9D%D0%BE%D0%B2%D0%B0%D1%8F%20%D0%BF%D0%B0%D0%BF%D0%BA%D0%B0%20(2)/hh__bot/hh_bot-gemini/server/server.js:219:27"
+      }
+    }
+  },
+  {
+    "id": 1774848108147,
+    "timestamp": "2026-03-30T05:21:48.147Z",
+    "type": "info",
+    "message": "Сервер остановлен",
+    "details": {}
+  },
+  {
+    "id": 1774848075294,
+    "timestamp": "2026-03-30T05:21:15.294Z",
+    "type": "info",
+    "message": "Пакетный отклик завершён: успешно=6, ошибок=10",
+    "details": {
+      "success": 6,
+      "failed": 10,
+      "total": 16
+    }
+  },
+  {
+    "id": 1774845742603,
+    "timestamp": "2026-03-30T04:42:22.603Z",
+    "type": "info",
+    "message": "Запуск пакетного отклика: 16 вакансий",
+    "details": {
+      "total": 16
+    }
+  },
+  {
+    "id": 1774845738538,
+    "timestamp": "2026-03-30T04:42:18.538Z",
+    "type": "info",
+    "message": "Поиск завершён: найдено 16 вакансий",
+    "details": {
+      "count": 16,
+      "jobTitle": "frontend"
+    }
+  },
+  {
+    "id": 1774845673208,
+    "timestamp": "2026-03-30T04:41:13.208Z",
+    "type": "info",
+    "message": "Сервер запущен на порту 3001",
+    "details": {}
+  },
+  {
     "id": 1774784307763,
     "timestamp": "2026-03-29T11:38:27.763Z",
     "type": "info",
